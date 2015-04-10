@@ -1,4 +1,5 @@
 import java.rmi.*;
+import java.util.Date;
 
 /**
  * Created by David on 10/04/2015.
@@ -10,7 +11,7 @@ public class BorneUtilisateur {
     public BorneUtilisateur(Station s){
         try{
             //Récupération d'un proxy sur l'objet
-            serv=(ServeurGeneral) Naming.lookup("//localhost/Serv");
+            serv=(ServeurGeneral) Naming.lookup("//localhost:5588/ServeurGeneral");
 
             //initialisation station locale
             station=s;
@@ -19,20 +20,20 @@ public class BorneUtilisateur {
         }
     }
 
-    public void deposerVelo(int id){
+    public void deposerVelo(int numero, int idVelo, Date heureDepot) throws RemoteException {
         //Maj de la station locale
-        station.deposerVelo(id);
+        station.deposerVelo(idVelo);
 
         //maj de la station distante via l'objet rmi serveur
-        serv.deposerVelo(id);
+        serv.deposerVelo(station.getIdentifiantStation(),numero,idVelo,heureDepot);
     }
 
-    public void retirerVelo(int id){
+    public void retirerVelo(int numero, int idVelo, Date heureDepot) throws RemoteException {
         //maj de la station locale
-        station.retirerVelo(id);
+        station.retirerVelo(idVelo);
 
 
         //maj de la station distante via l'objet rmi serveur
-        serv.retirerVelo(id);
+        serv.retirerVelo(station.getIdentifiantStation(),numero,idVelo,heureDepot);
     }
 }
