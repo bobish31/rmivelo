@@ -14,6 +14,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     //
     private HashMap<Integer, Utilisateur> listeUtilisateurs;
     private HashMap<Integer, Velo> listeVelos;
+    private HashMap<Integer, Station> listeStations;
 
     public ServeurGeneralImpl() throws RemoteException {
         // On fixe le nom du serveur pour éviter les erreurs de frappe plus tard
@@ -63,8 +64,11 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         // Changement du statut du vélo
         listeVelos.get(identifiantVelo).setEnCirculation(false);
 
-        //
+        // Changement des capacités de la station concernée
+        listeStations.get(identifiantBorneUtilisateur).incrementerNbVelosDispos();
 
+        // Gérer les nombres de dépôts de vélo dans la station
+        listeStations.get(identifiantBorneUtilisateur).incrementerNbDepots();
 
     }
 
@@ -73,6 +77,12 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
         // Changement du statut du vélo
         listeVelos.get(identifiantVelo).setEnCirculation(true);
+
+        // Changement des capacités de la station concernée
+        listeStations.get(identifiantBorneUtilisateur).decrementerNbVelosDispos();
+
+        // Gérer les nombres de retraits de vélo dans la station
+        listeStations.get(identifiantBorneUtilisateur).decrementerNbRetraits();
 
     }
 
