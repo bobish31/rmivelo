@@ -7,10 +7,10 @@ public class Velo {
     private boolean operationnel;
     private boolean enCirculation;
 
-    public Velo(int identifiantVelo, boolean enCirculation, boolean operationnel) {
+    public Velo(int identifiantVelo) {
         this.identifiantVelo = identifiantVelo;
-        this.enCirculation = enCirculation;
-        this.operationnel = operationnel;
+        this.enCirculation = false;
+        this.operationnel = true;
     }
 
     public int getIdentifiantVelo() {
