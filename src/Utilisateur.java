@@ -3,19 +3,19 @@
  */
 public class Utilisateur {
 
-    private String numero;
+    private int numero;
     private int code;
 
-    public Utilisateur(String numero, int code) {
+    public Utilisateur(int numero, int code) {
         this.numero = numero;
         this.code = code;
     }
 
-    public String getNumero() {
+    public int getNumero() {
         return numero;
     }
 
-    public void setNumero(String numero) {
+    public void setNumero(int numero) {
         this.numero = numero;
     }
 

@@ -19,7 +19,7 @@ public class BorneUtilisateur {
         }
     }
 
-    public void deposerVelo(String id){
+    public void deposerVelo(int id){
         //Maj de la station locale
         station.deposerVelo(id);
 
@@ -27,7 +27,7 @@ public class BorneUtilisateur {
         serv.deposerVelo(id);
     }
 
-    public void retirerVelo(String id){
+    public void retirerVelo(int id){
         //maj de la station locale
         station.retirerVelo(id);
 

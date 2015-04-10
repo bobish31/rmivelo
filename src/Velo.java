@@ -3,21 +3,21 @@
  */
 public class Velo {
 
-    private String identifiantVelo;
+    private int identifiantVelo;
     private boolean operationnel;
     private boolean enCirculation;
 
-    public Velo(String identifiantVelo, boolean enCirculation, boolean operationnel) {
+    public Velo(int identifiantVelo, boolean enCirculation, boolean operationnel) {
         this.identifiantVelo = identifiantVelo;
         this.enCirculation = enCirculation;
         this.operationnel = operationnel;
     }
 
-    public String getIdentifiantVelo() {
+    public int getIdentifiantVelo() {
         return identifiantVelo;
     }
 
-    public void setIdentifiantVelo(String identifiantVelo) {
+    public void setIdentifiantVelo(int identifiantVelo) {
         this.identifiantVelo = identifiantVelo;
     }
 

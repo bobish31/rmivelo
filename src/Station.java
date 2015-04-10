@@ -5,16 +5,16 @@ import java.util.ArrayList;
  */
 public class Station {
 
-    private String identifiantStation;
+    private int identifiantStation;
     private int capacite;
     private double latitude;
     private double longitude;
     private int nbDepots;
     private int nbRetraits;
 
-    private ArrayList<String> listeVeloDispo;
+    private ArrayList<Integer> listeVeloDispo;
 
-    public Station(String identifiantStation, int capacite, double latitude, double longitude, int nbDepots, int nbRetraits) {
+    public Station(int identifiantStation, int capacite, double latitude, double longitude, int nbDepots, int nbRetraits) {
         this.identifiantStation = identifiantStation;
         this.capacite = capacite;
         this.latitude = latitude;
@@ -24,11 +24,11 @@ public class Station {
         listeVeloDispo = new ArrayList<>();
     }
 
-    public String getIdentifiantStation() {
+    public int getIdentifiantStation() {
         return identifiantStation;
     }
 
-    public void setIdentifiantStation(String identifiantStation) {
+    public void setIdentifiantStation(int identifiantStation) {
         this.identifiantStation = identifiantStation;
     }
 
@@ -72,12 +72,12 @@ public class Station {
         this.nbRetraits = nbRetraits;
     }
 
-    public void deposerVelo(String identifiantVelo) {
+    public void deposerVelo(int identifiantVelo) {
         nbDepots++;
         listeVeloDispo.add(identifiantVelo);
     }
 
-    public void retirerVelo(String identifiantVelo) {
+    public void retirerVelo(int identifiantVelo) {
         nbRetraits++;
         listeVeloDispo.remove(identifiantVelo);
     }
