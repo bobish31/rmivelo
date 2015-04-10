@@ -11,7 +11,7 @@ public class BorneUtilisateur {
     public BorneUtilisateur(Station s){
         try{
             //Récupération d'un proxy sur l'objet
-            serv=(ServeurGeneral) Naming.lookup("//localhost/Serv");
+            serv=(ServeurGeneral) Naming.lookup("ServeurGeneral");
 
             //initialisation station locale
             station=s;
