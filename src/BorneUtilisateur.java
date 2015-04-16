@@ -11,14 +11,21 @@ public class BorneUtilisateur {
     public BorneUtilisateur(Station s){
         try{
             //Récupération d'un proxy sur l'objet
-            serv=(ServeurGeneral) Naming.lookup("//localhost:5588/ServeurGeneral");
+            serv=(ServeurGeneral) Naming.lookup("rmi://127.0.0.1:5588/ServeurGeneral");
 
             //initialisation station locale
             station=s;
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
+        } 
+	catch (RemoteException e){
+			e.printStackTrace();
+	}
+	catch (MalformedURLException e){
+			e.printStackTrace();
+	} 
+	catch (UnknownHostException e) {
+		e.printStackTrace();
+	}
+ }
 
     public void deposerVelo(int numero, int idVelo, Date heureDepot) throws RemoteException {
         //Maj de la station locale

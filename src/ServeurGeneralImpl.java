@@ -21,20 +21,6 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         name = "ServeurGeneral";
     }
 
-    public static void main(String args[]) {
-        try {
-            ServeurGeneralImpl obj = new ServeurGeneralImpl();
-            // On s'enregistre dans le registre
-            LocateRegistry.createRegistry(5588);
-            // On associe le nom du serveur à l'objet du serveur créé, et on le publie sur le serveur de noms
-            Naming.rebind(obj.name, obj);
-            System.out.println(obj.name + " déclaré auprès du serveur de noms");
-        } catch (Exception e) {
-            System.out.println("ServeurGeneral erreur : " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public int[] genererUtilisateur() throws RemoteException {
 
