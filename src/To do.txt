@@ -1,7 +1,12 @@
+ETAPE 1
+
 - Test du lancement serveur RMI dans serveurGeneralIMPL (ok)
 - Test du lancement du client qui s'enregistre auprès du serveurGeneral (ok)
 - Test d'une communication entre les 2 (ok)
 --- COMMIT ---
+
+ETAPE 2
+
 - Installation de la bdd postgre en local (en cours)
 - connection bdd en java
 - tester l'enregistrement par exemple de creerUser
