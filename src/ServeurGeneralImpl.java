@@ -1,3 +1,4 @@
+import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -9,23 +10,51 @@ import java.util.*;
  */
 public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGeneral {
 
-    // Le nom du serveur sert à nommer le service sur le serveur de noms
-    private String name;
-    //
+
     private HashMap<Integer, Utilisateur> listeUtilisateurs;
     private HashMap<Integer, Velo> listeVelos;
     private HashMap<Integer, Station> listeStations;
 
     public ServeurGeneralImpl() throws RemoteException {
-        // On fixe le nom du serveur pour éviter les erreurs de frappe plus tard
-        name = "ServeurGeneral";
+
+        // Déclaration des listes
+        listeUtilisateurs = new HashMap<>();
+    }
+
+    // Méthode qui lance le serveur
+    public  static void main(String[] args) {
+
+        try
+        {
+            // Création du registre
+            LocateRegistry.createRegistry(5588);
+
+            // Création de l'objet
+            ServeurGeneralImpl obj = new ServeurGeneralImpl();
+
+            // Création de l'adresse URL
+            String url = "rmi://127.0.0.1:5588/ServeurGeneral";
+
+            // Enregistrement de l'adresse
+            Naming.rebind(url, obj);
+
+            // On confirme que tout est ok
+            System.out.println ("Serveur Lancé");
+        }
+        catch (RemoteException e){
+            e.printStackTrace();
+        }
+        catch (MalformedURLException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public int[] genererUtilisateur() throws RemoteException {
 
         // On récupère le plus grand numero d'utilisateur de la map correspondante
-        int numero = Collections.max(listeUtilisateurs.keySet());
+        // int numero = Collections.max(listeUtilisateurs.keySet());
+        int numero = 1;
 
         // On créé le numero + 1
         numero++;
@@ -36,6 +65,9 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
         // On stocke le nouvel utilisateur selon la stratégie de stockage choisie
         // new Utilisateur(numero, code);
+
+        // on ajoute dans la map locale
+        listeUtilisateurs.put(numero, new Utilisateur(numero,code));
 
         // On retourne le numero + code générés dans un tableau de Int
         int[] utilisateur = new int[2];
