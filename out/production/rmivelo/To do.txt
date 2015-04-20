@@ -1,0 +1,22 @@
+ETAPE 1
+
+- Test du lancement serveur RMI dans serveurGeneralIMPL (ok)
+- Test du lancement du client qui s'enregistre auprès du serveurGeneral (ok)
+- Test d'une communication entre les 2 (ok)
+--- COMMIT ---
+
+ETAPE 2
+
+- Installation de la bdd postgre en local (en cours)
+- connection bdd en java
+- tester l'enregistrement par exemple de creerUser
+- modification de toute les methodes serveurs en lien avec la bdd
+---- COMMIT ----
+
+
+VERSION BDD INSTALLER
+
+postgresql-9.4.1-3-windows-x64.exe
+mdp root = romain66
+port = 5590
+nom bdd = rmivelo
