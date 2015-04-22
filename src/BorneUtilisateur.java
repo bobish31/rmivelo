@@ -1,3 +1,5 @@
+import bdd.bddClass.StationMetier;
+
 import java.net.MalformedURLException;
 import java.rmi.*;
 import java.util.Date;
@@ -7,9 +9,9 @@ import java.util.Date;
  */
 public class BorneUtilisateur {
 
-    private Station station;
+    private StationMetier station;
 
-    public BorneUtilisateur(Station s) {
+    public BorneUtilisateur(StationMetier s) {
         //initialisation station locale
         station=s;
     }

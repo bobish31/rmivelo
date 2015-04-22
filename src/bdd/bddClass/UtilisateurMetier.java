@@ -1,15 +1,31 @@
 package bdd.bddClass;
 
 /**
- * Created by Menu on 20/04/2015.
+ * Created by David on 22/04/2015.
  */
 public class UtilisateurMetier {
-
-    // Numero de l'abonne
     private int numero;
-
-    // Code de l'abonne
     private int code;
 
-    //
+    public UtilisateurMetier(int numero, int code) {
+        this.numero = numero;
+        this.code = code;
+    }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
 }
+

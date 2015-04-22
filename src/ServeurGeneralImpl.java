@@ -1,4 +1,7 @@
 import bdd.BDDConnecteur;
+import bdd.bddClass.StationMetier;
+import bdd.bddClass.UtilisateurMetier;
+import bdd.bddClass.VeloMetier;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -13,9 +16,9 @@ import java.util.*;
 public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGeneral {
 
 
-    private HashMap<Integer, Utilisateur> listeUtilisateurs;
-    private HashMap<Integer, Velo> listeVelos;
-    private HashMap<Integer, Station> listeStations;
+    private HashMap<Integer, UtilisateurMetier> listeUtilisateurs;
+    private HashMap<Integer, VeloMetier> listeVelos;
+    private HashMap<Integer, StationMetier> listeStations;
 
     public ServeurGeneralImpl() throws RemoteException {
 
@@ -65,7 +68,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         // new Utilisateur(numero, code);
 
         // on ajoute dans la map locale
-        listeUtilisateurs.put(numero, new Utilisateur(numero,code));
+        listeUtilisateurs.put(numero, new UtilisateurMetier(numero,code));
 
         // On retourne le numero + code générés dans un tableau de Int
         int[] utilisateur = new int[2];
@@ -125,7 +128,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     @Override
     public boolean authentifierUtilisateur(int numero, int code) throws RemoteException {
 
-        Utilisateur user = listeUtilisateurs.get(numero);
+        UtilisateurMetier user = listeUtilisateurs.get(numero);
         if (user != null) {
             if (user.getCode() == code) {
                 return true;
