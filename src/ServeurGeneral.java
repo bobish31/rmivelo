@@ -1,4 +1,5 @@
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.Date;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Date;
 
 public interface ServeurGeneral extends Remote {
 
-    // Toutes les méthodes doivent --> throws java.rmi.RemoteException
+    // Toutes les mï¿½thodes doivent --> throws java.rmi.RemoteException
 
     public int[] genererUtilisateur() throws java.rmi.RemoteException;
 
@@ -25,4 +26,6 @@ public interface ServeurGeneral extends Remote {
     public String[] imprimerRecuUtilisateur() throws java.rmi.RemoteException;
 
     public void notifier(int idStation) throws java.rmi.RemoteException;
+
+    public boolean connexionOkBDD() throws RemoteException;
 }

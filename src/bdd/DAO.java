@@ -7,34 +7,13 @@ import java.sql.Connection;
  */
 public interface DAO<T> {
 
-        public Connection connect = ConnectionBDD.getInstance();
+        Connection bddConnecter = BDDConnecteur.getInstance();
 
-        /**
-         * Méthode de création
-         * @param obj
-         * @return boolean
-         */
+        boolean create(T obj);
 
-        public abstract boolean create(T obj);
+        boolean delete(T obj);
 
-        /**
-         * Méthode pour effacer
-         * @param obj
-         * @return boolean
-         */
-        public abstract boolean delete(T obj);
+        boolean update(T obj);
 
-        /**
-         * Méthode de mise à jour
-         * @param obj
-         * @return boolean
-         */
-        public abstract boolean update(T obj);
-
-        /**
-         * Méthode de recherche des informations
-         * @param id
-         * @return T
-         */
-        public abstract T find(int id);
+        T find(int id);
 }

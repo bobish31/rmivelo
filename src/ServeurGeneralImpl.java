@@ -1,3 +1,5 @@
+import bdd.BDDConnecteur;
+
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -17,34 +19,30 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
     public ServeurGeneralImpl() throws RemoteException {
 
-        // Déclaration des listes
+        // DÃ©claration des listes
         listeUtilisateurs = new HashMap<>();
     }
 
-    // Méthode qui lance le serveur
-    public  static void main(String[] args) {
+    // MÃ©thode qui lance le serveur
+    public static void main(String[] args) {
 
-        try
-        {
-            // Création du registre
+        try {
+            // CrÃ©ation du registre
             LocateRegistry.createRegistry(5588);
 
-            // Création de l'objet
+            // CrÃ©ation de l'objet
             ServeurGeneralImpl obj = new ServeurGeneralImpl();
 
-            // Création de l'adresse URL
+            // CrÃ©ation de l'adresse URL
             String url = "rmi://127.0.0.1:5588/ServeurGeneral";
 
             // Enregistrement de l'adresse
             Naming.rebind(url, obj);
 
             // On confirme que tout est ok
-            System.out.println ("Serveur Lancé");
+            System.out.println ("Serveur LancÃ©");
         }
-        catch (RemoteException e){
-            e.printStackTrace();
-        }
-        catch (MalformedURLException e){
+        catch (RemoteException | MalformedURLException e){
             e.printStackTrace();
         }
     }
@@ -52,24 +50,24 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     @Override
     public int[] genererUtilisateur() throws RemoteException {
 
-        // On récupère le plus grand numero d'utilisateur de la map correspondante
+        // On rÃ©cupÃ©re le plus grand numero d'utilisateur de la map correspondante
         // int numero = Collections.max(listeUtilisateurs.keySet());
         int numero = 1;
 
-        // On créé le numero + 1
+        // On crÃ©Ã© le numero + 1
         numero++;
 
-        // On génére un code aléatoire de 4 chiffres pour le code
+        // On gÃ©nÃ©re un code alÃ©atoire de 4 chiffres pour le code
         Random rand = new Random();
         int code = rand.nextInt((9999 - 0) + 1) + 0;
 
-        // On stocke le nouvel utilisateur selon la stratégie de stockage choisie
+        // On stocke le nouvel utilisateur selon la stratÃ©gie de stockage choisie
         // new Utilisateur(numero, code);
 
         // on ajoute dans la map locale
         listeUtilisateurs.put(numero, new Utilisateur(numero,code));
 
-        // On retourne le numero + code générés dans un tableau de Int
+        // On retourne le numero + code gÃ©nÃ©rÃ©s dans un tableau de Int
         int[] utilisateur = new int[2];
         utilisateur[0] = numero;
         utilisateur[1] = code;
@@ -79,13 +77,13 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     @Override
     public void deposerVelo(int identifiantBorneUtilisateur, int numero, int identifiantVelo, Date heureDepot) throws RemoteException {
 
-        // Changement du statut du vélo
+        // Changement du statut du vÃ©lo
         listeVelos.get(identifiantVelo).setEnCirculation(false);
 
-        // Changement des capacités de la station concernée
+        // Changement des capacitÃ©s de la station concernÃ©e
         listeStations.get(identifiantBorneUtilisateur).incrementerNbVelosDispos();
 
-        // Gérer les nombres de dépôts de vélo dans la station
+        // GÃ©rer les nombres de dÃ©pÃ´ts de vÃ©lo dans la station
         listeStations.get(identifiantBorneUtilisateur).incrementerNbDepots();
 
     }
@@ -93,13 +91,13 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     @Override
     public void retirerVelo(int identifiantBorneUtilisateur, int numero, int identifiantVelo, Date heureRetrait) throws RemoteException {
 
-        // Changement du statut du vélo
+        // Changement du statut du vÃ©lo
         listeVelos.get(identifiantVelo).setEnCirculation(true);
 
-        // Changement des capacités de la station concernée
+        // Changement des capacitÃ©s de la station concernÃ©e
         listeStations.get(identifiantBorneUtilisateur).decrementerNbVelosDispos();
 
-        // Gérer les nombres de retraits de vélo dans la station
+        // GÃ©rer les nombres de retraits de vÃ©lo dans la station
         listeStations.get(identifiantBorneUtilisateur).decrementerNbRetraits();
 
     }
@@ -114,13 +112,13 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     @Override
     public void creerVelo(int identifiantVelo, boolean operationnel, boolean enCirculation) throws RemoteException {
 
-        // On récupère le plus grand numero de velo de la map correspondante
+        // On rÃ©cupÃ©re le plus grand numero de velo de la map correspondante
         int numero = Collections.max(listeVelos.keySet());
 
-        // On créé le numero + 1
+        // On crÃ©Ã© le numero + 1
         numero++;
 
-        // On stocke le nouvel velo selon la stratégie de stockage choisie
+        // On stocke le nouvel velo selon la stratÃ©gie de stockage choisie
         // new Velo(numero)
     }
 
@@ -144,5 +142,10 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     @Override
     public void notifier(int idStation) throws RemoteException {
 
+    }
+
+    @Override
+    public boolean connexionOkBDD() throws RemoteException {
+         return (BDDConnecteur.getInstance() != null);
     }
 }

@@ -6,30 +6,36 @@ import java.util.Date;
  * Created by David on 10/04/2015.
  */
 public class BorneUtilisateur {
+
     private Station station;
 
-    public BorneUtilisateur(Station s){
-
-            //initialisation station locale
-            station=s;
+    public BorneUtilisateur(Station s) {
+        //initialisation station locale
+        station=s;
     }
 
-    public static void main (String [] args)
-    {
-        // Gestion des attributs
-      //  ServeurGeneral serv;
+    public static void main (String [] args) {
         int [] utilisateur;
 
-        try{
+        try {
+
             System.out.println ("Lancement de la borne utilisateur");
 
-            //R�cup�ration d'un proxy sur l'objet
+            //R�cup�ration d'un proxy sur l'objet
             Remote serv = Naming.lookup("rmi://127.0.0.1:5588/ServeurGeneral");
 
-            if ( serv instanceof ServeurGeneral)
-            {
+            if (serv instanceof ServeurGeneral) {
+
+                // On fera les tous appels sur serveurDistant
+                ServeurGeneral serveurDistant = (ServeurGeneral) serv;
+
+                // On teste la connexion à la BDD
+                if (serveurDistant.connexionOkBDD()) {
+                    System.out.println("Connexion à la base de données réussie");
+                }
+
                 // On demande la generation d'un client par exemple
-                utilisateur =  ((ServeurGeneral) serv).genererUtilisateur();
+                utilisateur = serveurDistant.genererUtilisateur();
 
                 // On affiche le code pour voir si tout fonctionne
                 System.out.println ("Numero : " + utilisateur[0]);

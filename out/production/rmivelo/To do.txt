@@ -7,8 +7,8 @@ ETAPE 1
 
 ETAPE 2
 
-- Installation de la bdd postgre en local (en cours)
-- connection bdd en java
+- Installation de la bdd postgre en local (OK)
+- connection bdd en java (OK)
 - tester l'enregistrement par exemple de creerUser
 - modification de toute les methodes serveurs en lien avec la bdd
 ---- COMMIT ----
@@ -20,3 +20,7 @@ postgresql-9.4.1-3-windows-x64.exe
 mdp root = romain66
 port = 5590
 nom bdd = rmivelo
+
+Import du jar nécessaire
+
+https://jdbc.postgresql.org/download/postgresql-9.4-1201.jdbc41.jar
