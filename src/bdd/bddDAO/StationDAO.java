@@ -10,18 +10,18 @@ public class StationDAO extends DAO<StationMetier> {
 
 
     @Override
-    public boolean create(StationMetier obj) {
-        return false;
+    public StationMetier create(StationMetier obj) {
+        return null;
     }
 
     @Override
-    public boolean delete(StationMetier obj) {
-        return false;
+    public StationMetier delete(StationMetier obj) {
+        return null;
     }
 
     @Override
-    public boolean update(StationMetier obj) {
-        return false;
+    public StationMetier update(StationMetier obj) {
+        return null;
     }
 
     @Override

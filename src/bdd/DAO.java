@@ -7,13 +7,13 @@ import java.sql.Connection;
  */
 public abstract class DAO<T> {
 
-        Connection bddConnecteur = BDDConnecteur.getInstance();
+        public Connection bddConnecteur = BDDConnecteur.getInstance();
 
-        public abstract boolean create(T obj);
+        public abstract T create(T obj);
 
-        public abstract boolean delete(T obj);
+        public abstract T delete(T obj);
 
-        public abstract boolean update(T obj);
+        public abstract T update(T obj);
 
         public abstract T find(int id);
 }

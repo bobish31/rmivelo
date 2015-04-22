@@ -10,18 +10,18 @@ public class UtilisateurDAO extends DAO<UtilisateurMetier> {
 
 
     @Override
-    public boolean create(UtilisateurMetier obj) {
-        return false;
+    public UtilisateurMetier create(UtilisateurMetier obj) {
+        return null;
     }
 
     @Override
-    public boolean delete(UtilisateurMetier obj) {
-        return false;
+    public UtilisateurMetier delete(UtilisateurMetier obj) {
+        return null;
     }
 
     @Override
-    public boolean update(UtilisateurMetier obj) {
-        return false;
+    public UtilisateurMetier update(UtilisateurMetier obj) {
+        return null;
     }
 
     @Override

@@ -20,6 +20,12 @@ public class VeloMetier {
         enCirculation = false;
     }
 
+    public VeloMetier(int id,boolean op,boolean circ){
+        this.identifiantVelo = id;
+        operationnel = op;
+        enCirculation = circ;
+    }
+
     public int getIdentifiant () {
         return identifiantVelo;
     }
