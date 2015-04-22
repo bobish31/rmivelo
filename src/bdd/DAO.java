@@ -5,15 +5,15 @@ import java.sql.Connection;
 /**
  * Created by Menu on 20/04/2015.
  */
-public interface DAO<T> {
+public abstract class DAO<T> {
 
-        Connection bddConnecter = BDDConnecteur.getInstance();
+        Connection bddConnecteur = BDDConnecteur.getInstance();
 
-        boolean create(T obj);
+        public abstract boolean create(T obj);
 
-        boolean delete(T obj);
+        public abstract boolean delete(T obj);
 
-        boolean update(T obj);
+        public abstract boolean update(T obj);
 
-        T find(int id);
+        public abstract T find(int id);
 }
