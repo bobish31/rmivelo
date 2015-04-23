@@ -7,17 +7,12 @@ public class VeloMetier {
 
     private int identifiantVelo;
     private boolean operationnel;
-    private boolean enCirculation;
 
-    public VeloMetier()
-    {
-        // Constructeur par defaut
-    }
+    public VeloMetier() {}
 
-    public VeloMetier(int id){
-        this.identifiantVelo = id;
-        operationnel = true;
-        enCirculation = false;
+    public VeloMetier(int identifiantVelo){
+        this.identifiantVelo = identifiantVelo;
+        this.operationnel = true;
     }
 
     public VeloMetier(int identifiantVelo, boolean operationnel) {
@@ -25,13 +20,7 @@ public class VeloMetier {
         this.operationnel = operationnel;
     }
 
-    public VeloMetier(int id,boolean op,boolean circ){
-        this.identifiantVelo = id;
-        operationnel = op;
-        enCirculation = circ;
-    }
-
-    public int getIdentifiant () {
+    public int getIdentifiantVelo() {
         return identifiantVelo;
     }
 
@@ -47,20 +36,11 @@ public class VeloMetier {
         this.operationnel = operationnel;
     }
 
-    public boolean isEnCirculation() {
-        return enCirculation;
-    }
-
-    public void setEnCirculation(boolean enCirculation) {
-        this.enCirculation = enCirculation;
-    }
-
     @Override
     public String toString() {
         return "VeloMetier{" +
                 "identifiantVelo=" + identifiantVelo +
                 ", operationnel=" + operationnel +
-                ", enCirculation=" + enCirculation +
                 '}';
     }
 }

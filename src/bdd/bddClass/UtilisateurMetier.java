@@ -27,5 +27,13 @@ public class UtilisateurMetier {
     public void setCode(int code) {
         this.code = code;
     }
+
+    @Override
+    public String toString() {
+        return "UtilisateurMetier{" +
+                "numero=" + numero +
+                ", code=" + code +
+                '}';
+    }
 }
 

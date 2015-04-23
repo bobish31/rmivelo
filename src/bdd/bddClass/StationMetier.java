@@ -9,23 +9,38 @@ public class StationMetier {
 
     private int identifiantStation;
     private int capacite;
-    private int nbVelosDispos;
+    private int nbRetraits;
+    private int nbDepots;
     private double latitude;
     private double longitude;
-    private int nbDepots;
-    private int nbRetraits;
 
-    private ArrayList<Integer> listeVeloDispo;
+    private ArrayList<Integer> listeVelos;
 
-    public StationMetier(int identifiantStation, int capacite,int nbVelosDispos, double latitude, double longitude, int nbDepots, int nbRetraits) {
+    public StationMetier(int identifiantStation, int capacite, int nbRetraits, int nbDepots, double latitude, double longitude) {
         this.identifiantStation = identifiantStation;
         this.capacite = capacite;
-        this.nbVelosDispos = nbVelosDispos;
+        this.nbRetraits = nbRetraits;
+        this.nbDepots = nbDepots;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.nbDepots = nbDepots;
-        this.nbRetraits = nbRetraits;
-        listeVeloDispo = new ArrayList<>();
+
+        listeVelos = new ArrayList<>();
+    }
+
+    public void deposerVelo(int identifiantVelo) {
+        listeVelos.add(identifiantVelo);
+    }
+
+    public void retirerVelo(int identifiantVelo) {
+        listeVelos.remove(identifiantVelo);
+    }
+
+    public void incrementerNbDepots() {
+        nbDepots++;
+    }
+
+    public void decrementerNbRetraits() {
+        nbRetraits--;
     }
 
     public int getIdentifiantStation() {
@@ -44,12 +59,20 @@ public class StationMetier {
         this.capacite = capacite;
     }
 
-    public ArrayList<Integer> getListeVeloDispo() {
-        return listeVeloDispo;
+    public int getNbDepots() {
+        return nbDepots;
     }
 
-    public void setListeVeloDispo(ArrayList<Integer> listeVeloDispo) {
-        this.listeVeloDispo = listeVeloDispo;
+    public void setNbDepots(int nbDepots) {
+        this.nbDepots = nbDepots;
+    }
+
+    public int getNbRetraits() {
+        return nbRetraits;
+    }
+
+    public void setNbRetraits(int nbRetraits) {
+        this.nbRetraits = nbRetraits;
     }
 
     public double getLatitude() {
@@ -68,43 +91,25 @@ public class StationMetier {
         this.longitude = longitude;
     }
 
-    public int getNbDepots() {
-        return nbDepots;
+    public ArrayList<Integer> getListeVelos() {
+        return listeVelos;
     }
 
-    public void setNbDepots(int nbDepots) {
-        this.nbDepots = nbDepots;
+    public void setListeVelos(ArrayList<Integer> listeVelos) {
+        this.listeVelos = listeVelos;
     }
 
-    public int getNbRetraits() {
-        return nbRetraits;
+    @Override
+    public String toString() {
+        return "StationMetier{" +
+                "identifiantStation=" + identifiantStation +
+                ", capacite=" + capacite +
+                ", nbDepots=" + nbDepots +
+                ", nbRetraits=" + nbRetraits +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", listeVelos=" + listeVelos +
+                '}';
     }
 
-    public void setNbRetraits(int nbRetraits) {
-        this.nbRetraits = nbRetraits;
-    }
-
-    public void deposerVelo(int identifiantVelo) {
-        listeVeloDispo.add(identifiantVelo);
-    }
-
-    public void retirerVelo(int identifiantVelo) {
-        listeVeloDispo.remove(identifiantVelo);
-    }
-
-    public void incrementerNbVelosDispos() {
-        nbVelosDispos++;
-    }
-
-    public void decrementerNbVelosDispos() {
-        nbVelosDispos--;
-    }
-
-    public void incrementerNbDepots() {
-        nbDepots++;
-    }
-
-    public void decrementerNbRetraits() {
-        nbRetraits--;
-    }
 }

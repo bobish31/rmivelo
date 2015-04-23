@@ -6,27 +6,29 @@ import java.util.Date;
  * Created by David on 22/04/2015.
  */
 public class UtiliserMetier {
-    private Date dateDepart;
-    private Date dateArivee;
 
-    public UtiliserMetier(Date dateDepart, Date dateArivee) {
-        this.dateDepart = dateDepart;
-        this.dateArivee = dateArivee;
+    private Date dateRetrait;
+    private Date dateDepot;
+    private int idUtilisation;
+
+    public UtiliserMetier(Date dateRetrait, Date dateDepot) {
+        this.dateRetrait = dateRetrait;
+        this.dateDepot = dateDepot;
     }
 
     public Date getDateDepart() {
-        return dateDepart;
+        return dateRetrait;
     }
 
     public void setDateDepart(Date dateDepart) {
-        this.dateDepart = dateDepart;
+        this.dateRetrait = dateDepart;
     }
 
     public Date getDateArivee() {
-        return dateArivee;
+        return dateDepot;
     }
 
     public void setDateArivee(Date dateArivee) {
-        this.dateArivee = dateArivee;
+        this.dateDepot = dateArivee;
     }
 }

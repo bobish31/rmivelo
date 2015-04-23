@@ -48,13 +48,6 @@ public class VeloDAO extends DAO<VeloMetier> {
                 PreparedStatement prepare = bddConnecteur.prepareStatement(requete);
                 prepare.setInt(1, id);
                 prepare.setNull(2, Types.INTEGER);
-
-
-                // TODO : operationnel est censé être à TRUE automatiquement à la création ... Doit on garder cette ligne ?
-                // prepare.setBoolean(2, velo.isOperationnel());
-                // TODO : enCirculation a disparu du modèle, on l'enlève du coup ?
-                //prepare.setBoolean(3, velo.isEnCirculation());
-
                 prepare.executeUpdate();
                 velo = this.find(id);
             }
@@ -77,7 +70,7 @@ public class VeloDAO extends DAO<VeloMetier> {
     @Override
     public VeloMetier find(int id){
 
-        VeloMetier velo = null;
+        VeloMetier velo = new VeloMetier();
 
         try {
 

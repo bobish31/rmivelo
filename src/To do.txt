@@ -9,8 +9,8 @@ ETAPE 2
 
 - Installation de la bdd postgre en local (OK)
 - connection bdd en java (OK)
-- tester l'enregistrement par exemple de creerUser
-- modification de toute les methodes serveurs en lien avec la bdd
+- tester l'enregistrement par exemple de creerUser (ok)
+- modification de toute les methodes serveurs en lien avec la bdd --> voir Onglet LIAISON BASE DE DONNEES <-> JAVA
 ---- COMMIT ----
 
 
@@ -34,6 +34,7 @@ BASE DE DONNEES
 
 LIAISON BASE DE DONNEES <-> JAVA
 
+- Ecrire les constantes de BDD dans chaque classe (ok)
 - Ecrire le corps des méthodes de création des objets
 - Ecrire le corps des méthodes de suppression des objets
 - Ecrire le corps des méthodes de modification des objets
