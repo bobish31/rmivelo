@@ -1,15 +1,16 @@
--- *********** -- *********** -- *********** -- *******
---
---
---			SCRIPT GENERAL DE CREATION DE L'ENSEMBLE
---				DE LA BASE DEDIEE AU PROJET RMI
---
---			Postgre impose d'avoir les variables
---			des requêtes sans majuscules : la casse
---			n'est pas prise en compte !
---
---
--- *********** -- *********** -- *********** -- *******
+-- *********** -- *********** -- *********** -- ******* --
+--														--
+--														--
+--		SCRIPT GENERAL DE CREATION DE L'ENSEMBLE		--
+--			DE LA BASE DEDIEE AU PROJET RMI				--
+--														--
+--		Postgre impose d'avoir les variables			--
+--		des requêtes sans majuscules : la casse			--
+--		n'est pas prise en compte !						--
+--		D'où les identifiants sans majuscules...		--
+--														--
+--														--
+-- *********** -- *********** -- *********** -- *******	--
 
 
 	-- *********** -- *********** -- *********** -- *******
@@ -18,6 +19,9 @@
 
 		CREATE DATABASE "rmivelo" WITH TEMPLATE = template0 ENCODING = 'UTF8';
 		ALTER DATABASE "rmivelo" OWNER TO postgres;
+
+
+
 
 	-- *********** -- *********** -- *********** -- *******
 	--			SCRIPT DE CREATION DES TABLES
@@ -61,7 +65,7 @@
 			CACHE 1;
 
 		ALTER TABLE public.numero_seq OWNER TO postgres;
-		ALTER SEQUENCE numero_seq OWNED BY utilisateur.numero_seq;
+		ALTER SEQUENCE numero_seq OWNED BY utilisateur.numero;
 		-- Initialiser la séquence selon le nombre d'INSERT faits à la main dans ce script
 		SELECT pg_catalog.setval('numero_seq', 5, true);
 
@@ -74,8 +78,8 @@
 				capacite integer NOT NULL,
 				nbretraits integer NOT NULL DEFAULT 0,
 				nbdepots integer NOT NULL DEFAULT 0,
-				latitude double NOT NULL,
-				longitude double NOT NULL
+				latitude real NOT NULL,
+				longitude real NOT NULL
 			);
 
 		ALTER TABLE public.station OWNER TO postgres;
@@ -86,7 +90,7 @@
 			CACHE 1;
 
 		ALTER TABLE public.identifiantstation_seq OWNER TO postgres;
-		ALTER SEQUENCE identifiantstation_seq OWNED BY station.identifiantstation_seq;
+		ALTER SEQUENCE identifiantstation_seq OWNED BY station.identifiantstation;
 		-- Initialiser la séquence selon le nombre d'INSERT faits à la main dans ce script
 		SELECT pg_catalog.setval('identifiantstation_seq', 5, true);
 
@@ -95,11 +99,11 @@
 		-- TABLE UTILISER
 		-------------------------------------------------------
 		CREATE TABLE utiliser (
-				utiliser_id
+				utiliser_id integer NOT NULL,
 				fk_identifiantvelo integer NOT NULL,
 				fk_numero integer NOT NULL,
-				dateretrait date NOT NULL,
-				datedepot date NOT NULL
+				dateretrait timestamp with time zone NOT NULL,
+				datedepot timestamp with time zone NOT NULL
 			);
 
 		ALTER TABLE public.utiliser OWNER TO postgres;
@@ -150,22 +154,21 @@
 	--				   SCRIPT D'INSERTION
 	-- *********** -- *********** -- *********** -- *******
 
+		INSERT INTO utilisateur (numero, code) VALUES (1, 0000);
+		INSERT INTO utilisateur (numero, code) VALUES (2, 1111);
+		INSERT INTO utilisateur (numero, code) VALUES (3, 2222);
+		INSERT INTO utilisateur (numero, code) VALUES (4, 3333);
+		INSERT INTO utilisateur (numero, code) VALUES (5, 4444);
 
-	INSERT INTO utilisateur (numero, code) VALUES (1, 0000);
-	INSERT INTO utilisateur (numero, code) VALUES (2, 1111);
-	INSERT INTO utilisateur (numero, code) VALUES (3, 2222);
-	INSERT INTO utilisateur (numero, code) VALUES (4, 3333);
-	INSERT INTO utilisateur (numero, code) VALUES (5, 4444);
+		-- Les nombre de retraits et dépôts sont automatiquement remplis à 0 grâce à la structure de création
+		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (1, 20, 43.585909, 1.447364);
+		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (2, 15, 43.583776, 1.443702);
+		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (3, 25, 43.585632, 1.428026);
+		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (4, 10, 43.591544, 1.418569);
+		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (5, 20, 43.587916, 1.424500);
 
-	-- Les nombre de retraits et dépôts sont automatiquement remplis à 0 grâce à la structure de création
-	INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (1, 20, 43.585909, 1.447364);
-	INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (1, 15, 43.583776, 1.443702);
-	INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (1, 25, 43.585632, 1.428026);
-	INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (1, 10, 43.591544, 1.418569);
-	INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (1, 20, 43.587916, 1.424500);
-
-	INSERT INTO velo (identifiantvelo, operationnel, fk_identifiantstation) VALUES (1, 1, TRUE);
-	INSERT INTO velo (identifiantvelo, operationnel, fk_identifiantstation) VALUES (2, 1, TRUE);
-	INSERT INTO velo (identifiantvelo, operationnel, fk_identifiantstation) VALUES (3, 2, TRUE);
-	INSERT INTO velo (identifiantvelo, operationnel, fk_identifiantstation) VALUES (4, 3, TRUE);
-	INSERT INTO velo (identifiantvelo, operationnel, fk_identifiantstation) VALUES (5, 4, TRUE);
+		INSERT INTO velo (identifiantvelo, operationnel, fk_identifiantstation) VALUES (1, TRUE, 1);
+		INSERT INTO velo (identifiantvelo, operationnel, fk_identifiantstation) VALUES (2, TRUE, 1);
+		INSERT INTO velo (identifiantvelo, operationnel, fk_identifiantstation) VALUES (3, TRUE, 2);
+		INSERT INTO velo (identifiantvelo, operationnel, fk_identifiantstation) VALUES (4, TRUE, 3);
+		INSERT INTO velo (identifiantvelo, operationnel, fk_identifiantstation) VALUES (5, TRUE, 4);
