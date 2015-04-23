@@ -55,4 +55,12 @@ public class VeloMetier {
         this.enCirculation = enCirculation;
     }
 
+    @Override
+    public String toString() {
+        return "VeloMetier{" +
+                "identifiantVelo=" + identifiantVelo +
+                ", operationnel=" + operationnel +
+                ", enCirculation=" + enCirculation +
+                '}';
+    }
 }

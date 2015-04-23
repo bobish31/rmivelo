@@ -8,6 +8,12 @@ import bdd.bddClass.UtilisateurMetier;
  */
 public class UtilisateurDAO extends DAO<UtilisateurMetier> {
 
+    private static final String TABLE_UTILISATEUR = "utilisateur";
+
+    private static final String COLONNE_UTILISATEUR_NUMERO = "numero";
+    private static final String COLONNE_UTILISATEUR_CODE = "code";
+
+    private static final String SEQ_UTILISATEUR_NUMERO= "numero_seq";
 
     @Override
     public UtilisateurMetier create(UtilisateurMetier obj) {

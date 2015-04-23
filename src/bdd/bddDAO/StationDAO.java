@@ -8,6 +8,17 @@ import bdd.bddClass.StationMetier;
  */
 public class StationDAO extends DAO<StationMetier> {
 
+    private static final String TABLE_STATION = "station";
+
+    private static final String COLONNE_STATION_IDENTIFIANTSTATION = "identifiantstation";
+    private static final String COLONNE_STATION_CAPACITE = "capacite";
+    private static final String COLONNE_STATION_NBRETRAITS = "nbretraits";
+    private static final String COLONNE_STATION_NBDEPOTS = "nbdepots";
+    private static final String COLONNE_STATION_LATITUDE = "latitude";
+    private static final String COLONNE_STATION_LONGITUDE = "longitude";
+
+    private static final String SEQ_STATION_IDENTIFIANTSTATION = "identifiantstation_seq";
+
 
     @Override
     public StationMetier create(StationMetier obj) {

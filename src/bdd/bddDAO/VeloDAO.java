@@ -14,35 +14,12 @@ import java.sql.Types;
 public class VeloDAO extends DAO<VeloMetier> {
 
     private static final String TABLE_VELO = "velo";
-    private static final String TABLE_UTILISATEUR = "utilisateur";
-    private static final String TABLE_STATION = "station";
-    private static final String TABLE_UTILISER = "utiliser";
 
     private static final String COLONNE_VELO_IDENTIFIANTVELO = "identifiantvelo";
     private static final String COLONNE_VELO_OPERATIONNEL = "operationnel";
     private static final String COLONNE_VELO_FK_IDENTIFIANTSTATION = "fk_identifiantstation";
 
-    private static final String COLONNE_UTILISATEUR_NUMERO = "numero";
-    private static final String COLONNE_UTILISATEUR_CODE = "code";
-
-    private static final String COLONNE_STATION_IDENTIFIANTSTATION = "identifiantstation";
-    private static final String COLONNE_STATION_CAPACITE = "capacite";
-    private static final String COLONNE_STATION_NBRETRAITS = "nbretraits";
-    private static final String COLONNE_STATION_NBDEPOTS = "nbdepots";
-    private static final String COLONNE_STATION_LATITUDE = "latitude";
-    private static final String COLONNE_STATION_LONGITUDE = "longitude";
-
-    private static final String COLONNE_UTILISER_UTILISER_ID = "utiliser_id";
-    private static final String COLONNE_UTILISER_FK_IDENTIFIANTVELO = "fk_identifiantvelo";
-    private static final String COLONNE_UTILISER_FK_NUMERO = "fk_numero";
-    private static final String COLONNE_UTILISER_DATERETRAIT = "dateretrait";
-    private static final String COLONNE_UTILISER_DATEDEPOT = "datedepot";
-
     private static final String SEQ_VELO_IDENTIFIANTVELO = "identifiantvelo_seq";
-    private static final String SEQ_UTILISATEUR_NUMERO= "numero_seq";
-    private static final String SEQ_STATION_IDENTIFIANTSTATION = "identifiantstation_seq";
-    private static final String SEQ_UTILISER_UTILISER_ID = "utiliser_id_seq";
-
 
     @Override
     public VeloMetier create(VeloMetier velo){

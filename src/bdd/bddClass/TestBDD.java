@@ -11,7 +11,7 @@ import java.sql.SQLException;
  * Created by David on 22/04/2015.
  */
 public class TestBDD {
-    // On va tester dans cette classe si on peut vraiment se co à la bdd
+    // On va tester dans cette classe si on peut vraiment se co ï¿½ la bdd
     public static void main(String[] args) throws SQLException {
 
         // on lance la bdd
@@ -23,7 +23,7 @@ public class TestBDD {
 
             VeloMetier vel= veldao.create(new VeloMetier(1));
 
-           System.out.println(veldao.find(1).getIdentifiant());
+           System.out.println(veldao.find(1).toString());
 
         } else {
             System.out.println("Erreur Connection BDD");
