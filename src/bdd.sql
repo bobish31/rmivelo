@@ -1,109 +1,171 @@
-CREATE DATABASE "rmivelo" WITH TEMPLATE = template0 ENCODING = 'UTF8';
-	ALTER DATABASE "rmivelo" OWNER TO postgres;
+-- *********** -- *********** -- *********** -- *******
+--
+--
+--			SCRIPT GENERAL DE CREATION DE L'ENSEMBLE
+--				DE LA BASE DEDIEE AU PROJET RMI
+--
+--			Postgre impose d'avoir les variables
+--			des requêtes sans majuscules : la casse
+--			n'est pas prise en compte !
+--
+--
+-- *********** -- *********** -- *********** -- *******
 
-	CREATE TABLE velo (
-	    velo_id integer NOT NULL,
-	    velo_operationnel BOOLEAN DEFAULT TRUE,
-	    velo_enCirculation BOOLEAN DEFAULT FALSE
-	); 	
 
-	ALTER TABLE public.velo OWNER TO postgres;
-	CREATE SEQUENCE velo_id_seq
-	    INCREMENT BY 1
-	    NO MAXVALUE
-	    NO MINVALUE
-	    CACHE 1;
-	
-	ALTER TABLE public.velo_id_seq OWNER TO postgres;
-	ALTER SEQUENCE velo_id_seq OWNED BY velo.velo_id;
+	-- *********** -- *********** -- *********** -- *******
+	--			SCRIPT DE CREATION DE LA BASE
+	-- *********** -- *********** -- *********** -- *******
 
-	
-	CREATE TABLE j_soc_dev (
-	    jsd_id integer NOT NULL,
-	    jsd_soc_k bigint NOT NULL,
-	    jsd_dev_k bigint NOT NULL
-	);
-	ALTER TABLE public.j_soc_dev OWNER TO postgres;
-	CREATE SEQUENCE j_soc_dev_jsd_id_seq
-	    INCREMENT BY 1
-	    NO MAXVALUE
-	    NO MINVALUE
-	    CACHE 1;
-	ALTER TABLE public.j_soc_dev_jsd_id_seq OWNER TO postgres;
-	ALTER SEQUENCE j_soc_dev_jsd_id_seq OWNED BY j_soc_dev.jsd_id;
-	SELECT pg_catalog.setval('j_soc_dev_jsd_id_seq', 5, true);
-	
-	
-	CREATE TABLE langage (
-	    lan_id integer NOT NULL,
-	    lan_nom character varying(64) NOT NULL
-	);
-	ALTER TABLE public.langage OWNER TO postgres;
-	CREATE SEQUENCE langage_lan_id_seq
-	    INCREMENT BY 1
-	    NO MAXVALUE
-	    NO MINVALUE
-	    CACHE 1;
-	ALTER TABLE public.langage_lan_id_seq OWNER TO postgres;
-	ALTER SEQUENCE langage_lan_id_seq OWNED BY langage.lan_id;
-	SELECT pg_catalog.setval('langage_lan_id_seq', 3, true);
-	
-	
-	CREATE TABLE societe (
-	    soc_id integer NOT NULL,
-	    soc_nom character varying(64) NOT NULL
-	);
-	ALTER TABLE public.societe OWNER TO postgres;
-	CREATE SEQUENCE societe_soc_id_seq
-	    INCREMENT BY 1
-	    NO MAXVALUE
-	    NO MINVALUE
-	    CACHE 1;
-	ALTER TABLE public.societe_soc_id_seq OWNER TO postgres;
-	ALTER SEQUENCE societe_soc_id_seq OWNED BY societe.soc_id;
-	SELECT pg_catalog.setval('societe_soc_id_seq', 2, true);
-	
-	
-	ALTER TABLE developpeur ALTER COLUMN dev_id SET DEFAULT nextval('developpeur_dev_id_seq'::regclass);
-	ALTER TABLE j_soc_dev ALTER COLUMN jsd_id SET DEFAULT nextval('j_soc_dev_jsd_id_seq'::regclass);
-	ALTER TABLE langage ALTER COLUMN lan_id SET DEFAULT nextval('langage_lan_id_seq'::regclass);
-	ALTER TABLE societe ALTER COLUMN soc_id SET DEFAULT nextval('societe_soc_id_seq'::regclass);
-	
-	INSERT INTO developpeur (dev_id, dev_nom, dev_prenom, dev_lan_k) VALUES (1, 'HERBY', 'Cyrille', 1);
-	INSERT INTO developpeur (dev_id, dev_nom, dev_prenom, dev_lan_k) VALUES (2, 'PITON', 'Thomas', 3);
-	INSERT INTO developpeur (dev_id, dev_nom, dev_prenom, dev_lan_k) VALUES (3, 'COURTEL', 'Angelo', 2);
-	
-	INSERT INTO j_soc_dev (jsd_id, jsd_soc_k, jsd_dev_k) VALUES (1, 1, 1);
-	INSERT INTO j_soc_dev (jsd_id, jsd_soc_k, jsd_dev_k) VALUES (2, 1, 2);
-	INSERT INTO j_soc_dev (jsd_id, jsd_soc_k, jsd_dev_k) VALUES (3, 1, 3);
-	INSERT INTO j_soc_dev (jsd_id, jsd_soc_k, jsd_dev_k) VALUES (4, 2, 1);
-	INSERT INTO j_soc_dev (jsd_id, jsd_soc_k, jsd_dev_k) VALUES (5, 2, 3);
-	
-	INSERT INTO langage (lan_id, lan_nom) VALUES (1, 'Java');
-	INSERT INTO langage (lan_id, lan_nom) VALUES (2, 'PHP');
-	INSERT INTO langage (lan_id, lan_nom) VALUES (3, 'C++');
-	
-	INSERT INTO societe (soc_id, soc_nom) VALUES (1, 'Societe 1');
-	INSERT INTO societe (soc_id, soc_nom) VALUES (2, 'Societe 2');
-	
-	
-	ALTER TABLE ONLY developpeur
-	    ADD CONSTRAINT developpeur_pkey PRIMARY KEY (dev_id);
-	ALTER TABLE ONLY j_soc_dev
-	    ADD CONSTRAINT j_soc_dev_pkey PRIMARY KEY (jsd_id);
-	ALTER TABLE ONLY langage
-	    ADD CONSTRAINT langage_pkey PRIMARY KEY (lan_id);
-	ALTER TABLE ONLY societe
-	    ADD CONSTRAINT societe_pkey PRIMARY KEY (soc_id);
-	
-	CREATE INDEX fki_ ON developpeur USING btree (dev_lan_k);
-	CREATE INDEX fki_fki_developpeur ON j_soc_dev USING btree (jsd_dev_k);
-	CREATE INDEX fki_fki_societe ON j_soc_dev USING btree (jsd_soc_k);
-	
-	
-	ALTER TABLE ONLY developpeur
-	    ADD CONSTRAINT developpeur_dev_lan_k_fkey FOREIGN KEY (dev_lan_k) REFERENCES langage(lan_id);
-	ALTER TABLE ONLY j_soc_dev
-	    ADD CONSTRAINT fki_developpeur FOREIGN KEY (jsd_dev_k) REFERENCES developpeur(dev_id);
-	ALTER TABLE ONLY j_soc_dev
-	    ADD CONSTRAINT fki_societe FOREIGN KEY (jsd_soc_k) REFERENCES societe(soc_id);
+		CREATE DATABASE "rmivelo" WITH TEMPLATE = template0 ENCODING = 'UTF8';
+		ALTER DATABASE "rmivelo" OWNER TO postgres;
+
+	-- *********** -- *********** -- *********** -- *******
+	--			SCRIPT DE CREATION DES TABLES
+	-- *********** -- *********** -- *********** -- *******
+
+		-------------------------------------------------------
+		-- TABLE VELO
+		-------------------------------------------------------
+		CREATE TABLE velo (
+			identifiantvelo integer NOT NULL,
+			operationnel BOOLEAN DEFAULT TRUE,
+			fk_identifiantstation integer
+		);
+
+		ALTER TABLE public.velo OWNER TO postgres;
+		CREATE SEQUENCE identifiantvelo_seq
+			INCREMENT BY 1
+			NO MAXVALUE
+			NO MINVALUE
+			CACHE 1;
+
+		ALTER TABLE public.identifiantvelo_seq OWNER TO postgres;
+		ALTER SEQUENCE identifiantvelo_seq OWNED BY velo.identifiantvelo;
+		-- Initialiser la séquence selon le nombre d'INSERT faits à la main dans ce script
+		SELECT pg_catalog.setval('identifiantvelo_seq', 5, true);
+
+
+		-------------------------------------------------------
+		-- TABLE UTILISATEUR
+		-------------------------------------------------------
+		CREATE TABLE utilisateur (
+				numero integer NOT NULL,
+				code integer NOT NULL
+			);
+
+		ALTER TABLE public.utilisateur OWNER TO postgres;
+		CREATE SEQUENCE numero_seq
+			INCREMENT BY 1
+			NO MAXVALUE
+			NO MINVALUE
+			CACHE 1;
+
+		ALTER TABLE public.numero_seq OWNER TO postgres;
+		ALTER SEQUENCE numero_seq OWNED BY utilisateur.numero_seq;
+		-- Initialiser la séquence selon le nombre d'INSERT faits à la main dans ce script
+		SELECT pg_catalog.setval('numero_seq', 5, true);
+
+
+		-------------------------------------------------------
+		-- TABLE STATION
+		-------------------------------------------------------
+		CREATE TABLE station (
+				identifiantstation integer NOT NULL,
+				capacite integer NOT NULL,
+				nbretraits integer NOT NULL DEFAULT 0,
+				nbdepots integer NOT NULL DEFAULT 0,
+				latitude double NOT NULL,
+				longitude double NOT NULL
+			);
+
+		ALTER TABLE public.station OWNER TO postgres;
+		CREATE SEQUENCE identifiantstation_seq
+			INCREMENT BY 1
+			NO MAXVALUE
+			NO MINVALUE
+			CACHE 1;
+
+		ALTER TABLE public.identifiantstation_seq OWNER TO postgres;
+		ALTER SEQUENCE identifiantstation_seq OWNED BY station.identifiantstation_seq;
+		-- Initialiser la séquence selon le nombre d'INSERT faits à la main dans ce script
+		SELECT pg_catalog.setval('identifiantstation_seq', 5, true);
+
+
+		-------------------------------------------------------
+		-- TABLE UTILISER
+		-------------------------------------------------------
+		CREATE TABLE utiliser (
+				utiliser_id
+				fk_identifiantvelo integer NOT NULL,
+				fk_numero integer NOT NULL,
+				dateretrait date NOT NULL,
+				datedepot date NOT NULL
+			);
+
+		ALTER TABLE public.utiliser OWNER TO postgres;
+		CREATE SEQUENCE utiliser_id_seq
+			INCREMENT BY 1
+			NO MAXVALUE
+			NO MINVALUE
+			CACHE 1;
+		ALTER TABLE public.utiliser_id_seq OWNER TO postgres;
+		ALTER SEQUENCE utiliser_id_seq OWNED BY utiliser.utiliser_id;
+		-- Initialiser la séquence selon le nombre d'INSERT faits à la main dans ce script
+		SELECT pg_catalog.setval('utiliser_id_seq', 1, true);
+
+
+		-------------------------------------------------------
+		-- MISE EN PLACE DES SEQUENCES
+		-------------------------------------------------------
+		ALTER TABLE velo ALTER COLUMN identifiantvelo SET DEFAULT nextval('identifiantvelo_seq'::regclass);
+		ALTER TABLE utilisateur ALTER COLUMN numero SET DEFAULT nextval('numero_seq'::regclass);
+		ALTER TABLE station ALTER COLUMN identifiantstation SET DEFAULT nextval('identifiantstation_seq'::regclass);
+		ALTER TABLE utiliser ALTER COLUMN utiliser_id SET DEFAULT nextval('utiliser_id_seq'::regclass);
+
+
+		-------------------------------------------------------
+		-- MISE EN PLACE DES CLES PRIMAIRES
+		-------------------------------------------------------
+		ALTER TABLE ONLY velo
+			ADD CONSTRAINT identifiantvelo_pkey PRIMARY KEY (identifiantvelo);
+		ALTER TABLE ONLY utilisateur
+			ADD CONSTRAINT numero_pkey PRIMARY KEY (numero);
+		ALTER TABLE ONLY station
+			ADD CONSTRAINT identifiantstation_pkey PRIMARY KEY (identifiantstation);
+		ALTER TABLE ONLY utiliser
+			ADD CONSTRAINT utiliser_id_pkey PRIMARY KEY (utiliser_id);
+
+
+		-------------------------------------------------------
+		-- MISE EN PLACE DES CLES ETRANGERES
+		-------------------------------------------------------
+		ALTER TABLE ONLY velo
+			ADD CONSTRAINT velo_identifiantstation_fk FOREIGN KEY (fk_identifiantstation) REFERENCES station(identifiantstation);
+		ALTER TABLE ONLY utiliser
+			ADD CONSTRAINT utiliser_identifiantvelo_fk FOREIGN KEY (fk_identifiantvelo) REFERENCES velo(identifiantvelo);
+		ALTER TABLE ONLY utiliser
+			ADD CONSTRAINT utiliser_numero_fk FOREIGN KEY (fk_numero) REFERENCES utilisateur(numero);
+
+	-- *********** -- *********** -- *********** -- *******
+	--				   SCRIPT D'INSERTION
+	-- *********** -- *********** -- *********** -- *******
+
+
+	INSERT INTO utilisateur (numero, code) VALUES (1, 0000);
+	INSERT INTO utilisateur (numero, code) VALUES (2, 1111);
+	INSERT INTO utilisateur (numero, code) VALUES (3, 2222);
+	INSERT INTO utilisateur (numero, code) VALUES (4, 3333);
+	INSERT INTO utilisateur (numero, code) VALUES (5, 4444);
+
+	-- Les nombre de retraits et dépôts sont automatiquement remplis à 0 grâce à la structure de création
+	INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (1, 20, 43.585909, 1.447364);
+	INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (1, 15, 43.583776, 1.443702);
+	INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (1, 25, 43.585632, 1.428026);
+	INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (1, 10, 43.591544, 1.418569);
+	INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (1, 20, 43.587916, 1.424500);
+
+	INSERT INTO velo (identifiantvelo, operationnel, fk_identifiantstation) VALUES (1, 1, TRUE);
+	INSERT INTO velo (identifiantvelo, operationnel, fk_identifiantstation) VALUES (2, 1, TRUE);
+	INSERT INTO velo (identifiantvelo, operationnel, fk_identifiantstation) VALUES (3, 2, TRUE);
+	INSERT INTO velo (identifiantvelo, operationnel, fk_identifiantstation) VALUES (4, 3, TRUE);
+	INSERT INTO velo (identifiantvelo, operationnel, fk_identifiantstation) VALUES (5, 4, TRUE);
