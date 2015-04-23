@@ -28,5 +28,13 @@ https://jdbc.postgresql.org/download/postgresql-9.4-1201.jdbc41.jar
 
 BASE DE DONNEES
 
-- Schéma de la BD
-- Script de création de la BD
+- Schéma de la BD (ok)
+- Script de création de la BD (ok)
+- Test du script (ok)
+
+LIAISON BASE DE DONNEES <-> JAVA
+
+- Ecrire le corps des méthodes de création des objets
+- Ecrire le corps des méthodes de suppression des objets
+- Ecrire le corps des méthodes de modification des objets
+- Ecrire le corps des méthodes de selection des objets

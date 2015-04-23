@@ -20,6 +20,11 @@ public class VeloMetier {
         enCirculation = false;
     }
 
+    public VeloMetier(int identifiantVelo, boolean operationnel) {
+        this.identifiantVelo = identifiantVelo;
+        this.operationnel = operationnel;
+    }
+
     public VeloMetier(int id,boolean op,boolean circ){
         this.identifiantVelo = id;
         operationnel = op;
