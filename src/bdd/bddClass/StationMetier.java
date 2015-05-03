@@ -16,6 +16,8 @@ public class StationMetier {
 
     private ArrayList<Integer> listeVelos;
 
+    public StationMetier () {}
+
     public StationMetier(int identifiantStation, int capacite, int nbRetraits, int nbDepots, double latitude, double longitude) {
         this.identifiantStation = identifiantStation;
         this.capacite = capacite;

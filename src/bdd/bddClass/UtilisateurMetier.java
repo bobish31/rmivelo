@@ -1,11 +1,15 @@
 package bdd.bddClass;
 
+import bdd.DAO;
+
 /**
  * Created by David on 22/04/2015.
  */
-public class UtilisateurMetier {
+public class UtilisateurMetier  {
     private int numero;
     private int code;
+
+    public UtilisateurMetier () {}
 
     public UtilisateurMetier(int numero, int code) {
         this.numero = numero;
