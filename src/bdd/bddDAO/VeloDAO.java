@@ -7,9 +7,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 
 /**
  * Created by Menu on 20/04/2015.
+ *
+ * Pour faire un select on utilise un executeQuery avec un ResultSet
+ * Sinon pour les autres opérations en BDD on utilise un executeUpdate
  */
 public class VeloDAO extends DAO<VeloMetier> {
 
@@ -58,13 +62,39 @@ public class VeloDAO extends DAO<VeloMetier> {
     }
 
     @Override
-    public VeloMetier delete(VeloMetier obj) {
-        return null;
+    public void delete(VeloMetier obj) {
+        try {
+            String requete = "DELETE FROM " + TABLE_VELO + "where identifiantvelo ="+obj.getIdentifiantVelo();
+
+                bddConnecteur.createStatement(
+                 ResultSet.TYPE_SCROLL_INSENSITIVE,
+                 ResultSet.CONCUR_UPDATABLE
+            ).executeUpdate(requete);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
     public VeloMetier update(VeloMetier obj) {
-        return null;
+
+        String requete = "UPDATE" + TABLE_VELO + "SET" + COLONNE_VELO_OPERATIONNEL + "=" + obj.isOperationnel();
+
+            try
+            {
+            bddConnecteur.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE
+            ).executeUpdate(requete);
+
+                obj = this.find(obj.getIdentifiantVelo());
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return obj;
     }
 
     @Override
@@ -91,4 +121,33 @@ public class VeloDAO extends DAO<VeloMetier> {
         return velo;
 
     }
+
+    // Permet de charger toutes les instances dans la liste velo utiliser pour ServeurGeneralImpl
+    public ArrayList<VeloMetier> getInstances () {
+        ArrayList<VeloMetier> listeVelos = new ArrayList<>();
+
+        try {
+            String requete = "SELECT * from " + TABLE_VELO;
+
+            ResultSet result = bddConnecteur.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE
+            ).executeQuery(requete);
+
+            // pour chaque enregistrement de la bdd on le charge dans la liste
+            while (result.next()) {
+                VeloMetier v = this.find(result.getInt(1));
+                listeVelos.add(v);
+
+            }
+        }    catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listeVelos;
+
+
+        }
+
+
 }
