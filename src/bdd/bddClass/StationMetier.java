@@ -41,8 +41,8 @@ public class StationMetier {
         nbDepots++;
     }
 
-    public void decrementerNbRetraits() {
-        nbRetraits--;
+    public void incrementerNbRetraits() {
+        nbRetraits++;
     }
 
     public int getIdentifiantStation() {

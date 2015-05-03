@@ -102,12 +102,20 @@ public class VeloDAO extends DAO<VeloMetier> {
         return obj;
     }
 
-    public VeloMetier update(VeloMetier obj, StationMetier sta) {
+    public VeloMetier update2(VeloMetier obj, StationMetier sta) {
 
-        String requete = "UPDATE" + TABLE_VELO + "SET"
-                + COLONNE_VELO_OPERATIONNEL + "=" + obj.isOperationnel() +","
-                + COLONNE_VELO_FK_IDENTIFIANTSTATION + "=" + sta.getIdentifiantStation()
-                + "WHERE" + COLONNE_VELO_IDENTIFIANTVELO + "=" + obj.getIdentifiantVelo();
+        String requete;
+        if(sta!=null){
+            requete = "UPDATE" + TABLE_VELO + "SET"
+                    + COLONNE_VELO_OPERATIONNEL + "=" + obj.isOperationnel() +","
+                    + COLONNE_VELO_FK_IDENTIFIANTSTATION + "=" + sta.getIdentifiantStation()
+                    + "WHERE" + COLONNE_VELO_IDENTIFIANTVELO + "=" + obj.getIdentifiantVelo();
+        }else{
+            requete = "UPDATE" + TABLE_VELO + "SET"
+                    + COLONNE_VELO_OPERATIONNEL + "=" + obj.isOperationnel()+","
+                    + COLONNE_VELO_FK_IDENTIFIANTSTATION + "= 0"
+                    + "WHERE" + COLONNE_VELO_IDENTIFIANTVELO + "=" + obj.getIdentifiantVelo();
+        }
 
         try
         {

@@ -33,7 +33,10 @@ ETAPE 4 - DAO
 
 ETAPE 5 - SERVEURGENERALIMPL
 
-
+- Faire méthodes déposer et retirer : OK
+- Faire méthode creer OK
+- Manque Tester
+=>> J'ai fait des modifs dans la classes DAO et servGeneral aussi il faudra en discuter
 
 ANNEXE
 VERSION BDD INSTALLER
@@ -46,6 +49,10 @@ nom bdd = rmivelo
 Import du jar n�cessaire
 
 https://jdbc.postgresql.org/download/postgresql-9.4-1201.jdbc41.jar
+
+
+------------------------------
+
 
 
 

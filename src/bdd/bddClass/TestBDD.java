@@ -19,7 +19,7 @@ public class TestBDD {
 
         if (connect != null) {
             System.out.println("Connection BDD OK");
-            DAO<VeloMetier> veldao=new VeloDAO();
+            VeloDAO veldao=new VeloDAO();
 
             VeloMetier vel= veldao.create(new VeloMetier(1));
 

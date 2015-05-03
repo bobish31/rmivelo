@@ -19,7 +19,7 @@ public interface ServeurGeneral extends Remote {
 
     public String[] obtenirBornesVoisines(int identifiantBorneUtilisateur) throws java.rmi.RemoteException;
 
-    public void creerVelo(int identifiantVelo, boolean operationnel, boolean enCirculation) throws java.rmi.RemoteException;
+    public  void creerVelo(int identifiantVelo, boolean operationnel) throws java.rmi.RemoteException;
 
     public boolean authentifierUtilisateur(int numero, int code) throws java.rmi.RemoteException;
 

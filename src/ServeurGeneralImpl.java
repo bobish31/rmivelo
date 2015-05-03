@@ -1,13 +1,17 @@
 import bdd.BDDConnecteur;
+import bdd.DAO;
 import bdd.bddClass.StationMetier;
 import bdd.bddClass.UtilisateurMetier;
 import bdd.bddClass.VeloMetier;
+import bdd.bddDAO.StationDAO;
+import bdd.bddDAO.VeloDAO;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.Connection;
 import java.util.*;
 
 /**
@@ -19,11 +23,27 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     private HashMap<Integer, UtilisateurMetier> listeUtilisateurs;
     private HashMap<Integer, VeloMetier> listeVelos;
     private HashMap<Integer, StationMetier> listeStations;
+    private VeloDAO veldao;
+    private DAO<StationMetier> stationdao;
 
     public ServeurGeneralImpl() throws RemoteException {
 
         // Déclaration des listes
         listeUtilisateurs = new HashMap<>();
+
+        // on lance la bdd
+        Connection connect = BDDConnecteur.getInstance();
+
+        if (connect != null) {
+            System.out.println("Connection BDD OK");
+            veldao=new VeloDAO();
+            stationdao= new StationDAO();
+
+
+
+        } else {
+            System.out.println("Erreur Connection BDD");
+        }
     }
 
     // Méthode qui lance le serveur
@@ -80,28 +100,44 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     @Override
     public void deposerVelo(int identifiantBorneUtilisateur, int numero, int identifiantVelo, Date heureDepot) throws RemoteException {
 
-        // Changement du statut du vélo
-        listeVelos.get(identifiantVelo).setEnCirculation(false);
+        // Changement du statut du vélo, affectation de la station dans la bdd
+
+        VeloMetier vel=veldao.find(identifiantVelo);
+
+        StationMetier st = stationdao.find(identifiantBorneUtilisateur);
+        veldao.update2(vel, st);
+
 
         // Changement des capacités de la station concernée
-        listeStations.get(identifiantBorneUtilisateur).incrementerNbVelosDispos();
+        //TODO checker si ça vaut le coup de faire ça
+        st.setCapacite(st.getCapacite()+1);
 
         // Gérer les nombres de dépôts de vélo dans la station
-        listeStations.get(identifiantBorneUtilisateur).incrementerNbDepots();
+        st.incrementerNbDepots();
+
+        //maj dans la base
+        stationdao.update(st);
 
     }
 
     @Override
     public void retirerVelo(int identifiantBorneUtilisateur, int numero, int identifiantVelo, Date heureRetrait) throws RemoteException {
 
-        // Changement du statut du vélo
-        listeVelos.get(identifiantVelo).setEnCirculation(true);
+        // Changement du statut du vélo => on enleve la clé étrangère
+        VeloMetier vel=veldao.find(identifiantVelo);
+
+        veldao.update2(vel,null);
 
         // Changement des capacités de la station concernée
-        listeStations.get(identifiantBorneUtilisateur).decrementerNbVelosDispos();
+        StationMetier st=stationdao.find(identifiantBorneUtilisateur);
+        st.setCapacite(st.getCapacite() - 1);
+
 
         // Gérer les nombres de retraits de vélo dans la station
-        listeStations.get(identifiantBorneUtilisateur).decrementerNbRetraits();
+        st.incrementerNbRetraits();
+
+        //Maj dans la bdd
+        stationdao.update(st);
 
     }
 
@@ -113,16 +149,9 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     }
 
     @Override
-    public void creerVelo(int identifiantVelo, boolean operationnel, boolean enCirculation) throws RemoteException {
+    public void creerVelo(int identifiantVelo, boolean operationnel) throws RemoteException {
 
-        // On récupére le plus grand numero de velo de la map correspondante
-        int numero = Collections.max(listeVelos.keySet());
-
-        // On créé le numero + 1
-        numero++;
-
-        // On stocke le nouvel velo selon la stratégie de stockage choisie
-        // new Velo(numero)
+        veldao.create(new VeloMetier(identifiantVelo,operationnel));
     }
 
     @Override
