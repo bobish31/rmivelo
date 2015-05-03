@@ -16,6 +16,8 @@ public class UtiliserMetier {
         this.dateDepot = dateDepot;
     }
 
+    public int getIdUtilisation () {return idUtilisation;}
+
     public Date getDateDepart() {
         return dateRetrait;
     }

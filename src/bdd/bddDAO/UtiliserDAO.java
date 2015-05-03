@@ -1,12 +1,16 @@
 package bdd.bddDAO;
 
 import bdd.DAO;
+import bdd.bddClass.UtiliserMetier;
 import bdd.bddClass.VeloMetier;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Created by lintingre on 23/04/15.
  */
-public class UtiliserDAO extends DAO<VeloMetier> {
+public class UtiliserDAO extends DAO<UtiliserMetier> {
 
     private static final String TABLE_UTILISER = "utiliser";
 
@@ -20,22 +24,33 @@ public class UtiliserDAO extends DAO<VeloMetier> {
 
 
     @Override
-    public VeloMetier create(VeloMetier obj) {
+    public UtiliserMetier create(UtiliserMetier obj) {
         return null;
     }
 
     @Override
-    public VeloMetier delete(VeloMetier obj) {
+    public void delete(UtiliserMetier obj) {
+        try {
+            String requete = "DELETE FROM " + TABLE_UTILISER + "where utiliser_id ="+obj.getIdUtilisation();
+
+            bddConnecteur.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE
+            ).executeUpdate(requete);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public UtiliserMetier update(UtiliserMetier obj) {
         return null;
     }
 
     @Override
-    public VeloMetier update(VeloMetier obj) {
-        return null;
-    }
-
-    @Override
-    public VeloMetier find(int id) {
+    public UtiliserMetier find(int id) {
         return null;
     }
 }

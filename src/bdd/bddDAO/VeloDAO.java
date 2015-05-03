@@ -1,6 +1,7 @@
 package bdd.bddDAO;
 
 import bdd.DAO;
+import bdd.bddClass.StationMetier;
 import bdd.bddClass.VeloMetier;
 
 import java.sql.PreparedStatement;
@@ -45,13 +46,15 @@ public class VeloDAO extends DAO<VeloMetier> {
                 String requete =
                         "INSERT INTO " + TABLE_VELO + "("
                             + COLONNE_VELO_IDENTIFIANTVELO + ","
-                            + COLONNE_VELO_OPERATIONNEL
+                            + COLONNE_VELO_OPERATIONNEL + ","
+                            + COLONNE_VELO_FK_IDENTIFIANTSTATION
                         + ")"
-                        + "VALUES (?,?);";
+                        + "VALUES (?,?,?);";
 
                 PreparedStatement prepare = bddConnecteur.prepareStatement(requete);
                 prepare.setInt(1, id);
                 prepare.setBoolean(2, obj.isOperationnel());
+                prepare.setNull(3, Types.INTEGER);
                 prepare.executeUpdate();
                 obj = this.find(id);
             }
@@ -92,6 +95,28 @@ public class VeloDAO extends DAO<VeloMetier> {
             ).executeUpdate(requete);
 
                 obj = this.find(obj.getIdentifiantVelo());
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return obj;
+    }
+
+    public VeloMetier update(VeloMetier obj, StationMetier sta) {
+
+        String requete = "UPDATE" + TABLE_VELO + "SET"
+                + COLONNE_VELO_OPERATIONNEL + "=" + obj.isOperationnel() +","
+                + COLONNE_VELO_FK_IDENTIFIANTSTATION + "=" + sta.getIdentifiantStation()
+                + "WHERE" + COLONNE_VELO_IDENTIFIANTVELO + "=" + obj.getIdentifiantVelo();
+
+        try
+        {
+            bddConnecteur.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE
+            ).executeUpdate(requete);
+
+            obj = this.find(obj.getIdentifiantVelo());
 
         } catch (SQLException e) {
             e.printStackTrace();

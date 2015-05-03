@@ -1,7 +1,7 @@
 ETAPE 1
 
 - Test du lancement serveur RMI dans serveurGeneralIMPL (ok)
-- Test du lancement du client qui s'enregistre aupr�s du serveurGeneral (ok)
+- Test du lancement du client qui s'enregistre auprès du serveurGeneral (ok)
 - Test d'une communication entre les 2 (ok)
 --- COMMIT ---
 
@@ -11,9 +11,31 @@ ETAPE 2
 - connection bdd en java (OK)
 - tester l'enregistrement par exemple de creerUser (ok)
 - modification de toute les methodes serveurs en lien avec la bdd --> voir Onglet LIAISON BASE DE DONNEES <-> JAVA
+LIAISON BASE DE DONNEES <-> JAVA (ok)
 ---- COMMIT ----
 
+ETAPE 3 - BASE DE DONNEES
 
+- Schéma de la BD (ok)
+- Script de création de la BD (ok)
+- Test du script (ok)
+---- COMMIT ----
+
+ETAPE 4 - DAO
+
+- Ecrire les constantes de BDD dans chaque classe DAO(ok)
+- VELODAO (ok)
+    - Il manque la représentation de la clé étrangère
+- STATION (ok)
+- UTILISATEUR (ok)
+- UTILISER
+    - Structure
+
+ETAPE 5 - SERVEURGENERALIMPL
+
+
+
+ANNEXE
 VERSION BDD INSTALLER
 
 postgresql-9.4.1-3-windows-x64.exe
@@ -26,16 +48,5 @@ Import du jar n�cessaire
 https://jdbc.postgresql.org/download/postgresql-9.4-1201.jdbc41.jar
 
 
-BASE DE DONNEES
 
-- Schéma de la BD (ok)
-- Script de création de la BD (ok)
-- Test du script (ok)
 
-LIAISON BASE DE DONNEES <-> JAVA
-
-- Ecrire les constantes de BDD dans chaque classe (ok)
-- Ecrire le corps des méthodes de création des objets
-- Ecrire le corps des méthodes de suppression des objets
-- Ecrire le corps des méthodes de modification des objets
-- Ecrire le corps des méthodes de selection des objets
