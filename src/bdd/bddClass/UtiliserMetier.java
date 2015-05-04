@@ -11,9 +11,12 @@ public class UtiliserMetier {
     private Date dateDepot;
     private int idUtilisation;
 
-    public UtiliserMetier(Date dateRetrait, Date dateDepot) {
+    public UtiliserMetier () {}
+
+    public UtiliserMetier(int id,Date dateRetrait, Date dateDepot) {
         this.dateRetrait = dateRetrait;
         this.dateDepot = dateDepot;
+        this.idUtilisation = id;
     }
 
     public int getIdUtilisation () {return idUtilisation;}

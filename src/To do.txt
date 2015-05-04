@@ -28,8 +28,8 @@ ETAPE 4 - DAO
     - Il manque la représentation de la clé étrangère
 - STATION (ok)
 - UTILISATEUR (ok)
-- UTILISER
-    - Structure
+- UTILISER (ok)
+- Test des méthodes en bdd (en cours)
 
 ETAPE 5 - SERVEURGENERALIMPL
 
