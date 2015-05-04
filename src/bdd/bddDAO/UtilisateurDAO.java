@@ -59,7 +59,7 @@ public class UtilisateurDAO extends DAO<UtilisateurMetier> {
     @Override
     public void delete(UtilisateurMetier obj) {
         try {
-            String requete = "DELETE FROM " + TABLE_UTILISATEUR + "where numero ="+obj.getNumero();
+            String requete = "DELETE FROM " + TABLE_UTILISATEUR +  " where numero = " + obj.getNumero();
 
             bddConnecteur.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -73,9 +73,9 @@ public class UtilisateurDAO extends DAO<UtilisateurMetier> {
 
     @Override
     public UtilisateurMetier update(UtilisateurMetier obj) {
-        String requete = "UPDATE" + TABLE_UTILISATEUR + "SET"
+        String requete = "UPDATE " + TABLE_UTILISATEUR + " SET "
                 + COLONNE_UTILISATEUR_CODE+ "=" + obj.getCode()
-                + "WHERE" + COLONNE_UTILISATEUR_NUMERO + "=" + obj.getNumero();
+                + " WHERE " + COLONNE_UTILISATEUR_NUMERO + " = " + obj.getNumero();
 
         try
         {
