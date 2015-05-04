@@ -129,10 +129,12 @@ public class UtiliserDAO extends DAO<UtiliserMetier> {
     @Override
     public UtiliserMetier update(UtiliserMetier obj) {
 
-        String requete = "UPDATE" + TABLE_UTILISER + "SET"
-                + COLONNE_UTILISER_DATERETRAIT + "=" + obj.getDateDepart() + ","
-                + COLONNE_UTILISER_DATEDEPOT + "=" + obj.getDateArivee()
-                + "WHERE" + COLONNE_UTILISER_UTILISER_ID + "=" + obj.getIdUtilisation();
+        String requete = "UPDATE" + TABLE_UTILISER + " SET "
+                + COLONNE_UTILISER_DATERETRAIT + " = " + obj.getDateDepart() + ","
+                + COLONNE_UTILISER_DATEDEPOT + " = " + obj.getDateArivee()
+                + " WHERE " + COLONNE_UTILISER_UTILISER_ID + " = " + obj.getIdUtilisation();
+
+        System.out.println(requete);
 
         try
         {

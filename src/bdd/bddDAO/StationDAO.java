@@ -70,7 +70,7 @@ public class StationDAO extends DAO<StationMetier> {
     @Override
     public void delete(StationMetier obj) {
         try {
-            String requete = "DELETE FROM " + TABLE_STATION + "where identifiantstation ="+obj.getIdentifiantStation();
+            String requete = "DELETE FROM " + TABLE_STATION + " where identifiantstation = " + obj.getIdentifiantStation();
 
             bddConnecteur.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -85,13 +85,13 @@ public class StationDAO extends DAO<StationMetier> {
     @Override
     public StationMetier update(StationMetier obj) {
 
-        String requete = "UPDATE" + TABLE_STATION + "SET"
-                + COLONNE_STATION_CAPACITE + "=" + obj.getCapacite() + ","
-                + COLONNE_STATION_NBRETRAITS + "=" + obj.getNbRetraits() + ","
-                + COLONNE_STATION_NBDEPOTS + "=" + obj.getNbDepots() + ","
-                + COLONNE_STATION_LATITUDE + "=" + obj.getLatitude() + ","
-                + COLONNE_STATION_LONGITUDE + "=" + obj.getLongitude()
-                + "WHERE" + COLONNE_STATION_IDENTIFIANTSTATION + "=" + obj.getIdentifiantStation();
+        String requete = "UPDATE " + TABLE_STATION + " SET "
+                + COLONNE_STATION_CAPACITE + " = " + obj.getCapacite() + ","
+                + COLONNE_STATION_NBRETRAITS + " = " + obj.getNbRetraits() + ","
+                + COLONNE_STATION_NBDEPOTS + " = " + obj.getNbDepots() + ","
+                + COLONNE_STATION_LATITUDE + "=  " + obj.getLatitude() + ","
+                + COLONNE_STATION_LONGITUDE + " = " + obj.getLongitude()
+                + " WHERE " + COLONNE_STATION_IDENTIFIANTSTATION + "=" + obj.getIdentifiantStation();
 
         try
         {
@@ -124,7 +124,7 @@ public class StationDAO extends DAO<StationMetier> {
             ).executeQuery(requete);
 
             if(result.first()) {
-                station = new StationMetier(id,result.getInt(COLONNE_STATION_IDENTIFIANTSTATION),result.getInt(COLONNE_STATION_NBRETRAITS),result.getInt(COLONNE_STATION_NBDEPOTS), result.getDouble(COLONNE_STATION_LATITUDE), result.getDouble(COLONNE_STATION_LONGITUDE));
+                station = new StationMetier(id,result.getInt(COLONNE_STATION_CAPACITE),result.getInt(COLONNE_STATION_NBRETRAITS),result.getInt(COLONNE_STATION_NBDEPOTS), result.getDouble(COLONNE_STATION_LATITUDE), result.getDouble(COLONNE_STATION_LONGITUDE));
             }
 
         } catch (SQLException e) {
