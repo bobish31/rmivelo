@@ -67,7 +67,7 @@ public class VeloDAO extends DAO<VeloMetier> {
     @Override
     public void delete(VeloMetier obj) {
         try {
-            String requete = "DELETE FROM " + TABLE_VELO + "where identifiantvelo ="+obj.getIdentifiantVelo();
+            String requete = "DELETE FROM " + TABLE_VELO + " where identifiantvelo = "+obj.getIdentifiantVelo();
 
             bddConnecteur.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -83,9 +83,9 @@ public class VeloDAO extends DAO<VeloMetier> {
     @Override
     public VeloMetier update(VeloMetier obj) {
 
-        String requete = "UPDATE" + TABLE_VELO + "SET"
-                + COLONNE_VELO_OPERATIONNEL + "=" + obj.isOperationnel()
-                + "WHERE" + COLONNE_VELO_IDENTIFIANTVELO + "=" + obj.getIdentifiantVelo();
+        String requete = "UPDATE " + TABLE_VELO + " SET "
+                + COLONNE_VELO_OPERATIONNEL + " = " + obj.isOperationnel()
+                + " WHERE " + COLONNE_VELO_IDENTIFIANTVELO + " = " + obj.getIdentifiantVelo();
 
             try
             {
@@ -106,15 +106,15 @@ public class VeloDAO extends DAO<VeloMetier> {
 
         String requete;
         if(sta!=null){
-            requete = "UPDATE" + TABLE_VELO + "SET"
-                    + COLONNE_VELO_OPERATIONNEL + "=" + obj.isOperationnel() +","
-                    + COLONNE_VELO_FK_IDENTIFIANTSTATION + "=" + sta.getIdentifiantStation()
-                    + "WHERE" + COLONNE_VELO_IDENTIFIANTVELO + "=" + obj.getIdentifiantVelo();
+            requete = "UPDATE " + TABLE_VELO + " SET "
+                    + COLONNE_VELO_OPERATIONNEL + " = " + obj.isOperationnel() +","
+                    + COLONNE_VELO_FK_IDENTIFIANTSTATION + " = " + sta.getIdentifiantStation()
+                    + " WHERE " + COLONNE_VELO_IDENTIFIANTVELO + " = " + obj.getIdentifiantVelo();
         }else{
-            requete = "UPDATE" + TABLE_VELO + "SET"
-                    + COLONNE_VELO_OPERATIONNEL + "=" + obj.isOperationnel()+","
-                    + COLONNE_VELO_FK_IDENTIFIANTSTATION + "= 0"
-                    + "WHERE" + COLONNE_VELO_IDENTIFIANTVELO + "=" + obj.getIdentifiantVelo();
+            requete = "UPDATE " + TABLE_VELO + " SET "
+                    + COLONNE_VELO_OPERATIONNEL + " = " + obj.isOperationnel()+","
+                    + COLONNE_VELO_FK_IDENTIFIANTSTATION + " = 0"
+                    + " WHERE " + COLONNE_VELO_IDENTIFIANTVELO + " = " + obj.getIdentifiantVelo();
         }
 
         try

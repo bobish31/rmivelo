@@ -54,10 +54,10 @@ public class UtiliserDAO extends DAO<UtiliserMetier> {
 
                 PreparedStatement prepare = bddConnecteur.prepareStatement(requete);
                 prepare.setInt(1, id);
-                prepare.setDate(2, (Date) obj.getDateDepart());
-                prepare.setDate(3, (Date) obj.getDateArivee());
-                prepare.setNull(4, Types.INTEGER);
-                prepare.setNull(5, Types.INTEGER);
+                prepare.setTimestamp(2, obj.getDateRetrait());
+                prepare.setTimestamp(3, obj.getDateDepot());
+                prepare.setInt(4, 1);
+                prepare.setInt(5, 1);
                 prepare.executeUpdate();
                 obj = this.find(id);
             }
@@ -97,8 +97,8 @@ public class UtiliserDAO extends DAO<UtiliserMetier> {
 
                 PreparedStatement prepare = bddConnecteur.prepareStatement(requete);
                 prepare.setInt(1, id);
-                prepare.setDate(2, (Date) obj.getDateDepart());
-                prepare.setDate(3, (Date) obj.getDateArivee());
+                prepare.setTimestamp(2, obj.getDateRetrait());
+                prepare.setTimestamp(3, obj.getDateDepot());
                 prepare.setInt(4, vel.getIdentifiantVelo());
                 prepare.setInt(5, util.getNumero());
                 prepare.executeUpdate();
@@ -113,7 +113,7 @@ public class UtiliserDAO extends DAO<UtiliserMetier> {
     @Override
     public void delete(UtiliserMetier obj) {
         try {
-            String requete = "DELETE FROM " + TABLE_UTILISER + "where utiliser_id ="+obj.getIdUtilisation();
+            String requete = "DELETE FROM " + TABLE_UTILISER + " where utiliser_id = "+obj.getIdUtilisation();
 
             bddConnecteur.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -129,19 +129,20 @@ public class UtiliserDAO extends DAO<UtiliserMetier> {
     @Override
     public UtiliserMetier update(UtiliserMetier obj) {
 
-        String requete = "UPDATE" + TABLE_UTILISER + " SET "
-                + COLONNE_UTILISER_DATERETRAIT + " = " + obj.getDateDepart() + ","
-                + COLONNE_UTILISER_DATEDEPOT + " = " + obj.getDateArivee()
-                + " WHERE " + COLONNE_UTILISER_UTILISER_ID + " = " + obj.getIdUtilisation();
-
-        System.out.println(requete);
+        String requete = "UPDATE " + TABLE_UTILISER + " SET "
+                + COLONNE_UTILISER_DATERETRAIT + " = ? "+ ","
+                + COLONNE_UTILISER_DATEDEPOT + " = ? "
+                + " WHERE " + COLONNE_UTILISER_UTILISER_ID + " = ? ";
 
         try
         {
-            bddConnecteur.createStatement(
-                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                    ResultSet.CONCUR_UPDATABLE
-            ).executeUpdate(requete);
+
+            PreparedStatement prepare = bddConnecteur.prepareStatement(requete);
+            prepare.setTimestamp(1, obj.getDateRetrait());
+            prepare.setTimestamp(2, obj.getDateDepot());
+            prepare.setInt(3, obj.getIdUtilisation());
+            prepare.executeUpdate();
+
 
             obj = this.find(obj.getIdUtilisation());
 
@@ -156,19 +157,22 @@ public class UtiliserDAO extends DAO<UtiliserMetier> {
     // UPDATE : Permet de mettre à jour toute les clés étrangères
     public UtiliserMetier update2 (UtiliserMetier obj, VeloMetier velo, UtilisateurMetier util) {
 
-        String requete = "UPDATE" + TABLE_UTILISER + "SET"
-                + COLONNE_UTILISER_FK_IDENTIFIANTVELO + "=" + velo.getIdentifiantVelo() + ","
-                + COLONNE_UTILISER_FK_NUMERO + "=" + util.getNumero() + ","
-                + COLONNE_UTILISER_DATERETRAIT + "=" + obj.getDateDepart() + ","
-                + COLONNE_UTILISER_DATEDEPOT + "=" + obj.getDateArivee()
-                + "WHERE" + COLONNE_UTILISER_UTILISER_ID + "=" + obj.getIdUtilisation();
+        String requete = "UPDATE " + TABLE_UTILISER + " SET "
+                + COLONNE_UTILISER_FK_IDENTIFIANTVELO + " = ? ,"
+                + COLONNE_UTILISER_FK_NUMERO + " = ? ,"
+                + COLONNE_UTILISER_DATERETRAIT + " = ? ,"
+                + COLONNE_UTILISER_DATEDEPOT + " = ? "
+                +  "WHERE " + COLONNE_UTILISER_UTILISER_ID + " = ? ";
 
         try
         {
-            bddConnecteur.createStatement(
-                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                    ResultSet.CONCUR_UPDATABLE
-            ).executeUpdate(requete);
+            PreparedStatement prepare = bddConnecteur.prepareStatement(requete);
+            prepare.setInt(1,velo.getIdentifiantVelo());
+            prepare.setInt(2,util.getNumero());
+            prepare.setTimestamp(3, obj.getDateRetrait());
+            prepare.setTimestamp(4, obj.getDateDepot());
+            prepare.setInt(5, obj.getIdUtilisation());
+            prepare.executeUpdate();
 
             obj = this.find(obj.getIdUtilisation());
 
@@ -195,7 +199,7 @@ public class UtiliserDAO extends DAO<UtiliserMetier> {
             ).executeQuery(requete);
 
             if(result.first()) {
-                utiliser = new UtiliserMetier(id,result.getDate(COLONNE_UTILISER_DATERETRAIT), result.getDate(COLONNE_UTILISER_DATEDEPOT));
+                utiliser = new UtiliserMetier(id,result.getTimestamp(COLONNE_UTILISER_DATERETRAIT), result.getTimestamp(COLONNE_UTILISER_DATEDEPOT));
             }
 
         } catch (SQLException e) {

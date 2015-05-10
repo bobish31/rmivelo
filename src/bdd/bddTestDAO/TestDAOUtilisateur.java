@@ -21,7 +21,7 @@ public class TestDAOUtilisateur {
             if (connect != null) {
                 System.out.println("Connection BDD OK");
 
-                // ---- TEST CLASSE STATION ---- //
+                // ---- TEST CLASSE Utilisateur ---- //
                 UtilisateurDAO utilD = new UtilisateurDAO();
 
                 // FIND -> CERTIFIER = OK
