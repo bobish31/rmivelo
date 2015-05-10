@@ -4,6 +4,7 @@ import bdd.bddClass.StationMetier;
 import bdd.bddClass.UtilisateurMetier;
 import bdd.bddClass.VeloMetier;
 import bdd.bddDAO.StationDAO;
+import bdd.bddDAO.UtilisateurDAO;
 import bdd.bddDAO.VeloDAO;
 
 import java.net.MalformedURLException;
@@ -23,8 +24,10 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     private HashMap<Integer, UtilisateurMetier> listeUtilisateurs;
     private HashMap<Integer, VeloMetier> listeVelos;
     private HashMap<Integer, StationMetier> listeStations;
+
     private VeloDAO veldao;
     private DAO<StationMetier> stationdao;
+    private UtilisateurDAO utilisateurdao;
 
     public ServeurGeneralImpl() throws RemoteException {
 
@@ -36,10 +39,11 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
         if (connect != null) {
             System.out.println("Connection BDD OK");
+
+            // Création des variables pour la bdd
             veldao=new VeloDAO();
             stationdao= new StationDAO();
-
-
+            utilisateurdao = new UtilisateurDAO();
 
         } else {
             System.out.println("Erreur Connection BDD");
@@ -71,11 +75,29 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     }
 
     @Override
-    public int[] genererUtilisateur() throws RemoteException {
+    public void chargementListeBdd () throws RemoteException {
+
+        // On créer une liste
+        ArrayList <VeloMetier> arrayVelo = new ArrayList<>();
+
+        // --- VELO --- //
+        arrayVelo = veldao.getInstances();
+
+        // On ajoute dans la map
+        for (VeloMetier v : arrayVelo)
+        {
+            listeVelos.put(v.getIdentifiantVelo(),new VeloMetier(v.getIdentifiantVelo(),v.isOperationnel()));
+        }
+
+
+    }
+
+
+    @Override
+    public UtilisateurMetier genererUtilisateur() throws RemoteException {
 
         // On récupére le plus grand numero d'utilisateur de la map correspondante
-        // int numero = Collections.max(listeUtilisateurs.keySet());
-        int numero = 1;
+        int numero = Collections.max(listeUtilisateurs.keySet());
 
         // On créé le numero + 1
         numero++;
@@ -85,16 +107,16 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         int code = rand.nextInt((9999 - 0) + 1) + 0;
 
         // On stocke le nouvel utilisateur selon la stratégie de stockage choisie
-        // new Utilisateur(numero, code);
+        UtilisateurMetier u =  new UtilisateurMetier(numero, code);
 
         // on ajoute dans la map locale
-        listeUtilisateurs.put(numero, new UtilisateurMetier(numero,code));
+        listeUtilisateurs.put(numero, u);
 
-        // On retourne le numero + code générés dans un tableau de Int
-        int[] utilisateur = new int[2];
-        utilisateur[0] = numero;
-        utilisateur[1] = code;
-        return utilisateur;
+        // on ajoute en bdd
+        utilisateurdao.create(u);
+
+        // On retourne l'utilisateur
+        return u;
     }
 
     @Override

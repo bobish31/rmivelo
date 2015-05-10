@@ -1,3 +1,5 @@
+import bdd.bddClass.UtilisateurMetier;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Date;
@@ -11,7 +13,7 @@ public interface ServeurGeneral extends Remote {
 
     // Toutes les m�thodes doivent --> throws java.rmi.RemoteException
 
-    public int[] genererUtilisateur() throws java.rmi.RemoteException;
+    public UtilisateurMetier genererUtilisateur() throws java.rmi.RemoteException;
 
     public void deposerVelo(int identifiantBorneUtilisateur, int numero, int identifiantVelo, Date heureDepot) throws java.rmi.RemoteException;
 
@@ -28,4 +30,6 @@ public interface ServeurGeneral extends Remote {
     public void notifier(int idStation) throws java.rmi.RemoteException;
 
     public boolean connexionOkBDD() throws RemoteException;
+
+    public void chargementListeBdd () throws RemoteException;
 }
