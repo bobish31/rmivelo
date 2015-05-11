@@ -29,7 +29,7 @@ ETAPE 4 - DAO
 - STATION (ok)
 - UTILISATEUR (ok)
 - UTILISER (ok)
-- Test des méthodes en bdd (en cours)
+- Test des méthodes en bdd (ok)
 
 ETAPE 5 - SERVEURGENERALIMPL
 
@@ -37,6 +37,23 @@ ETAPE 5 - SERVEURGENERALIMPL
 - Faire méthode creer OK
 - Manque Tester
 =>> J'ai fait des modifs dans la classes DAO et servGeneral aussi il faudra en discuter
+
+ETAPE 6 : Fonctionnalités
+
+- Chargement de la bdd dans les listes (en cours : RM)
+- générerUtilisateur (en cours : RM)
+
+
+
+
+
+
+
+
+
+
+
+
 
 ANNEXE
 VERSION BDD INSTALLER

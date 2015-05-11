@@ -1,4 +1,5 @@
 import bdd.bddClass.StationMetier;
+import bdd.bddClass.UtilisateurMetier;
 
 import java.net.MalformedURLException;
 import java.rmi.*;
@@ -17,14 +18,16 @@ public class BorneUtilisateur {
     }
 
     public static void main (String [] args) {
-        int [] utilisateur;
+
+        // Utilisateur temporaire
+        UtilisateurMetier utilisateur;
 
         try {
 
-            System.out.println ("Lancement de la borne utilisateur");
-
-            //R�cup�ration d'un proxy sur l'objet
+            //Récupération d'un proxy sur l'objet
             Remote serv = Naming.lookup("rmi://127.0.0.1:5588/ServeurGeneral");
+
+            System.out.println ("Lancement de la borne utilisateur");
 
             if (serv instanceof ServeurGeneral) {
 
@@ -34,14 +37,16 @@ public class BorneUtilisateur {
                 // On teste la connexion à la BDD
                 if (serveurDistant.connexionOkBDD()) {
                     System.out.println("Connexion à la base de données réussie");
+
+                    // --- Appel des fonctionnalités --- //
+
+
+                }
+                else
+                {
+                    System.out.println("Erreur BDD sur le serveur");
                 }
 
-                // On demande la generation d'un client par exemple
-                utilisateur = serveurDistant.genererUtilisateur();
-
-                // On affiche le code pour voir si tout fonctionne
-                System.out.println ("Numero : " + utilisateur[0]);
-                System.out.println ("Code : " + utilisateur[1]);
 
             }
 

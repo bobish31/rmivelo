@@ -33,6 +33,8 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
         // Déclaration des listes
         listeUtilisateurs = new HashMap<>();
+        listeVelos = new HashMap<>();
+        listeStations = new HashMap<>();
 
         // on lance la bdd
         Connection connect = BDDConnecteur.getInstance();
@@ -67,7 +69,14 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
             Naming.rebind(url, obj);
 
             // On confirme que tout est ok
-            System.out.println ("Serveur Lancé");
+            System.out.println("Serveur Lancé");
+
+            // CHARGEMENT BDD
+            System.out.println("Chargement bdd en cours ... \n");
+            obj.chargementListeBdd();
+            System.out.println("Chargement bdd ok");
+
+
         }
         catch (RemoteException | MalformedURLException e){
             e.printStackTrace();
@@ -75,12 +84,38 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     }
 
     @Override
-    public void chargementListeBdd () throws RemoteException {
+    public void  chargementListeBdd () throws RemoteException {
+
+        Set listKeys;
+        Iterator it;
 
         // On créer une liste
-        ArrayList <VeloMetier> arrayVelo = new ArrayList<>();
+        ArrayList <UtilisateurMetier> arrayUtilisateur = new ArrayList<>();
+        ArrayList<VeloMetier> arrayVelo = new ArrayList<>();
+        ArrayList<StationMetier> arrayStation = new ArrayList<>();
 
-        // --- VELO --- //
+        // --- Utilisateur --- //
+        arrayUtilisateur = utilisateurdao.getInstances();
+
+        // On ajoute dans la map
+        for (UtilisateurMetier u : arrayUtilisateur)
+        {
+            listeUtilisateurs.put(u.getNumero(),new UtilisateurMetier(u.getNumero(),u.getCode()));
+        }
+
+                System.out.println("Liste Utilisateurs : " + listeUtilisateurs.size() + "\n");
+
+
+         listKeys = listeUtilisateurs.keySet();
+         it = listKeys.iterator();
+        while (it.hasNext()) {
+            Object key = it.next();
+            System.out.println(listeUtilisateurs.get(key).toString());
+        }
+
+        System.out.println();
+
+         // --- Velo --- //
         arrayVelo = veldao.getInstances();
 
         // On ajoute dans la map
@@ -89,6 +124,38 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
             listeVelos.put(v.getIdentifiantVelo(),new VeloMetier(v.getIdentifiantVelo(),v.isOperationnel()));
         }
 
+        System.out.println("Liste Velo : " + listeVelos.size() + "\n");
+
+
+        listKeys = listeVelos.keySet();
+        it = listKeys.iterator();
+        while (it.hasNext()) {
+            Object key = it.next();
+            System.out.println(listeVelos.get(key).toString());
+        }
+
+        System.out.println();
+
+        // --- Station --- //
+        arrayStation = stationdao.getInstances();
+
+        // On ajoute dans la map
+        for (StationMetier s : arrayStation)
+        {
+            listeStations.put(s.getIdentifiantStation(),new StationMetier(s.getIdentifiantStation(),s.getCapacite(),s.getNbRetraits(),s.getNbDepots(),s.getLatitude(),s.getLongitude()));
+        }
+
+        System.out.println("Liste Station : " + listeStations.size() + "\n");
+
+
+        listKeys = listeStations.keySet();
+         it = listKeys.iterator();
+        while (it.hasNext()) {
+            Object key = it.next();
+            System.out.println(listeStations.get(key).toString());
+        }
+
+        System.out.println();
 
     }
 
@@ -97,7 +164,8 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     public UtilisateurMetier genererUtilisateur() throws RemoteException {
 
         // On récupére le plus grand numero d'utilisateur de la map correspondante
-        int numero = Collections.max(listeUtilisateurs.keySet());
+        // Collections.max(listeUtilisateurs.keySet());
+        int numero = 20;
 
         // On créé le numero + 1
         numero++;
