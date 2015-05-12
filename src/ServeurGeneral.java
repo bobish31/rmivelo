@@ -13,7 +13,7 @@ public interface ServeurGeneral extends Remote {
 
     // Toutes les m�thodes doivent --> throws java.rmi.RemoteException
 
-    public UtilisateurMetier genererUtilisateur() throws java.rmi.RemoteException;
+    public String genererUtilisateur() throws java.rmi.RemoteException;
 
     public void deposerVelo(int identifiantBorneUtilisateur, int numero, int identifiantVelo, Date heureDepot) throws java.rmi.RemoteException;
 

@@ -39,10 +39,22 @@ public class BorneUtilisateur {
                     System.out.println("Connexion à la base de données réussie");
 
                     // --- Appel des fonctionnalités --- //
+                  String u = serveurDistant.genererUtilisateur();
+
+                    // On affiche ce qu'on récupère
+                    System.out.println(u);
+
+                    // Découpage en split
+                    String tableau_utilisateur[]=u.split("/");
+
+                    // On crée le nouvel utilisateur
+                    UtilisateurMetier util = new UtilisateurMetier(Integer.parseInt(tableau_utilisateur[0]),Integer.parseInt(tableau_utilisateur[1]));
+
+                    // On affiche l'objet metier
+                    System.out.println(util.toString());
 
 
-                }
-                else
+                } else
                 {
                     System.out.println("Erreur BDD sur le serveur");
                 }

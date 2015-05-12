@@ -74,7 +74,9 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
             // CHARGEMENT BDD
             System.out.println("Chargement bdd en cours ... \n");
             obj.chargementListeBdd();
-            System.out.println("Chargement bdd ok");
+            System.out.println("Chargement bdd ok\n");
+
+            System.out.println("En attente d'opération ... ");
 
 
         }
@@ -161,16 +163,15 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
 
     @Override
-    public UtilisateurMetier genererUtilisateur() throws RemoteException {
+    public String genererUtilisateur() throws RemoteException {
 
         // On récupére le plus grand numero d'utilisateur de la map correspondante
-        // Collections.max(listeUtilisateurs.keySet());
-        int numero = 20;
+        int numero = Collections.max(listeUtilisateurs.keySet());
 
         // On créé le numero + 1
         numero++;
 
-        // On génére un code aléatoire de 4 chiffres pour le code
+        // On génére un code aléatoire de 4 chiffres pour le code [BUG CA FAIT QUE 3 CHIFFRES]
         Random rand = new Random();
         int code = rand.nextInt((9999 - 0) + 1) + 0;
 
@@ -183,8 +184,11 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         // on ajoute en bdd
         utilisateurdao.create(u);
 
+        // Création de la string
+        String resultat = u.getNumero() + "/" + u.getCode();
+
         // On retourne l'utilisateur
-        return u;
+        return resultat;
     }
 
     @Override
