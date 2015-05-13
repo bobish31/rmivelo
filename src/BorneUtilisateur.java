@@ -3,6 +3,7 @@ import bdd.bddClass.UtilisateurMetier;
 
 import java.net.MalformedURLException;
 import java.rmi.*;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -39,7 +40,9 @@ public class BorneUtilisateur {
                     System.out.println("Connexion à la base de données réussie");
 
                     // --- Appel des fonctionnalités --- //
-                    String u = serveurDistant.genererUtilisateur();
+
+                    // ---- TEST genererUtilisateur ---- //
+                    /* String u = serveurDistant.genererUtilisateur();
 
                     // On affiche ce qu'on récupère
                     System.out.println(u);
@@ -52,14 +55,40 @@ public class BorneUtilisateur {
 
                     // On affiche l'objet metier
                     System.out.println(util.toString());
+                    */
 
+                    // ---- TEST authentifierUtilisateur ---- //
 
+                    // Saisie sur la borne des 2 paramètres
+                    /* boolean connexion = serveurDistant.authentifierUtilisateur(10,1630);
+                    System.out.println(connexion);
+                    */
 
+                    // ---- TEST créerVelo ---- //
+                    // serveurDistant.creerVelo(10,true);
+                    // System.out.println("Velo créé");
 
+                    // ---- TEST affectationVeloStation  ----
+                   /* serveurDistant.affectationVeloStation(8,3);
+                    System.out.println("Station affecte");
+                    */
 
-                    // ----- Test deposerVelo ------
+                    // ---- TEST retirerVelo  ----
+                     /* Date date = new Date();
+                     Timestamp heureRetrait = new Timestamp(date.getTime());
+
+                    serveurDistant.retirerVelo(3,10,4,heureRetrait);
+                    System.out.println("Velo retire");
+                    */
+
+                    // ---- TEST deposerVelo  ----
                     Date date = new Date();
-                    serveurDistant.deposerVelo(1, 2, 1, date);
+                    Timestamp heureDepot = new Timestamp(date.getTime());
+
+                    serveurDistant.deposerVelo(3,4,heureDepot);
+                    System.out.println("Velo depose");
+
+
 
 
                 } else

@@ -2,6 +2,7 @@ import bdd.bddClass.UtilisateurMetier;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -15,9 +16,9 @@ public interface ServeurGeneral extends Remote {
 
     public String genererUtilisateur() throws java.rmi.RemoteException;
 
-    public void deposerVelo(int identifiantBorneUtilisateur, int numero, int identifiantVelo, Date heureDepot) throws java.rmi.RemoteException;
+    public void deposerVelo(int identifiantBorneUtilisateur, int identifiantVelo, Timestamp heureDepot) throws java.rmi.RemoteException;
 
-    public void retirerVelo(int identifiantBorneUtilisateur, int numero, int identifiantVelo, Date heureRetrait) throws java.rmi.RemoteException;
+    public void retirerVelo(int identifiantBorneUtilisateur, int numero, int identifiantVelo, Timestamp heureRetrait) throws java.rmi.RemoteException;
 
     public String[] obtenirBornesVoisines(int identifiantBorneUtilisateur) throws java.rmi.RemoteException;
 
@@ -32,4 +33,6 @@ public interface ServeurGeneral extends Remote {
     public boolean connexionOkBDD() throws RemoteException;
 
     public void chargementListeBdd () throws RemoteException;
+
+    public void affectationVeloStation (int identifiantVelo, int identificationStation) throws RemoteException;
 }

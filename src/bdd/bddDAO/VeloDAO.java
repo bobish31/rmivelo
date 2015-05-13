@@ -114,7 +114,7 @@ public class VeloDAO extends DAO<VeloMetier> {
         } else {
             requete = "UPDATE " + TABLE_VELO + " SET "
                     + COLONNE_VELO_OPERATIONNEL + " = " + obj.isOperationnel()+","
-                    + COLONNE_VELO_FK_IDENTIFIANTSTATION + " = 0"
+                    + COLONNE_VELO_FK_IDENTIFIANTSTATION + " =null "
                     + " WHERE " + COLONNE_VELO_IDENTIFIANTVELO + " = " + obj.getIdentifiantVelo();
         }
 

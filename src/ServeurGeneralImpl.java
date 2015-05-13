@@ -2,9 +2,11 @@ import bdd.BDDConnecteur;
 import bdd.DAO;
 import bdd.bddClass.StationMetier;
 import bdd.bddClass.UtilisateurMetier;
+import bdd.bddClass.UtiliserMetier;
 import bdd.bddClass.VeloMetier;
 import bdd.bddDAO.StationDAO;
 import bdd.bddDAO.UtilisateurDAO;
+import bdd.bddDAO.UtiliserDAO;
 import bdd.bddDAO.VeloDAO;
 
 import java.net.MalformedURLException;
@@ -13,6 +15,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -24,10 +28,12 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     private HashMap<Integer, UtilisateurMetier> mapUtilisateurs;
     private HashMap<Integer, VeloMetier> mapVelos;
     private HashMap<Integer, StationMetier> mapStations;
+    private HashMap<Integer,UtiliserMetier> mapPret;
 
     private VeloDAO veldao;
     private DAO<StationMetier> stationdao;
     private UtilisateurDAO utilisateurdao;
+    private UtiliserDAO utiliserdao;
 
     public ServeurGeneralImpl() throws RemoteException {
 
@@ -35,6 +41,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         mapUtilisateurs = new HashMap<>();
         mapVelos = new HashMap<>();
         mapStations = new HashMap<>();
+        mapPret = new HashMap<>();
 
         // on lance la bdd
         Connection connect = BDDConnecteur.getInstance();
@@ -46,6 +53,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
             veldao = new VeloDAO();
             stationdao = new StationDAO();
             utilisateurdao = new UtilisateurDAO();
+            utiliserdao = new UtiliserDAO();
 
         } else {
             System.out.println("Erreur Connection BDD");
@@ -85,6 +93,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         }
     }
 
+    // OK
     @Override
     public void  chargementListeBdd () throws RemoteException {
 
@@ -99,6 +108,10 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         // --- Station --- //
         mapStations = stationdao.getInstancesByMap();
         afficherContenuMapStations();
+
+        // --- Pret --- //
+        mapPret = utiliserdao.getInstancesByMap();
+        afficherContenuMapPret();
 
     }
 
@@ -126,6 +139,15 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         }
     }
 
+    private void afficherContenuMapPret() {
+        System.out.println("Liste Pret : " + mapPret.size() + "\n");
+
+        for (UtiliserMetier utiliser : mapPret.values()) {
+            System.out.println(utiliser.toString());
+        }
+    }
+
+    // OK
     @Override
     public String genererUtilisateur() throws RemoteException {
 
@@ -155,17 +177,17 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         return resultat;
     }
 
+    // EN TEST
     @Override
-    public void deposerVelo(int identifiantBorneUtilisateur, int numero, int identifiantVelo, Date heureDepot) throws RemoteException {
+    public void deposerVelo(int identifiantBorneUtilisateur, int identifiantVelo, Timestamp heureDepot) throws RemoteException {
 
-        // TODO : ne pas avoir le numéro de l'utilisateur dans le dépôt, on doit pouvoir le retrouver dans la relation Utiliser !
-        // TODO : Ajouter l'heure de dépôt pour la BD en créant la relation Utiliser correspondante --> modifier la structure de la relation Utiliser pour avoir heure de depot à null
+        // TODO : ne pas avoir le numéro de l'utilisateur dans le dépôt, on doit pouvoir le retrouver dans la relation Utiliser ! -
+        // TODO : Ajouter l'heure de dépôt pour la BD en créant la relation Utiliser correspondante --> modifier la structure de la relation Utiliser pour avoir heure de depot à null - heu non pas du tout
 
         // Changement du statut du vélo, affectation de la station dans la bdd
         VeloMetier vel = veldao.find(identifiantVelo);
         StationMetier st = stationdao.find(identifiantBorneUtilisateur);
         veldao.update2(vel, st);
-
 
         // Changement des capacités de la station concernée
         st.setCapacite(st.getCapacite() - 1);
@@ -176,12 +198,27 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         //maj dans la base
         stationdao.update(st);
 
+        // on cherche l'id du pret dans la bdd
+        int idPret = utiliserdao.obtenirIDUtiliser(identifiantVelo);
+
+        System.out.println("ID PRET :" + idPret);
+
+        // On récupere l'objet utiliser
+        UtiliserMetier util = utiliserdao.find(idPret);
+
+        util.setDateArivee(heureDepot);
+
+        // On créé la relation utiliser
+        utiliserdao.update(util);
+
     }
 
+    // EN TEST
     @Override
-    public void retirerVelo(int identifiantBorneUtilisateur, int numero, int identifiantVelo, Date heureRetrait) throws RemoteException {
+    public void retirerVelo(int identifiantBorneUtilisateur, int numero, int identifiantVelo, Timestamp heureRetrait) throws RemoteException {
 
-        // TODO : créer la relation Utiliser correspondante avec l'heure de retrait (l'heure de depot reste à null, elle sera mise dans deposer)
+        // TODO : créer la relation Utiliser correspondante avec l'heure de retrait (l'heure de depot reste à null, elle sera mise dans deposer) - OK
+        // TODO : Il faut rajouter une map comme pour le reste, récupérer la dernire transaction et faire un +1 pour l'id
 
         // Changement du statut du vélo => on enleve la clé étrangère
         VeloMetier vel=veldao.find(identifiantVelo);
@@ -194,11 +231,27 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         // Gérer les nombres de retraits de vélo dans la station
         st.incrementerNbRetraits();
 
-        //Maj dans la bdd
+        //Maj dans la bdd de la station
         stationdao.update(st);
+
+        // On recupere l'utilisateur dans la bdd
+        UtilisateurMetier u = utilisateurdao.find(numero);
+
+        // On récupère l'id du dernier pret
+        int idpret = Collections.max(mapPret.keySet());
+
+        // On augmente de 1
+        idpret++;
+
+        // On créer l'objet utiliser
+        UtiliserMetier util = new UtiliserMetier(idpret,heureRetrait,null);
+
+        // On créé la relation utiliser
+        utiliserdao.create2(util, vel, u);
 
     }
 
+    // A FAIRE
     @Override
     public String[] obtenirBornesVoisines(int identifiantBorneUtilisateur) throws RemoteException {
 
@@ -206,12 +259,27 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         return new String[0];
     }
 
+    // OK
     @Override
     public void creerVelo(int identifiantVelo, boolean operationnel) throws RemoteException {
 
         veldao.create(new VeloMetier(identifiantVelo,operationnel));
     }
 
+    // OK
+    @Override
+    public void affectationVeloStation (int identifiantVelo, int identificationStation){
+
+        // On récupère dans la bdd les objets
+        VeloMetier v = veldao.find(identifiantVelo);
+        StationMetier s = stationdao.find(identificationStation);
+
+        // On applique update avec la station
+        veldao.update2(v,s);
+    }
+
+
+    // OK
     @Override
     public boolean authentifierUtilisateur(int numero, int code) throws RemoteException {
 
@@ -224,16 +292,19 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         return false;
     }
 
+    // A FAIRE
     @Override
     public String[] imprimerRecuUtilisateur() throws RemoteException {
         return new String[0];
     }
 
+    // A FAIRE
     @Override
     public void notifier(int idStation) throws RemoteException {
 
     }
 
+    // OK
     @Override
     public boolean connexionOkBDD() throws RemoteException {
          return (BDDConnecteur.getInstance() != null);

@@ -40,8 +40,17 @@ ETAPE 5 - SERVEURGENERALIMPL
 
 ETAPE 6 : Fonctionnalités
 
-- Chargement de la bdd dans les listes (en cours : RM)
-- générerUtilisateur (en cours : RM)
+- Chargement de la bdd dans les listes (OK)
+- générerUtilisateur (OK)
+- AuthentifierUtilisateur (OK)
+- AffectionVeloStation (OK)
+- Créer velo (OK)
+- Test de déposer (en cours : RM)
+
+- Test de retirer (en cours : RM)
+
+ALTER TABLE utiliser ALTER COLUMN datedepot DROP NOT NULL;
+ALTER TABLE velo ALTER COLUMN fk_identifiantstation DROP NOT NULL;
 
 
 

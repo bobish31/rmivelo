@@ -209,6 +209,30 @@ public class UtiliserDAO extends DAO<UtiliserMetier> {
         return utiliser;
     }
 
+
+    public int obtenirIDUtiliser (int identifiantVelo) {
+
+        int idPret = 0;
+        try {
+            String requete = "SELECT " + COLONNE_UTILISER_UTILISER_ID + " FROM " + TABLE_UTILISER + " WHERE " + COLONNE_UTILISER_FK_IDENTIFIANTVELO + " = " + identifiantVelo + " and " + COLONNE_UTILISER_DATEDEPOT + " is null" + ";";
+
+            System.out.println(requete);
+
+            ResultSet result = this.bddConnecteur.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE
+            ).executeQuery(requete);
+
+            if(result.first()) {
+                idPret = result.getInt(COLONNE_UTILISER_UTILISER_ID);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return idPret;
+    }
+
     @Override
     public ArrayList<UtiliserMetier> getInstancesByList() {
         ArrayList<UtiliserMetier> listePret = new ArrayList<>();
@@ -236,7 +260,25 @@ public class UtiliserDAO extends DAO<UtiliserMetier> {
 
     // Permet de charger toutes les instances dans la liste velo utiliser pour ServeurGeneralImpl
     public HashMap<Integer,UtiliserMetier> getInstancesByMap() {
+        HashMap<Integer,UtiliserMetier> mapPret = new HashMap<>();
 
-        return null;
+        try {
+            String requete = "SELECT * from " + TABLE_UTILISER;
+
+            ResultSet result = bddConnecteur.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE
+            ).executeQuery(requete);
+
+            // pour chaque enregistrement de la bdd on le charge dans la liste
+            while (result.next()) {
+                UtiliserMetier u = this.find(result.getInt(1));
+                mapPret.put(u.getIdUtilisation(), u);
+
+            }
+        }    catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return mapPret;
     }
 }
