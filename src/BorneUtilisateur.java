@@ -39,7 +39,7 @@ public class BorneUtilisateur {
                     System.out.println("Connexion à la base de données réussie");
 
                     // --- Appel des fonctionnalités --- //
-                  String u = serveurDistant.genererUtilisateur();
+                    String u = serveurDistant.genererUtilisateur();
 
                     // On affiche ce qu'on récupère
                     System.out.println(u);
@@ -52,6 +52,14 @@ public class BorneUtilisateur {
 
                     // On affiche l'objet metier
                     System.out.println(util.toString());
+
+
+
+
+
+                    // ----- Test deposerVelo ------
+                    Date date = new Date();
+                    serveurDistant.deposerVelo(1, 2, 1, date);
 
 
                 } else

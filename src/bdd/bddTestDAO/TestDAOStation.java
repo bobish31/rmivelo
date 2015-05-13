@@ -44,7 +44,7 @@ public class TestDAOStation {
             // System.out.println(s.toString());
 
             // GETINSTANCES -> CERTIFICATION = OK
-            ArrayList<StationMetier> listeStation = stationD.getInstances();
+            ArrayList<StationMetier> listeStation = stationD.getInstancesByList();
 
             for (StationMetier s : listeStation)
             {

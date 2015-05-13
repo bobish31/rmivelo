@@ -50,7 +50,7 @@ public class TestDAOUtiliser {
              // utilD.create(u);
 
             // GETINSTANCES -> CERTIFICATION = OK
-           /* ArrayList<UtiliserMetier> listePret = utilD.getInstances();
+           /* ArrayList<UtiliserMetier> listePret = utilD.getInstancesByMap();
 
             for (UtiliserMetier u : listePret)
              {

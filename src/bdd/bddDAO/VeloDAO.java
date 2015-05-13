@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Menu on 20/04/2015.
@@ -105,12 +106,12 @@ public class VeloDAO extends DAO<VeloMetier> {
     public VeloMetier update2(VeloMetier obj, StationMetier sta) {
 
         String requete;
-        if(sta!=null){
+        if (sta != null) {
             requete = "UPDATE " + TABLE_VELO + " SET "
                     + COLONNE_VELO_OPERATIONNEL + " = " + obj.isOperationnel() +","
                     + COLONNE_VELO_FK_IDENTIFIANTSTATION + " = " + sta.getIdentifiantStation()
                     + " WHERE " + COLONNE_VELO_IDENTIFIANTVELO + " = " + obj.getIdentifiantVelo();
-        }else{
+        } else {
             requete = "UPDATE " + TABLE_VELO + " SET "
                     + COLONNE_VELO_OPERATIONNEL + " = " + obj.isOperationnel()+","
                     + COLONNE_VELO_FK_IDENTIFIANTSTATION + " = 0"
@@ -157,9 +158,34 @@ public class VeloDAO extends DAO<VeloMetier> {
 
     }
 
+    @Override
+    public ArrayList<VeloMetier> getInstancesByList() {
+        ArrayList<VeloMetier> listeVelo = new ArrayList<>();
+
+        try {
+            String requete = "SELECT * from " + TABLE_VELO;
+
+            ResultSet result = bddConnecteur.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE
+            ).executeQuery(requete);
+
+            // pour chaque enregistrement de la bdd on le charge dans la liste
+            while (result.next()) {
+                VeloMetier u = this.find(result.getInt(1));
+                listeVelo.add(u);
+
+            }
+        }    catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listeVelo;
+    }
+
     // Permet de charger toutes les instances dans la liste velo utiliser pour ServeurGeneralImpl
-    public ArrayList<VeloMetier> getInstances () {
-        ArrayList<VeloMetier> listeVelos = new ArrayList<>();
+    public HashMap<Integer,VeloMetier> getInstancesByMap() {
+        HashMap<Integer,VeloMetier> mapVelos = new HashMap<>();
 
         try {
             String requete = "SELECT * from " + TABLE_VELO;
@@ -172,17 +198,12 @@ public class VeloDAO extends DAO<VeloMetier> {
             // pour chaque enregistrement de la bdd on le charge dans la liste
             while (result.next()) {
                 VeloMetier v = this.find(result.getInt(1));
-                listeVelos.add(v);
+                mapVelos.put(v.getIdentifiantVelo(), v);
 
             }
         }    catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return listeVelos;
-
-
-        }
-
-
+        return mapVelos;
+    }
 }

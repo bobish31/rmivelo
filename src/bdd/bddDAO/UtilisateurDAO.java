@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Menu on 20/04/2015.
@@ -101,7 +102,7 @@ public class UtilisateurDAO extends DAO<UtilisateurMetier> {
 
             String requete = "SELECT * FROM " + TABLE_UTILISATEUR + " WHERE " + COLONNE_UTILISATEUR_NUMERO + " = " + id + ";";
 
-            // Récupération de l'abonné
+            // Rï¿½cupï¿½ration de l'abonnï¿½
             ResultSet result = this.bddConnecteur.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_UPDATABLE
@@ -118,7 +119,32 @@ public class UtilisateurDAO extends DAO<UtilisateurMetier> {
 
     }
 
-    public ArrayList<UtilisateurMetier> getInstances () {
+    @Override
+    public HashMap<Integer,UtilisateurMetier> getInstancesByMap() {
+        HashMap<Integer,UtilisateurMetier> mapUtilisateur = new HashMap<>();
+
+        try {
+            String requete = "SELECT * from " + TABLE_UTILISATEUR;
+
+            ResultSet result = bddConnecteur.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE
+            ).executeQuery(requete);
+
+            // pour chaque enregistrement de la bdd on le charge dans la liste
+            while (result.next()) {
+                UtilisateurMetier u = this.find(result.getInt(1));
+                mapUtilisateur.put(u.getNumero(), u);
+
+            }
+        }    catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return mapUtilisateur;
+    }
+
+    public ArrayList<UtilisateurMetier> getInstancesByList() {
         ArrayList<UtilisateurMetier> listeUtilisateur = new ArrayList<>();
 
         try {

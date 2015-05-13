@@ -21,9 +21,9 @@ import java.util.*;
 public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGeneral {
 
 
-    private HashMap<Integer, UtilisateurMetier> listeUtilisateurs;
-    private HashMap<Integer, VeloMetier> listeVelos;
-    private HashMap<Integer, StationMetier> listeStations;
+    private HashMap<Integer, UtilisateurMetier> mapUtilisateurs;
+    private HashMap<Integer, VeloMetier> mapVelos;
+    private HashMap<Integer, StationMetier> mapStations;
 
     private VeloDAO veldao;
     private DAO<StationMetier> stationdao;
@@ -32,9 +32,9 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     public ServeurGeneralImpl() throws RemoteException {
 
         // Déclaration des listes
-        listeUtilisateurs = new HashMap<>();
-        listeVelos = new HashMap<>();
-        listeStations = new HashMap<>();
+        mapUtilisateurs = new HashMap<>();
+        mapVelos = new HashMap<>();
+        mapStations = new HashMap<>();
 
         // on lance la bdd
         Connection connect = BDDConnecteur.getInstance();
@@ -43,8 +43,8 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
             System.out.println("Connection BDD OK");
 
             // Création des variables pour la bdd
-            veldao=new VeloDAO();
-            stationdao= new StationDAO();
+            veldao = new VeloDAO();
+            stationdao = new StationDAO();
             utilisateurdao = new UtilisateurDAO();
 
         } else {
@@ -88,85 +88,49 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     @Override
     public void  chargementListeBdd () throws RemoteException {
 
-        Set listKeys;
-        Iterator it;
-
-        // On créer une liste
-        ArrayList <UtilisateurMetier> arrayUtilisateur = new ArrayList<>();
-        ArrayList<VeloMetier> arrayVelo = new ArrayList<>();
-        ArrayList<StationMetier> arrayStation = new ArrayList<>();
-
         // --- Utilisateur --- //
-        arrayUtilisateur = utilisateurdao.getInstances();
-
-        // On ajoute dans la map
-        for (UtilisateurMetier u : arrayUtilisateur)
-        {
-            listeUtilisateurs.put(u.getNumero(),new UtilisateurMetier(u.getNumero(),u.getCode()));
-        }
-
-                System.out.println("Liste Utilisateurs : " + listeUtilisateurs.size() + "\n");
-
-
-         listKeys = listeUtilisateurs.keySet();
-         it = listKeys.iterator();
-        while (it.hasNext()) {
-            Object key = it.next();
-            System.out.println(listeUtilisateurs.get(key).toString());
-        }
-
-        System.out.println();
+        mapUtilisateurs = utilisateurdao.getInstancesByMap();
+        afficherContenuMapUtilisateurs();
 
          // --- Velo --- //
-        arrayVelo = veldao.getInstances();
-
-        // On ajoute dans la map
-        for (VeloMetier v : arrayVelo)
-        {
-            listeVelos.put(v.getIdentifiantVelo(),new VeloMetier(v.getIdentifiantVelo(),v.isOperationnel()));
-        }
-
-        System.out.println("Liste Velo : " + listeVelos.size() + "\n");
-
-
-        listKeys = listeVelos.keySet();
-        it = listKeys.iterator();
-        while (it.hasNext()) {
-            Object key = it.next();
-            System.out.println(listeVelos.get(key).toString());
-        }
-
-        System.out.println();
+        mapVelos = veldao.getInstancesByMap();
+        afficherContenuMapVelos();
 
         // --- Station --- //
-        arrayStation = stationdao.getInstances();
-
-        // On ajoute dans la map
-        for (StationMetier s : arrayStation)
-        {
-            listeStations.put(s.getIdentifiantStation(),new StationMetier(s.getIdentifiantStation(),s.getCapacite(),s.getNbRetraits(),s.getNbDepots(),s.getLatitude(),s.getLongitude()));
-        }
-
-        System.out.println("Liste Station : " + listeStations.size() + "\n");
-
-
-        listKeys = listeStations.keySet();
-         it = listKeys.iterator();
-        while (it.hasNext()) {
-            Object key = it.next();
-            System.out.println(listeStations.get(key).toString());
-        }
-
-        System.out.println();
+        mapStations = stationdao.getInstancesByMap();
+        afficherContenuMapStations();
 
     }
 
+    private void afficherContenuMapUtilisateurs() {
+        System.out.println("Liste Utilisateurs : " + mapUtilisateurs.size() + "\n");
+
+        for (UtilisateurMetier utilisateur : mapUtilisateurs.values()) {
+            System.out.println(utilisateur.toString());
+        }
+    }
+
+    private void afficherContenuMapVelos() {
+        System.out.println("Liste Velos : " + mapVelos.size() + "\n");
+
+        for (VeloMetier velo : mapVelos.values()) {
+            System.out.println(velo.toString());
+        }
+    }
+
+    private void afficherContenuMapStations() {
+        System.out.println("Liste Stations : " + mapStations.size() + "\n");
+
+        for (StationMetier station : mapStations.values()) {
+            System.out.println(station.toString());
+        }
+    }
 
     @Override
     public String genererUtilisateur() throws RemoteException {
 
         // On récupére le plus grand numero d'utilisateur de la map correspondante
-        int numero = Collections.max(listeUtilisateurs.keySet());
+        int numero = Collections.max(mapUtilisateurs.keySet());
 
         // On créé le numero + 1
         numero++;
@@ -179,7 +143,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         UtilisateurMetier u =  new UtilisateurMetier(numero, code);
 
         // on ajoute dans la map locale
-        listeUtilisateurs.put(numero, u);
+        mapUtilisateurs.put(numero, u);
 
         // on ajoute en bdd
         utilisateurdao.create(u);
@@ -194,17 +158,17 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     @Override
     public void deposerVelo(int identifiantBorneUtilisateur, int numero, int identifiantVelo, Date heureDepot) throws RemoteException {
 
+        // TODO : ne pas avoir le numéro de l'utilisateur dans le dépôt, on doit pouvoir le retrouver dans la relation Utiliser !
+        // TODO : Ajouter l'heure de dépôt pour la BD en créant la relation Utiliser correspondante --> modifier la structure de la relation Utiliser pour avoir heure de depot à null
+
         // Changement du statut du vélo, affectation de la station dans la bdd
-
-        VeloMetier vel=veldao.find(identifiantVelo);
-
+        VeloMetier vel = veldao.find(identifiantVelo);
         StationMetier st = stationdao.find(identifiantBorneUtilisateur);
         veldao.update2(vel, st);
 
 
         // Changement des capacités de la station concernée
-        //TODO checker si ça vaut le coup de faire ça
-        st.setCapacite(st.getCapacite()+1);
+        st.setCapacite(st.getCapacite() - 1);
 
         // Gérer les nombres de dépôts de vélo dans la station
         st.incrementerNbDepots();
@@ -217,15 +181,15 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     @Override
     public void retirerVelo(int identifiantBorneUtilisateur, int numero, int identifiantVelo, Date heureRetrait) throws RemoteException {
 
+        // TODO : créer la relation Utiliser correspondante avec l'heure de retrait (l'heure de depot reste à null, elle sera mise dans deposer)
+
         // Changement du statut du vélo => on enleve la clé étrangère
         VeloMetier vel=veldao.find(identifiantVelo);
-
+        StationMetier st=stationdao.find(identifiantBorneUtilisateur);
         veldao.update2(vel,null);
 
         // Changement des capacités de la station concernée
-        StationMetier st=stationdao.find(identifiantBorneUtilisateur);
-        st.setCapacite(st.getCapacite() - 1);
-
+        st.setCapacite(st.getCapacite() + 1);
 
         // Gérer les nombres de retraits de vélo dans la station
         st.incrementerNbRetraits();
@@ -251,7 +215,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     @Override
     public boolean authentifierUtilisateur(int numero, int code) throws RemoteException {
 
-        UtilisateurMetier user = listeUtilisateurs.get(numero);
+        UtilisateurMetier user = mapUtilisateurs.get(numero);
         if (user != null) {
             if (user.getCode() == code) {
                 return true;

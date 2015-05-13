@@ -8,6 +8,7 @@ import bdd.bddClass.VeloMetier;
 import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by lintingre on 23/04/15.
@@ -30,7 +31,7 @@ public class UtiliserDAO extends DAO<UtiliserMetier> {
         try {
 
             // Vu que nous sommes sous postgres, nous allons chercher manuellement
-            // la prochaine valeur de la séquence correspondant à l'id de notre table
+            // la prochaine valeur de la sï¿½quence correspondant ï¿½ l'id de notre table
 
             String requete_sequence = "SELECT NEXTVAL('" + SEQ_UTILISER_UTILISER_ID + "') AS " + COLONNE_UTILISER_UTILISER_ID + ";";
 
@@ -73,7 +74,7 @@ public class UtiliserDAO extends DAO<UtiliserMetier> {
         try {
 
             // Vu que nous sommes sous postgres, nous allons chercher manuellement
-            // la prochaine valeur de la séquence correspondant à l'id de notre table
+            // la prochaine valeur de la sï¿½quence correspondant ï¿½ l'id de notre table
 
             String requete_sequence = "SELECT NEXTVAL('" + SEQ_UTILISER_UTILISER_ID + "') AS " + COLONNE_UTILISER_UTILISER_ID + ";";
 
@@ -154,7 +155,7 @@ public class UtiliserDAO extends DAO<UtiliserMetier> {
 
     }
 
-    // UPDATE : Permet de mettre à jour toute les clés étrangères
+    // UPDATE : Permet de mettre ï¿½ jour toute les clï¿½s ï¿½trangï¿½res
     public UtiliserMetier update2 (UtiliserMetier obj, VeloMetier velo, UtilisateurMetier util) {
 
         String requete = "UPDATE " + TABLE_UTILISER + " SET "
@@ -208,8 +209,8 @@ public class UtiliserDAO extends DAO<UtiliserMetier> {
         return utiliser;
     }
 
-    // Permet de charger toutes les instances dans la liste velo utiliser pour ServeurGeneralImpl
-    public ArrayList<UtiliserMetier> getInstances () {
+    @Override
+    public ArrayList<UtiliserMetier> getInstancesByList() {
         ArrayList<UtiliserMetier> listePret = new ArrayList<>();
 
         try {
@@ -231,7 +232,11 @@ public class UtiliserDAO extends DAO<UtiliserMetier> {
         }
 
         return listePret;
+    }
 
+    // Permet de charger toutes les instances dans la liste velo utiliser pour ServeurGeneralImpl
+    public HashMap<Integer,UtiliserMetier> getInstancesByMap() {
 
+        return null;
     }
 }

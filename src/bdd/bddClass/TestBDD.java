@@ -1,7 +1,6 @@
 package bdd.bddClass;
 
 import bdd.BDDConnecteur;
-import bdd.DAO;
 import bdd.bddDAO.VeloDAO;
 
 import java.sql.Connection;
@@ -19,13 +18,16 @@ public class TestBDD {
 
         if (connect != null) {
             System.out.println("Connection BDD OK");
-            VeloDAO veldao=new VeloDAO();
 
-            VeloMetier vel= veldao.create(new VeloMetier(1));
+            // On initialise nos usines à objets métiers
+            VeloDAO veldao = new VeloDAO();
 
-           System.out.println(veldao.find(1).toString());
+            veldao.create(new VeloMetier(1));
+
+            System.out.println(veldao.find(1).toString());
 
         } else {
+
             System.out.println("Erreur Connection BDD");
         }
     }

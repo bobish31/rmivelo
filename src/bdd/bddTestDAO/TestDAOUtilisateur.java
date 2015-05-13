@@ -44,7 +44,7 @@ public class TestDAOUtilisateur {
                 // System.out.println(u.toString());
 
                 // GETINSTANCES -> CERTIFICATION = OK
-                ArrayList<UtilisateurMetier> listeUtilisateur = utilD.getInstances();
+                ArrayList<UtilisateurMetier> listeUtilisateur = utilD.getInstancesByList();
 
                 for (UtilisateurMetier u : listeUtilisateur)
                 {

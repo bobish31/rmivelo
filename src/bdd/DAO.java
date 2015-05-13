@@ -2,6 +2,7 @@ package bdd;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Menu on 20/04/2015.
@@ -18,5 +19,7 @@ public abstract class DAO<T> {
 
         public abstract T find(int id);
 
-        public abstract ArrayList <T> getInstances ();
+        public abstract ArrayList<T> getInstancesByList();
+
+        public abstract HashMap<Integer,T> getInstancesByMap();
 }

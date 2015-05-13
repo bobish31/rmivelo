@@ -44,7 +44,7 @@ public class TestDAOVelo {
              // System.out.println(vcreer.toString());
 
             // GETINSTANCES -> CERTIFICATION = OK
-            ArrayList<VeloMetier> listeVelo = veloD.getInstances();
+            ArrayList<VeloMetier> listeVelo = veloD.getInstancesByList();
 
             for (VeloMetier v : listeVelo)
             {

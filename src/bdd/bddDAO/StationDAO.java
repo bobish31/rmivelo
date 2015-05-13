@@ -6,8 +6,8 @@ import bdd.bddClass.StationMetier;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Menu on 20/04/2015.
@@ -117,7 +117,7 @@ public class StationDAO extends DAO<StationMetier> {
 
             String requete = "SELECT * FROM " + TABLE_STATION + " WHERE " + COLONNE_STATION_IDENTIFIANTSTATION + " = " + id + ";";
 
-            // Création de la station
+            // Crï¿½ation de la station
             ResultSet result = this.bddConnecteur.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_UPDATABLE
@@ -134,7 +134,8 @@ public class StationDAO extends DAO<StationMetier> {
 
     }
 
-    public ArrayList<StationMetier> getInstances () {
+    @Override
+    public ArrayList<StationMetier> getInstancesByList() {
         ArrayList<StationMetier> listeStation = new ArrayList<>();
 
         try {
@@ -156,5 +157,28 @@ public class StationDAO extends DAO<StationMetier> {
         }
 
         return listeStation;
+    }
+
+    public HashMap<Integer,StationMetier> getInstancesByMap() {
+        HashMap<Integer,StationMetier> mapStations = new HashMap<>();
+
+        try {
+            String requete = "SELECT * from " + TABLE_STATION;
+
+            ResultSet result = bddConnecteur.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE
+            ).executeQuery(requete);
+
+            // pour chaque enregistrement de la bdd on le charge dans la liste
+            while (result.next()) {
+                StationMetier s = this.find(result.getInt(1));
+                mapStations.put(s.getIdentifiantStation(), s);
+
+            }
+        }    catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return mapStations;
     }
 }
