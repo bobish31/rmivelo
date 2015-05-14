@@ -107,6 +107,12 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
         // --- Station --- //
         mapStations = stationdao.getInstancesByMap();
+
+        // On charge la liste des vélos présents dans chaque station
+        for (StationMetier station : mapStations.values()) {
+            // On récupère la liste des vélos pour chaque station
+            station.setListeVelos(veldao.getVeloFromAStation(station.getIdentifiantStation()));
+        }
         afficherContenuMapStations();
 
         // --- Pret --- //
@@ -185,9 +191,6 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     @Override
     public void deposerVelo(int identifiantBorneUtilisateur, int identifiantVelo, Timestamp heureDepot) throws RemoteException {
 
-        // TODO : ne pas avoir le numéro de l'utilisateur dans le dépôt, on doit pouvoir le retrouver dans la relation Utiliser ! -
-        // TODO : Ajouter l'heure de dépôt pour la BD en créant la relation Utiliser correspondante --> modifier la structure de la relation Utiliser pour avoir heure de depot à null - heu non pas du tout
-
         // Changement du statut du vélo, affectation de la station dans la bdd
         VeloMetier vel = veldao.find(identifiantVelo);
         StationMetier st = stationdao.find(identifiantBorneUtilisateur);
@@ -199,6 +202,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
         // Gérer les nombres de dépôts de vélo dans la station
         st.incrementerNbDepots();
+        st.deposerVelo(identifiantVelo);
 
         //maj dans la base
         stationdao.update(st);
@@ -222,43 +226,50 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     @Override
     public void retirerVelo(int identifiantBorneUtilisateur, int numero, int identifiantVelo, Timestamp heureRetrait) throws RemoteException {
 
-        // TODO : créer la relation Utiliser correspondante avec l'heure de retrait (l'heure de depot reste à null, elle sera mise dans deposer) - OK
         // TODO : Il faut rajouter une map comme pour le reste, récupérer la dernire transaction et faire un +1 pour l'id
 
-        // Changement du statut du vélo => on enleve la clé étrangère
         VeloMetier vel=veldao.find(identifiantVelo);
-        StationMetier st=stationdao.find(identifiantBorneUtilisateur);
-        vel.setIdentifiantStation(StationMetier.IDENTIFIANT_STATION_NULL);
-        veldao.update(vel);
 
-        // Changement des capacités de la station concernée
-        st.setCapacite(st.getCapacite() + 1);
+        // Vérifier si le vélo est bien dans la station désignée
+        if (vel.getIdentifiantStation() != identifiantBorneUtilisateur) {
+            System.out.println("---- ERREUR : Le vélo n'est pas présent sur la borne choisie");
 
-        // Gérer les nombres de retraits de vélo dans la station
-        st.incrementerNbRetraits();
-
-        //Maj dans la bdd de la station
-        stationdao.update(st);
-
-        // On recupere l'utilisateur dans la bdd
-        UtilisateurMetier u = utilisateurdao.find(numero);
-
-        // On récupère l'id du dernier pret
-        int idpret;
-
-        Set<Integer> keyset = mapPret.keySet();
-        if (keyset.isEmpty()) {
-            idpret = 1;
         } else {
-            idpret = Collections.max(mapPret.keySet()) + 1;
+
+            // Changement du statut du vélo => on enleve la clé étrangère
+            StationMetier st=stationdao.find(identifiantBorneUtilisateur);
+            vel.setIdentifiantStation(StationMetier.IDENTIFIANT_STATION_NULL);
+            veldao.update(vel);
+
+            // Changement des capacités de la station concernée
+            st.setCapacite(st.getCapacite() + 1);
+
+            // Gérer les nombres de retraits de vélo dans la station
+            st.incrementerNbRetraits();
+            st.retirerVelo(identifiantVelo);
+
+            //Maj dans la bdd de la station
+            stationdao.update(st);
+
+            // On recupere l'utilisateur dans la bdd
+            UtilisateurMetier u = utilisateurdao.find(numero);
+
+            // On récupère l'id du dernier pret
+            int idpret;
+
+            Set<Integer> keyset = mapPret.keySet();
+            if (keyset.isEmpty()) {
+                idpret = 1;
+            } else {
+                idpret = Collections.max(mapPret.keySet()) + 1;
+            }
+
+            // On créer l'objet utiliser
+            UtiliserMetier util = new UtiliserMetier(idpret, u.getNumero(), vel.getIdentifiantVelo(), heureRetrait, null);
+
+            // On créé la relation utiliser
+            utiliserdao.create(util);
         }
-
-        // On créer l'objet utiliser
-        UtiliserMetier util = new UtiliserMetier(idpret, u.getNumero(), vel.getIdentifiantVelo(), heureRetrait, null);
-
-        // On créé la relation utiliser
-        utiliserdao.create(util);
-
     }
 
     // A FAIRE

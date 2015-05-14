@@ -154,7 +154,29 @@ public class VeloDAO extends DAO<VeloMetier> {
                 listeVelo.add(u);
 
             }
-        }    catch (SQLException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listeVelo;
+    }
+
+    public ArrayList<Integer> getVeloFromAStation(int identifiantStation) {
+        ArrayList<Integer> listeVelo = new ArrayList<>();
+
+        try {
+            String requete = "SELECT * from " + TABLE_VELO + " WHERE " + COLONNE_VELO_FK_IDENTIFIANTSTATION + " = " + identifiantStation;
+
+            ResultSet result = bddConnecteur.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE
+            ).executeQuery(requete);
+
+            // pour chaque enregistrement de la bdd on le charge dans la liste
+            while (result.next()) {
+                listeVelo.add(result.getInt(1));
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
