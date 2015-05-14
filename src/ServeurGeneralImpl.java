@@ -364,7 +364,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         HashMap<Integer,UtilisateurMetier> techs=utilisateurdao.getTechs();
 
         if (idStation>= 0 && idStation <99){
-            techs.get(1111).notifier(stationdao.find(idStation)); //todo revoir 
+            techs.get(1111).notifier(stationdao.find(idStation)); //todo revoir
         }
     }
 
