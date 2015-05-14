@@ -54,7 +54,8 @@
 		-------------------------------------------------------
 		CREATE TABLE utilisateur (
 				numero integer NOT NULL,
-				code integer NOT NULL
+				code integer NOT NULL,
+				tech BOOLEAN DEFAULT FALSE
 			);
 
 		ALTER TABLE public.utilisateur OWNER TO postgres;
