@@ -5,6 +5,8 @@ import java.net.MalformedURLException;
 import java.rmi.*;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by David on 10/04/2015.
@@ -82,13 +84,19 @@ public class BorneUtilisateur {
 
 
                     // ---- TEST deposerVelo  ----
-                    Date dateDepot = new Date();
-                    Timestamp heureDepot = new Timestamp(dateDepot.getTime());
+//                    Date dateDepot = new Date();
+//                    Timestamp heureDepot = new Timestamp(dateDepot.getTime());
+//
+//                    serveurDistant.deposerVelo(2, 4, heureDepot);
+//                    System.out.println("Velo depose");
 
-                    serveurDistant.deposerVelo(2, 4, heureDepot);
-                    System.out.println("Velo depose");
+                    // ---- TEST obtenirBornesVoisines ----
+                    System.out.println("\nListe des stations voisines disponibles : \n");
+                    HashMap<Integer, Double> stationsVoisines = serveurDistant.obtenirBornesVoisines(1);
 
-
+                    for (Map.Entry<Integer, Double> e : stationsVoisines.entrySet()){
+                        System.out.println("Station " + e.getKey() + " ---> Distance = " + e.getValue());
+                    }
 
 
                 } else
@@ -100,7 +108,7 @@ public class BorneUtilisateur {
             }
 
 
-            System.out.println ("Fin du client");
+            System.out.println("\n >----- Fin du client -----<");
 
         }
         catch (RemoteException e){

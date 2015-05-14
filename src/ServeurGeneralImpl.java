@@ -274,10 +274,35 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
     // A FAIRE
     @Override
-    public String[] obtenirBornesVoisines(int identifiantBorneUtilisateur) throws RemoteException {
+    public HashMap<Integer, Double> obtenirBornesVoisines(int identifiantBorneUtilisateur) throws RemoteException {
+        // obtenir les coordonnées de la station consultée
+        StationMetier stationSource = stationdao.find(identifiantBorneUtilisateur);
 
+        // obtenir les coordonnées de toutes les stations
+        ArrayList<StationMetier> toutesLesStations = stationdao.getInstancesByList();
 
-        return new String[0];
+        HashMap<Integer, Double> stationsOrdonneesParCoordonnes = new HashMap<>();
+
+        // Je mets toutes les distances dans la map
+        for (StationMetier station : toutesLesStations) {
+            if (station.getIdentifiantStation() != identifiantBorneUtilisateur) {
+                stationsOrdonneesParCoordonnes.put(station.getIdentifiantStation(), StationMetier.distance(stationSource.getLatitude(), stationSource.getLongitude(), station.getLatitude(), station.getLongitude()));
+            }
+        }
+
+        // Ajout des entrées de la map à une liste
+        final List<Map.Entry<Integer, Double>> entries = new ArrayList<>(stationsOrdonneesParCoordonnes.entrySet());
+
+        // Tri de la liste sur la valeur de l'entrée
+        Collections.sort(entries, new Comparator<Map.Entry<Integer, Double>>() {
+            public int compare(final Map.Entry<Integer, Double> e1, final Map.Entry<Integer, Double> e2) {
+                return e1.getKey().compareTo(e2.getKey());
+            }
+        });
+
+        // retourner la liste des 5 stations les plus proches
+
+        return stationsOrdonneesParCoordonnes;
     }
 
     // OK

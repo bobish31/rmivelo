@@ -1,9 +1,11 @@
+import bdd.bddClass.StationMetier;
 import bdd.bddClass.UtilisateurMetier;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by Robin on 03/04/2015.
@@ -20,7 +22,7 @@ public interface ServeurGeneral extends Remote {
 
     public void retirerVelo(int identifiantBorneUtilisateur, int numero, int identifiantVelo, Timestamp heureRetrait) throws java.rmi.RemoteException;
 
-    public String[] obtenirBornesVoisines(int identifiantBorneUtilisateur) throws java.rmi.RemoteException;
+    public HashMap<Integer, Double> obtenirBornesVoisines(int identifiantBorneUtilisateur) throws java.rmi.RemoteException;
 
     public  void creerVelo(int identifiantVelo, boolean operationnel) throws java.rmi.RemoteException;
 
