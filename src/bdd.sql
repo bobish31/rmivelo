@@ -103,7 +103,7 @@
 				fk_identifiantvelo integer NOT NULL,
 				fk_numero integer NOT NULL,
 				dateretrait timestamp with time zone NOT NULL,
-				datedepot timestamp with time zone NOT NULL
+				datedepot timestamp with time zone
 			);
 
 		ALTER TABLE public.utiliser OWNER TO postgres;
@@ -162,9 +162,9 @@
 
 		-- Les nombre de retraits et dépôts sont automatiquement remplis à 0 grâce à la structure de création
 		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (1, 20, 43.585909, 1.447364);
-		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (2, 15, 43.583776, 1.443702);
-		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (3, 25, 43.585632, 1.428026);
-		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (4, 10, 43.591544, 1.418569);
+		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (2, 20, 43.583776, 1.443702);
+		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (3, 20, 43.585632, 1.428026);
+		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (4, 20, 43.591544, 1.418569);
 		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (5, 20, 43.587916, 1.424500);
 
 		INSERT INTO velo (identifiantvelo, operationnel, fk_identifiantstation) VALUES (1, TRUE, 1);

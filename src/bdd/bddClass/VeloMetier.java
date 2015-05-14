@@ -7,6 +7,7 @@ public class VeloMetier {
 
     private int identifiantVelo;
     private boolean operationnel;
+    private int identifiantStation;
 
     public VeloMetier() {}
 
@@ -18,6 +19,14 @@ public class VeloMetier {
     public VeloMetier(int identifiantVelo, boolean operationnel) {
         this.identifiantVelo = identifiantVelo;
         this.operationnel = operationnel;
+    }
+
+    public int getIdentifiantStation() {
+        return identifiantStation;
+    }
+
+    public void setIdentifiantStation(int identifiantStation) {
+        this.identifiantStation = identifiantStation;
     }
 
     public int getIdentifiantVelo() {

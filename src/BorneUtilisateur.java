@@ -74,18 +74,18 @@ public class BorneUtilisateur {
                     */
 
                     // ---- TEST retirerVelo  ----
-                     /* Date date = new Date();
-                     Timestamp heureRetrait = new Timestamp(date.getTime());
+//                    Date dateRetrait = new Date();
+//                    Timestamp heureRetrait = new Timestamp(dateRetrait.getTime());
+//
+//                    serveurDistant.retirerVelo(3, 1, 4, heureRetrait);
+//                    System.out.println("Velo retire");
 
-                    serveurDistant.retirerVelo(3,10,4,heureRetrait);
-                    System.out.println("Velo retire");
-                    */
 
                     // ---- TEST deposerVelo  ----
-                    Date date = new Date();
-                    Timestamp heureDepot = new Timestamp(date.getTime());
+                    Date dateDepot = new Date();
+                    Timestamp heureDepot = new Timestamp(dateDepot.getTime());
 
-                    serveurDistant.deposerVelo(3,4,heureDepot);
+                    serveurDistant.deposerVelo(2, 4, heureDepot);
                     System.out.println("Velo depose");
 
 

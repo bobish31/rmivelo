@@ -14,6 +14,8 @@ public class StationMetier {
     private double latitude;
     private double longitude;
 
+    public static final int IDENTIFIANT_STATION_NULL = -1;
+
     private ArrayList<Integer> listeVelos;
 
     public StationMetier () {}

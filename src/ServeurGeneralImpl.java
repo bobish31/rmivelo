@@ -121,6 +121,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         for (UtilisateurMetier utilisateur : mapUtilisateurs.values()) {
             System.out.println(utilisateur.toString());
         }
+        System.out.println("\n");
     }
 
     private void afficherContenuMapVelos() {
@@ -129,6 +130,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         for (VeloMetier velo : mapVelos.values()) {
             System.out.println(velo.toString());
         }
+        System.out.println("\n");
     }
 
     private void afficherContenuMapStations() {
@@ -137,6 +139,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         for (StationMetier station : mapStations.values()) {
             System.out.println(station.toString());
         }
+        System.out.println("\n");
     }
 
     private void afficherContenuMapPret() {
@@ -145,6 +148,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         for (UtiliserMetier utiliser : mapPret.values()) {
             System.out.println(utiliser.toString());
         }
+        System.out.println("\n");
     }
 
     // OK
@@ -187,7 +191,8 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         // Changement du statut du vélo, affectation de la station dans la bdd
         VeloMetier vel = veldao.find(identifiantVelo);
         StationMetier st = stationdao.find(identifiantBorneUtilisateur);
-        veldao.update2(vel, st);
+        vel.setIdentifiantStation(st.getIdentifiantStation());
+        veldao.update(vel);
 
         // Changement des capacités de la station concernée
         st.setCapacite(st.getCapacite() - 1);
@@ -223,7 +228,8 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         // Changement du statut du vélo => on enleve la clé étrangère
         VeloMetier vel=veldao.find(identifiantVelo);
         StationMetier st=stationdao.find(identifiantBorneUtilisateur);
-        veldao.update2(vel,null);
+        vel.setIdentifiantStation(StationMetier.IDENTIFIANT_STATION_NULL);
+        veldao.update(vel);
 
         // Changement des capacités de la station concernée
         st.setCapacite(st.getCapacite() + 1);
@@ -238,16 +244,20 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         UtilisateurMetier u = utilisateurdao.find(numero);
 
         // On récupère l'id du dernier pret
-        int idpret = Collections.max(mapPret.keySet());
+        int idpret;
 
-        // On augmente de 1
-        idpret++;
+        Set<Integer> keyset = mapPret.keySet();
+        if (keyset.isEmpty()) {
+            idpret = 1;
+        } else {
+            idpret = Collections.max(mapPret.keySet()) + 1;
+        }
 
         // On créer l'objet utiliser
-        UtiliserMetier util = new UtiliserMetier(idpret,heureRetrait,null);
+        UtiliserMetier util = new UtiliserMetier(idpret, u.getNumero(), vel.getIdentifiantVelo(), heureRetrait, null);
 
         // On créé la relation utiliser
-        utiliserdao.create2(util, vel, u);
+        utiliserdao.create(util);
 
     }
 
@@ -274,8 +284,10 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         VeloMetier v = veldao.find(identifiantVelo);
         StationMetier s = stationdao.find(identificationStation);
 
+        v.setIdentifiantStation(s.getIdentifiantStation());
+
         // On applique update avec la station
-        veldao.update2(v,s);
+        veldao.update(v);
     }
 
 

@@ -51,6 +51,7 @@ ETAPE 6 : Fonctionnalités
 
 ALTER TABLE utiliser ALTER COLUMN datedepot DROP NOT NULL;
 ALTER TABLE velo ALTER COLUMN fk_identifiantstation DROP NOT NULL;
+--> Modifié dans le script de création de la base --> OK
 
 
 

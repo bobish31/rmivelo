@@ -84,48 +84,26 @@ public class VeloDAO extends DAO<VeloMetier> {
     @Override
     public VeloMetier update(VeloMetier obj) {
 
-        String requete = "UPDATE " + TABLE_VELO + " SET "
-                + COLONNE_VELO_OPERATIONNEL + " = " + obj.isOperationnel()
-                + " WHERE " + COLONNE_VELO_IDENTIFIANTVELO + " = " + obj.getIdentifiantVelo();
+        String requete;
+        if (obj.getIdentifiantStation() != StationMetier.IDENTIFIANT_STATION_NULL) {
+            requete = "UPDATE " + TABLE_VELO + " SET "
+                    + COLONNE_VELO_OPERATIONNEL + " = " + obj.isOperationnel() +","
+                    + COLONNE_VELO_FK_IDENTIFIANTSTATION + " = " + obj.getIdentifiantStation()
+                    + " WHERE " + COLONNE_VELO_IDENTIFIANTVELO + " = " + obj.getIdentifiantVelo();
+        } else {
+            requete = "UPDATE " + TABLE_VELO + " SET "
+                    + COLONNE_VELO_OPERATIONNEL + " = " + obj.isOperationnel()+","
+                    + COLONNE_VELO_FK_IDENTIFIANTSTATION + " = null "
+                    + " WHERE " + COLONNE_VELO_IDENTIFIANTVELO + " = " + obj.getIdentifiantVelo();
+        }
 
-            try
-            {
+        try {
             bddConnecteur.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_UPDATABLE
             ).executeUpdate(requete);
 
                 obj = this.find(obj.getIdentifiantVelo());
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return obj;
-    }
-
-    public VeloMetier update2(VeloMetier obj, StationMetier sta) {
-
-        String requete;
-        if (sta != null) {
-            requete = "UPDATE " + TABLE_VELO + " SET "
-                    + COLONNE_VELO_OPERATIONNEL + " = " + obj.isOperationnel() +","
-                    + COLONNE_VELO_FK_IDENTIFIANTSTATION + " = " + sta.getIdentifiantStation()
-                    + " WHERE " + COLONNE_VELO_IDENTIFIANTVELO + " = " + obj.getIdentifiantVelo();
-        } else {
-            requete = "UPDATE " + TABLE_VELO + " SET "
-                    + COLONNE_VELO_OPERATIONNEL + " = " + obj.isOperationnel()+","
-                    + COLONNE_VELO_FK_IDENTIFIANTSTATION + " =null "
-                    + " WHERE " + COLONNE_VELO_IDENTIFIANTVELO + " = " + obj.getIdentifiantVelo();
-        }
-
-        try
-        {
-            bddConnecteur.createStatement(
-                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                    ResultSet.CONCUR_UPDATABLE
-            ).executeUpdate(requete);
-
-            obj = this.find(obj.getIdentifiantVelo());
 
         } catch (SQLException e) {
             e.printStackTrace();
