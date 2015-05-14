@@ -19,6 +19,7 @@ public class UtilisateurDAO extends DAO<UtilisateurMetier> {
 
     private static final String COLONNE_UTILISATEUR_NUMERO = "numero";
     private static final String COLONNE_UTILISATEUR_CODE = "code";
+    private static final String COLONNE_UTILISATEUR_TECH = "tech";
 
     private static final String SEQ_UTILISATEUR_NUMERO= "numero_seq";
 
@@ -41,12 +42,14 @@ public class UtilisateurDAO extends DAO<UtilisateurMetier> {
                         "INSERT INTO " + TABLE_UTILISATEUR + "("
                                 + COLONNE_UTILISATEUR_NUMERO + ","
                                 + COLONNE_UTILISATEUR_CODE
+                                + COLONNE_UTILISATEUR_TECH
                                 + ")"
                                 + "VALUES (?,?);";
 
                 PreparedStatement prepare = bddConnecteur.prepareStatement(requete);
                 prepare.setInt(1, id);
                 prepare.setInt(2, obj.getCode());
+                prepare.setBoolean(3, obj.estTechnicien());
                 prepare.executeUpdate();
                 obj = this.find(id);
             }
@@ -75,7 +78,8 @@ public class UtilisateurDAO extends DAO<UtilisateurMetier> {
     @Override
     public UtilisateurMetier update(UtilisateurMetier obj) {
         String requete = "UPDATE " + TABLE_UTILISATEUR + " SET "
-                + COLONNE_UTILISATEUR_CODE+ "=" + obj.getCode()
+                + COLONNE_UTILISATEUR_CODE+ "=" + obj.getCode()+","
+                + COLONNE_UTILISATEUR_TECH+ "=" + obj.estTechnicien()
                 + " WHERE " + COLONNE_UTILISATEUR_NUMERO + " = " + obj.getNumero();
 
         try
@@ -109,7 +113,7 @@ public class UtilisateurDAO extends DAO<UtilisateurMetier> {
             ).executeQuery(requete);
 
             if(result.first()) {
-                utilisateur = new UtilisateurMetier(id,result.getInt(2));
+                utilisateur = new UtilisateurMetier(id,result.getInt(2),result.getBoolean(3));
             }
 
         } catch (SQLException e) {
@@ -166,5 +170,30 @@ public class UtilisateurDAO extends DAO<UtilisateurMetier> {
         }
 
         return listeUtilisateur;
+    }
+
+    
+    public HashMap<Integer,UtilisateurMetier> getTechs() {
+        HashMap<Integer,UtilisateurMetier> map = new HashMap<>();
+
+        try {
+            String requete = "SELECT * from " + TABLE_UTILISATEUR + " where "+COLONNE_UTILISATEUR_TECH+" = true"; //todo check si true ou 1
+
+            ResultSet result = bddConnecteur.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE
+            ).executeQuery(requete);
+
+            // pour chaque enregistrement de la bdd on le charge dans la liste
+            while (result.next()) {
+                UtilisateurMetier u = this.find(result.getInt(1));
+                map.put(u.getNumero(), u);
+
+            }
+        }    catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return map;
     }
 }

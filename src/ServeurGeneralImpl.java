@@ -160,7 +160,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     // OK
     @Override
     public String genererUtilisateur() throws RemoteException {
-
+        //par défault pas technicien
         // On récupére le plus grand numero d'utilisateur de la map correspondante
         int numero = Collections.max(mapUtilisateurs.keySet());
 
@@ -172,7 +172,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         int code = rand.nextInt((9999 - 0) + 1) + 0;
 
         // On stocke le nouvel utilisateur selon la stratégie de stockage choisie
-        UtilisateurMetier u =  new UtilisateurMetier(numero, code);
+        UtilisateurMetier u =  new UtilisateurMetier(numero, code,false);
 
         // on ajoute dans la map locale
         mapUtilisateurs.put(numero, u);
@@ -198,7 +198,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         veldao.update(vel);
 
         // Changement des capacités de la station concernée
-        st.setCapacite(st.getCapacite() - 1);
+        st.setCapacite(st.getCapacite() + 1);
 
         // Gérer les nombres de dépôts de vélo dans la station
         st.incrementerNbDepots();
@@ -242,7 +242,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
             veldao.update(vel);
 
             // Changement des capacités de la station concernée
-            st.setCapacite(st.getCapacite() + 1);
+            st.setCapacite(st.getCapacite() - 1);
 
             // Gérer les nombres de retraits de vélo dans la station
             st.incrementerNbRetraits();
@@ -269,6 +269,14 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
             // On créé la relation utiliser
             utiliserdao.create(util);
+
+            // Gestion de la notification enc as de pénurie
+            if(st.getCapacite()<3){
+                //si on a une capcité inférieure à 3 vélo on notifie un technicien
+                notifier(st.getIdentifiantStation());
+            }
+
+
         }
     }
 
@@ -349,7 +357,15 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     // A FAIRE
     @Override
     public void notifier(int idStation) throws RemoteException {
+        // en fonction de la station on contacte le bon tech
+       //TODO compléter
 
+        //on recupère la map des techs :
+        HashMap<Integer,UtilisateurMetier> techs=utilisateurdao.getTechs();
+
+        if (idStation>= 0 && idStation <99){
+            techs.get(1111).notifier(stationdao.find(idStation)); //todo revoir 
+        }
     }
 
     // OK
