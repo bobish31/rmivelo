@@ -18,7 +18,7 @@ public interface ServeurGeneral extends Remote {
 
     public String genererUtilisateur() throws java.rmi.RemoteException;
 
-    public void deposerVelo(int identifiantBorneUtilisateur, int identifiantVelo, Timestamp heureDepot) throws java.rmi.RemoteException;
+    public String deposerVelo(int identifiantBorneUtilisateur, int identifiantVelo, Timestamp heureDepot) throws java.rmi.RemoteException;
 
     public void retirerVelo(int identifiantBorneUtilisateur, int numero, int identifiantVelo, Timestamp heureRetrait) throws java.rmi.RemoteException;
 
@@ -28,7 +28,7 @@ public interface ServeurGeneral extends Remote {
 
     public boolean authentifierUtilisateur(int numero, int code) throws java.rmi.RemoteException;
 
-    public String[] imprimerRecuUtilisateur() throws java.rmi.RemoteException;
+    public String imprimerRecuUtilisateur(int numero, Timestamp retrait, Timestamp depot) throws java.rmi.RemoteException;
 
     public void notifier(int idStation) throws java.rmi.RemoteException;
 

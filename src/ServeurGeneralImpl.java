@@ -17,6 +17,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -85,6 +86,12 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
             System.out.println("Chargement bdd ok\n");
 
             System.out.println("En attente d'opération ... ");
+
+
+            /*UtiliserDAO u = new UtiliserDAO();
+            UtiliserMetier recu = u.find();
+            obj.imprimerRecuUtilisateur(5,recu.getDateRetrait(),recu.getDateDepot());
+            */
 
 
         }
@@ -189,7 +196,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
     // EN TEST
     @Override
-    public void deposerVelo(int identifiantBorneUtilisateur, int identifiantVelo, Timestamp heureDepot) throws RemoteException {
+    public String deposerVelo(int identifiantBorneUtilisateur, int identifiantVelo, Timestamp heureDepot) throws RemoteException {
 
         // Changement du statut du vélo, affectation de la station dans la bdd
         VeloMetier vel = veldao.find(identifiantVelo);
@@ -202,7 +209,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
         // Gérer les nombres de dépôts de vélo dans la station
         st.incrementerNbDepots();
-        st.deposerVelo(identifiantVelo);
+        // st.deposerVelo(identifiantVelo);
 
         //maj dans la base
         stationdao.update(st);
@@ -220,6 +227,14 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         // On créé la relation utiliser
         utiliserdao.update(util);
 
+        // On imprime le recu
+        String resultat = imprimerRecuUtilisateur(idPret,util.getDateRetrait(),util.getDateDepot());
+
+        System.out.println("DEPOT - " + util.getDateDepot());
+        System.out.println("RETRAIT - " + util.getDateRetrait());
+
+        return  resultat;
+
     }
 
     // EN TEST
@@ -228,7 +243,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
         // TODO : Il faut rajouter une map comme pour le reste, récupérer la dernire transaction et faire un +1 pour l'id
 
-        VeloMetier vel=veldao.find(identifiantVelo);
+        VeloMetier vel = veldao.find(identifiantVelo);
 
         // Vérifier si le vélo est bien dans la station désignée
         if (vel.getIdentifiantStation() != identifiantBorneUtilisateur) {
@@ -246,7 +261,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
             // Gérer les nombres de retraits de vélo dans la station
             st.incrementerNbRetraits();
-            st.retirerVelo(identifiantVelo);
+            // st.retirerVelo(identifiantVelo);
 
             //Maj dans la bdd de la station
             stationdao.update(st);
@@ -275,7 +290,6 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
                 //si on a une capcité inférieure à 3 vélo on notifie un technicien
                 notifier(st.getIdentifiantStation());
             }
-
 
         }
     }
@@ -348,10 +362,50 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         return false;
     }
 
-    // A FAIRE
+    // EN COURS
+    @Deprecated
     @Override
-    public String[] imprimerRecuUtilisateur() throws RemoteException {
-        return new String[0];
+    public String imprimerRecuUtilisateur(int idPret, Timestamp retrait, Timestamp depot) throws RemoteException {
+
+        // Variable Prix
+        double prix_seconde = 0.005;
+
+        // Calcul temps location
+        long timeStampFin = depot.getTime();
+        long timeStampDebut = retrait.getTime();
+
+        // Calcul de la durée de pret en ms
+        long diff = timeStampFin - timeStampDebut;
+
+        // On passe la période en seconde
+        long diff_s = Math.abs(diff / 1000) ;
+
+        // calcul du prix de la location
+        double prix_location = prix_seconde * diff_s;
+
+        // jour
+        int jour = ((int) diff_s) / 86400;
+        diff_s = diff_s%86400;
+
+        // heure
+        int heure = ((int) diff_s) / 3600;
+        diff_s = diff_s%3600;
+
+        // minute
+
+        int minutes = ((int) diff_s) / 60;
+        diff_s = diff_s%60;
+
+
+        // On passe en date humaine pour le ticket
+        Date date_humaine_retrait = new Date(retrait.getTime());
+        Date date_humaine_depot = new Date(depot.getTime());
+        Date date_humaine_emprunt = new Date(diff_s);
+        SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yyyy kk:mm:ss" );
+
+        // Affichage du ticket
+        String resultat = " // ---------- TICKET UTILISATEUR ---------- // \n" + "N° Prêt : " + idPret + "\n" + "Temps Location : " + "Du " +  sdf.format( date_humaine_retrait ) + " au " + sdf.format( date_humaine_depot ) + " = " + jour + " jour(s) " + heure + " heure(s) " + minutes + " minute(s) " + diff_s + " seconde(s) \n" + "Prix Location : " + prix_location +  " € " +  "\n\n" + "\n Merci de votre visite ! A bientôt sur notre réseau.";
+        return resultat;
     }
 
     // A FAIRE

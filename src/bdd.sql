@@ -103,8 +103,8 @@
 				utiliser_id integer NOT NULL,
 				fk_identifiantvelo integer NOT NULL,
 				fk_numero integer NOT NULL,
-				dateretrait timestamp with time zone NOT NULL,
-				datedepot timestamp with time zone
+				dateretrait timestamp without time zone NOT NULL,
+				datedepot timestamp without time zone
 			);
 
 		ALTER TABLE public.utiliser OWNER TO postgres;

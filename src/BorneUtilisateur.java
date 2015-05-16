@@ -83,27 +83,31 @@ public class BorneUtilisateur {
                     */
 
                     // ---- TEST retirerVelo  ----
-//                    Date dateRetrait = new Date();
-//                    Timestamp heureRetrait = new Timestamp(dateRetrait.getTime());
-//
-//                    serveurDistant.retirerVelo(3, 1, 4, heureRetrait);
-//                    System.out.println("Velo retire");
+                    /* Date dateRetrait = new Date();
+                    Timestamp heureRetrait = new Timestamp(dateRetrait.getTime());
 
+                   serveurDistant.retirerVelo(3,5,4,heureRetrait);
+                   System.out.println("Velo retire");
+                   */
 
                     // ---- TEST deposerVelo  ----
-//                    Date dateDepot = new Date();
-//                    Timestamp heureDepot = new Timestamp(dateDepot.getTime());
-//
-//                    serveurDistant.deposerVelo(2, 4, heureDepot);
-//                    System.out.println("Velo depose");
+                      Date dateDepot = new Date();
+                    Timestamp heureDepot = new Timestamp(dateDepot.getTime());
+
+                  String ticket =  serveurDistant.deposerVelo(2, 4, heureDepot);
+                   System.out.println(ticket);
+
+
 
                     // ---- TEST obtenirBornesVoisines ----
-                    System.out.println("\nListe des stations voisines disponibles : \n");
+                   /* System.out.println("\nListe des stations voisines disponibles : \n");
                     HashMap<Integer, Double> stationsVoisines = serveurDistant.obtenirBornesVoisines(1);
 
                     for (Map.Entry<Integer, Double> e : stationsVoisines.entrySet()){
                         System.out.println("Station " + e.getKey() + " ---> Distance = " + e.getValue());
-                    }
+                    }*/
+
+                    // ---- TEST IMPRIMER RECU --- //
 
 
                 } else
@@ -130,20 +134,28 @@ public class BorneUtilisateur {
     }
 
 
-    public void deposerVelo(int numero, int idVelo, Date heureDepot) throws RemoteException {
+    // public void deposerVelo(int numero, int idVelo, Date heureDepot) throws RemoteException {
         //Maj de la station locale
-        station.deposerVelo(idVelo);
+      //  station.deposerVelo(idVelo);
 
         //maj de la station distante via l'objet rmi serveur
-        serv.deposerVelo(station.getIdentifiantStation(), numero, idVelo, heureDepot); //todo à corriger
-    }
+        //serv.deposerVelo(station.getIdentifiantStation(), numero, idVelo, heureDepot); //todo à corriger
+   // }
 
-    public void retirerVelo(int numero, int idVelo, Date heureDepot) throws RemoteException {
+ /*  public void retirerVelo(int numero, int idVelo, Date heureDepot) throws RemoteException {
         //maj de la station locale
         station.retirerVelo(idVelo);
 
 
+
+
         //maj de la station distante via l'objet rmi serveur
-        serv.retirerVelo(station.getIdentifiantStation(),numero,idVelo,heureDepot); // todo à corriger
+        //serv.retirerVelo(station.getIdentifiantStation(),numero,idVelo,heureDepot); // todo à corriger
     }
+
+    */
+
+
+
 }
+
