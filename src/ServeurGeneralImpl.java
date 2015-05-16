@@ -270,7 +270,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
             // On créé la relation utiliser
             utiliserdao.create(util);
 
-            // Gestion de la notification enc as de pénurie
+            // Gestion de la notification en cas de pénurie
             if(st.getCapacite()<3){
                 //si on a une capcité inférieure à 3 vélo on notifie un technicien
                 notifier(st.getIdentifiantStation());

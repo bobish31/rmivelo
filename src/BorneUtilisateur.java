@@ -14,10 +14,17 @@ import java.util.Map;
 public class BorneUtilisateur {
 
     private StationMetier station;
+    private ServeurGeneralImpl serv;
+
 
     public BorneUtilisateur(StationMetier s) {
         //initialisation station locale
         station=s;
+        try {
+            serv= new ServeurGeneralImpl();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main (String [] args) {
@@ -128,7 +135,7 @@ public class BorneUtilisateur {
         station.deposerVelo(idVelo);
 
         //maj de la station distante via l'objet rmi serveur
-      //  serv.deposerVelo(station.getIdentifiantStation(),numero,idVelo,heureDepot);
+        serv.deposerVelo(station.getIdentifiantStation(), numero, idVelo, heureDepot); //todo à corriger
     }
 
     public void retirerVelo(int numero, int idVelo, Date heureDepot) throws RemoteException {
@@ -137,6 +144,6 @@ public class BorneUtilisateur {
 
 
         //maj de la station distante via l'objet rmi serveur
-       // serv.retirerVelo(station.getIdentifiantStation(),numero,idVelo,heureDepot);
+        serv.retirerVelo(station.getIdentifiantStation(),numero,idVelo,heureDepot); // todo à corriger
     }
 }
