@@ -126,7 +126,11 @@ public class VeloDAO extends DAO<VeloMetier> {
             ).executeQuery(requete);
 
             if(result.first()) {
-                velo = new VeloMetier(id,result.getBoolean(COLONNE_VELO_OPERATIONNEL));
+                if (result.getInt(COLONNE_VELO_FK_IDENTIFIANTSTATION) != 0) {
+                    velo = new VeloMetier(id, result.getBoolean(COLONNE_VELO_OPERATIONNEL), result.getInt(COLONNE_VELO_FK_IDENTIFIANTSTATION));
+                } else {
+                    velo = new VeloMetier(id, result.getBoolean(COLONNE_VELO_OPERATIONNEL));
+                }
             }
 
         } catch (SQLException e) {

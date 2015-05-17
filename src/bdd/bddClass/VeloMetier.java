@@ -21,6 +21,12 @@ public class VeloMetier {
         this.operationnel = operationnel;
     }
 
+    public VeloMetier(int identifiantVelo, boolean operationnel, int identifiantStation) {
+        this.identifiantVelo = identifiantVelo;
+        this.operationnel = operationnel;
+        this.identifiantStation = identifiantStation;
+    }
+
     public int getIdentifiantStation() {
         return identifiantStation;
     }

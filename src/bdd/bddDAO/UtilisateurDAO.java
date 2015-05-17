@@ -41,10 +41,10 @@ public class UtilisateurDAO extends DAO<UtilisateurMetier> {
                 String requete =
                         "INSERT INTO " + TABLE_UTILISATEUR + "("
                                 + COLONNE_UTILISATEUR_NUMERO + ","
-                                + COLONNE_UTILISATEUR_CODE
+                                + COLONNE_UTILISATEUR_CODE + ","
                                 + COLONNE_UTILISATEUR_TECH
                                 + ")"
-                                + "VALUES (?,?);";
+                                + "VALUES (?,?,?);";
 
                 PreparedStatement prepare = bddConnecteur.prepareStatement(requete);
                 prepare.setInt(1, id);

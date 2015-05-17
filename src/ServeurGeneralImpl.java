@@ -228,7 +228,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         utiliserdao.update(util);
 
         // On imprime le recu
-        String resultat = imprimerRecuUtilisateur(idPret,util.getDateRetrait(),util.getDateDepot());
+        String resultat = imprimerRecuUtilisateur(idPret, util.getDateRetrait(), util.getDateDepot());
 
         System.out.println("DEPOT - " + util.getDateDepot());
         System.out.println("RETRAIT - " + util.getDateRetrait());
@@ -291,6 +291,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
                 notifier(st.getIdentifiantStation());
             }
 
+            System.out.println("Velo retire");
         }
     }
 

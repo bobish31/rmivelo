@@ -143,8 +143,6 @@ public class UtiliserDAO extends DAO<UtiliserMetier> {
         try {
             String requete = "SELECT " + COLONNE_UTILISER_UTILISER_ID + " FROM " + TABLE_UTILISER + " WHERE " + COLONNE_UTILISER_FK_IDENTIFIANTVELO + " = " + identifiantVelo + " and " + COLONNE_UTILISER_DATEDEPOT + " is null" + ";";
 
-            System.out.println(requete);
-
             ResultSet result = this.bddConnecteur.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_UPDATABLE
