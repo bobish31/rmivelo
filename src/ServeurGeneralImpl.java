@@ -297,34 +297,25 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
     // A FAIRE
     @Override
-    public HashMap<Integer, Double> obtenirBornesVoisines(int identifiantBorneUtilisateur) throws RemoteException {
+    public TreeMap<Double, Integer> obtenirBornesVoisines(int identifiantBorneUtilisateur) throws RemoteException {
         // obtenir les coordonnées de la station consultée
         StationMetier stationSource = stationdao.find(identifiantBorneUtilisateur);
 
         // obtenir les coordonnées de toutes les stations
         ArrayList<StationMetier> toutesLesStations = stationdao.getInstancesByList();
 
-        HashMap<Integer, Double> stationsOrdonneesParCoordonnes = new HashMap<>();
+        HashMap<Double, Integer> stationsParCoordonnes = new HashMap<>();
 
         // Je mets toutes les distances dans la map
         for (StationMetier station : toutesLesStations) {
             if (station.getIdentifiantStation() != identifiantBorneUtilisateur) {
-                stationsOrdonneesParCoordonnes.put(station.getIdentifiantStation(), StationMetier.distance(stationSource.getLatitude(), stationSource.getLongitude(), station.getLatitude(), station.getLongitude()));
+                stationsParCoordonnes.put(StationMetier.distance(stationSource.getLatitude(), stationSource.getLongitude(), station.getLatitude(), station.getLongitude()), station.getIdentifiantStation());
             }
         }
 
-        // Ajout des entrées de la map à une liste
-        final List<Map.Entry<Integer, Double>> entries = new ArrayList<>(stationsOrdonneesParCoordonnes.entrySet());
-
-        // Tri de la liste sur la valeur de l'entrée
-        Collections.sort(entries, new Comparator<Map.Entry<Integer, Double>>() {
-            public int compare(final Map.Entry<Integer, Double> e1, final Map.Entry<Integer, Double> e2) {
-                return e1.getKey().compareTo(e2.getKey());
-            }
-        });
+        TreeMap<Double, Integer> stationsOrdonneesParCoordonnes = new TreeMap<Double, Integer>(stationsParCoordonnes);
 
         // retourner la liste des 5 stations les plus proches
-
         return stationsOrdonneesParCoordonnes;
     }
 
@@ -349,6 +340,31 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         veldao.update(v);
     }
 
+    @Override
+    public ArrayList<Integer> obtenirVelosRattachesAUneStation(int identificationStation) throws RemoteException {
+        StationMetier station = stationdao.find(identificationStation);
+        station.setListeVelos(veldao.getVeloFromAStation(station.getIdentifiantStation()));
+        return station.getListeVelos();
+    }
+
+    @Override
+    public int obtenirVeloCorrespondantAuPretEnCours(int numero) throws RemoteException {
+        UtiliserMetier pret = utiliserdao.find(utiliserdao.obtenirIDUtiliserParNumeroClient(numero));
+        return pret.getIdentifiantVelo();
+    }
+
+    @Override
+    public boolean aUnPretEnCours(int numero) throws RemoteException {
+        // SI != 0 --> pret en cours, sinon non
+         return utiliserdao.obtenirIDUtiliserParNumeroClient(numero) != 0;
+    }
+
+    @Override
+    public boolean velosDisposDansLaStation(int identifiantBorneUtilisateur) {
+        StationMetier st = stationdao.find(identifiantBorneUtilisateur);
+        st.setListeVelos(veldao.getVeloFromAStation(identifiantBorneUtilisateur));
+        return !st.getListeVelos().isEmpty();
+    }
 
     // OK
     @Override

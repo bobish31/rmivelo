@@ -60,10 +60,12 @@ public class UtiliserMetier {
 
     @Override
     public String toString() {
-        return "UtiliserMetier [PRET] {" +
-                "idUtilisation = " + idUtilisation +
-                ", Depot =" + dateDepot +
-                ", Retrait =" + dateRetrait +
+        return "UtiliserMetier{" +
+                "dateRetrait=" + dateRetrait +
+                ", dateDepot=" + dateDepot +
+                ", idUtilisation=" + idUtilisation +
+                ", numero=" + numero +
+                ", identifiantVelo=" + identifiantVelo +
                 '}';
     }
 }

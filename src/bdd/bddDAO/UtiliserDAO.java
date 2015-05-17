@@ -158,6 +158,27 @@ public class UtiliserDAO extends DAO<UtiliserMetier> {
         return idPret;
     }
 
+    public int obtenirIDUtiliserParNumeroClient (int numero) {
+
+        int idPret = 0;
+        try {
+            String requete = "SELECT " + COLONNE_UTILISER_UTILISER_ID + " FROM " + TABLE_UTILISER + " WHERE " + COLONNE_UTILISER_FK_NUMERO + " = " + numero + " and " + COLONNE_UTILISER_DATEDEPOT + " is null" + ";";
+
+            ResultSet result = this.bddConnecteur.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE
+            ).executeQuery(requete);
+
+            if(result.first()) {
+                idPret = result.getInt(COLONNE_UTILISER_UTILISER_ID);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return idPret;
+    }
+
     @Override
     public ArrayList<UtiliserMetier> getInstancesByList() {
         ArrayList<UtiliserMetier> listePret = new ArrayList<>();

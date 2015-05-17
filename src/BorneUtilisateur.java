@@ -6,10 +6,7 @@ import java.net.MalformedURLException;
 import java.rmi.*;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by David on 10/04/2015.
@@ -18,6 +15,8 @@ public class BorneUtilisateur {
 
     private StationMetier station;
     private ServeurGeneralImpl serv;
+
+    private static final int IDENTIFIANT_BORNE_UTILISATEUR = 1;
 
 
     public BorneUtilisateur(StationMetier s) {
@@ -96,29 +95,55 @@ public class BorneUtilisateur {
 
     private static void consulterStationsAlentours(ServeurGeneral serveurDistant) throws RemoteException {
         System.out.println("\nListe des stations voisines disponibles : \n");
-        HashMap<Integer, Double> stationsVoisines = serveurDistant.obtenirBornesVoisines(1);
+        TreeMap<Double, Integer> stationsVoisines = serveurDistant.obtenirBornesVoisines(IDENTIFIANT_BORNE_UTILISATEUR);
 
         DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.HALF_UP);
 
-        for (Map.Entry<Integer, Double> e : stationsVoisines.entrySet()){
-            System.out.println("Station " + e.getKey() + " ---> Distance = " + df.format(e.getValue()) + "km");
+        for (Map.Entry<Double, Integer> e : stationsVoisines.entrySet()){
+            System.out.println("Station " + e.getValue() + " ---> Distance = " + df.format(e.getKey()) + "km");
         }
     }
 
-    private static void deposerUnVelo(ServeurGeneral serveurDistant) throws RemoteException {
+    private static void deposerUnVelo(ServeurGeneral serveurDistant, int numero) throws RemoteException {
         Date dateDepot = new Date();
         Timestamp heureDepot = new Timestamp(dateDepot.getTime());
 
-        String ticket = serveurDistant.deposerVelo(3, 3, heureDepot);
+        int numeroDuVelo = serveurDistant.obtenirVeloCorrespondantAuPretEnCours(numero);
+        String ticket = serveurDistant.deposerVelo(IDENTIFIANT_BORNE_UTILISATEUR, numeroDuVelo, heureDepot);
+        System.out.println("Vélo déposé");
         System.out.println(ticket);
     }
 
-    private static void retirerUnVelo(ServeurGeneral serveurDistant) throws RemoteException {
-        Date dateRetrait = new Date();
-        Timestamp heureRetrait = new Timestamp(dateRetrait.getTime());
+    private static void retirerUnVelo(ServeurGeneral serveurDistant, int numero) throws RemoteException {
 
-        serveurDistant.retirerVelo(2, 5, 3, heureRetrait);
+        // Checker si la station a des vélos
+        if (!serveurDistant.velosDisposDansLaStation(IDENTIFIANT_BORNE_UTILISATEUR)) {
+            System.out.println("Il n'y a pas de vélos dispos dans cette station ...");
+            consulterStationsAlentours(serveurDistant);
+            lancerMenuUtilisateurAuthentifie(serveurDistant, numero);
+        } else {
+
+            Date dateRetrait = new Date();
+            Timestamp heureRetrait = new Timestamp(dateRetrait.getTime());
+
+            ArrayList<Integer> listVelos = serveurDistant.obtenirVelosRattachesAUneStation(IDENTIFIANT_BORNE_UTILISATEUR);
+
+            System.out.println("Voici la liste des vélos disponibles : ");
+            for (int identifiantVelo : listVelos) {
+                System.out.print(identifiantVelo + " | ");
+            }
+            System.out.println("Votre choix : ");
+            Scanner scanner = new Scanner(System.in);
+            String input = scanner.nextLine();
+
+            if (listVelos.contains(Integer.parseInt(input))) {
+                serveurDistant.retirerVelo(IDENTIFIANT_BORNE_UTILISATEUR, numero, Integer.parseInt(input), heureRetrait);
+            } else {
+                System.out.println("Erreur de saisie, veuillez recommencer ..");
+                retirerUnVelo(serveurDistant, numero);
+            }
+        }
     }
 
     private static void lancerMenuAccueil(ServeurGeneral serveurDistant) throws RemoteException {
@@ -128,7 +153,7 @@ public class BorneUtilisateur {
                 "Faites votre choix à l'aide du menu ci-dessous :\n" +
                 "\n" +
                 "1 - S'inscrire au service Velo'Toulouse\n" +
-                "2 - S'authentifier à l'aide de son numéro d'adhérent et code secret\n");
+                "2 - S'authentifier à l'aide de son numéro d'adhérent et code secret");
 
         System.out.println("Votre choix : ");
         Scanner scanner = new Scanner(System.in);
@@ -147,49 +172,88 @@ public class BorneUtilisateur {
         }
     }
 
-    private static void lancerMenuUtilisateurAuthentifie(ServeurGeneral serveurDistant) throws RemoteException {
-        System.out.println("" +
-                "************ BIENVENUE SUR LE SERVICE VELO'TOULOUSE ************\n" +
-                "\n" +
-                "Faites votre choix à l'aide du menu ci-dessous :\n" +
-                "\n" +
-                "1 - Retirer un velo\n" +
-                "2 - Déposer un vélo\n" +
-                "3 - Consulter les stations aux alentours\n" +
-                "");
+    private static void lancerMenuUtilisateurAuthentifie(ServeurGeneral serveurDistant, int numero) throws RemoteException {
+        if (serveurDistant.aUnPretEnCours(numero)) {
+            System.out.println("" +
+                    "************ SERVICE VELO'TOULOUSE ************\n" +
+                    "\n" +
+                    "---> Numéro d'abonné : " + numero +
+                    "\n" +
+                    "Faites votre choix à l'aide du menu ci-dessous :\n" +
+                    "\n" +
+                    "1 - Déposer le velo\n" +
+                    "2 - Consulter les stations aux alentours\n" +
+                    "\n" +
+                    "9 - Quitter");
 
+            System.out.println("Votre choix :");
+            Scanner scanner = new Scanner(System.in);
+            String input = scanner.nextLine();
+            switch (input) {
+                case "1":
+                    deposerUnVelo(serveurDistant, numero);
+                    lancerMenuAccueil(serveurDistant);
+                    break;
+                case "2":
+                    consulterStationsAlentours(serveurDistant);
+                    lancerMenuUtilisateurAuthentifie(serveurDistant, numero);
+                    break;
+                case "9":
+                    lancerMenuAccueil(serveurDistant);
+                default:
+                    System.out.println("Votre saisie est incorrecte, veuillez reprendre la procédure.\n");
+                    lancerMenuUtilisateurAuthentifie(serveurDistant, numero);
+                    break;
+            }
 
-        System.out.println("Votre choix :\n");
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
-        switch (input) {
-            case "1":
-                retirerUnVelo(serveurDistant);
-                lancerMenuAccueil(serveurDistant);
-                break;
-            case "2":
-                deposerUnVelo(serveurDistant);
-                lancerMenuAccueil(serveurDistant);
-                break;
-            case "3":
-                consulterStationsAlentours(serveurDistant);
-                break;
-            default:
-                System.out.println("Votre saisie est incorrecte, veuillez reprendre la procédure.\n");
-                lancerMenuUtilisateurAuthentifie(serveurDistant);
-                break;
+        } else {
+            System.out.println("" +
+                    "************ SERVICE VELO'TOULOUSE ************\n" +
+                    "\n" +
+                    "---> Numéro d'abonné : " + numero +
+                    "\n" +
+                    "Faites votre choix à l'aide du menu ci-dessous :\n" +
+                    "\n" +
+                    "1 - Retirer un velo\n" +
+                    "2 - Consulter les stations aux alentours\n" +
+                    "\n" +
+                    "9 - Quitter");
+
+            System.out.println("Votre choix :");
+            Scanner scanner = new Scanner(System.in);
+            String input = scanner.nextLine();
+            switch (input) {
+                case "1":
+                    retirerUnVelo(serveurDistant, numero);
+                    lancerMenuAccueil(serveurDistant);
+                    break;
+                case "2":
+                    consulterStationsAlentours(serveurDistant);
+                    lancerMenuUtilisateurAuthentifie(serveurDistant, numero);
+                    break;
+                case "9":
+                    lancerMenuAccueil(serveurDistant);
+                default:
+                    System.out.println("Votre saisie est incorrecte, veuillez reprendre la procédure.\n");
+                    lancerMenuUtilisateurAuthentifie(serveurDistant, numero);
+                    break;
+            }
         }
     }
 
     private static void authentifierUtilisateur(ServeurGeneral serveurDistant) throws RemoteException {
         String input;
-        System.out.println("Veuillez saisir votre numéro d'abonné ainsi que votre code secret sous le format suivant : xx/xxxx\n");
+        System.out.println("Veuillez saisir votre numéro d'abonné ainsi que votre code secret sous le format suivant : xx/xxxx");
         input = new Scanner(System.in).nextLine();
         int numero = Integer.parseInt(input.split("/")[0]);
         int code = Integer.parseInt(input.split("/")[1]);
         boolean connexion = serveurDistant.authentifierUtilisateur(numero, code);
-        System.out.println(connexion);
-        lancerMenuUtilisateurAuthentifie(serveurDistant);
+        if (connexion) {
+            lancerMenuUtilisateurAuthentifie(serveurDistant, numero);
+        } else {
+            System.out.println("Erreur dans vos informations de connexion, veuillez recommencer");
+            lancerMenuAccueil(serveurDistant);
+        }
     }
 
     private static void inscrireUtilisateur(ServeurGeneral serveurDistant) throws RemoteException {
