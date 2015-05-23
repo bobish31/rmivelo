@@ -11,6 +11,8 @@ import bdd.bddDAO.VeloDAO;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
@@ -19,6 +21,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.prefs.Preferences;
 
 /**
  * Created by Robin on 03/04/2015.
@@ -35,6 +38,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     private DAO<StationMetier> stationdao;
     private UtilisateurDAO utilisateurdao;
     private UtiliserDAO utiliserdao;
+    private static BorneTechnicien  bornetech;
 
     public ServeurGeneralImpl() throws RemoteException {
 
@@ -94,9 +98,28 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
             */
 
 
+            // Connexion à la borne du tech
+            //Récupération d'un proxy sur l'objet
+            Remote tech = Naming.lookup("rmi://127.0.0.1:5589/BorneTechnicien");
+
+            System.out.println ("Lancement de la borne technicien");
+
+            if (tech instanceof BorneTechnicien) {
+
+
+                bornetech= (BorneTechnicien) tech;
+
+                //test notifier
+                obj.notifierPlein(bornetech, 1);
+                obj.notifierVide(bornetech, 1);
+            }
+
+
         }
         catch (RemoteException | MalformedURLException e){
             e.printStackTrace();
+        } catch (NotBoundException e1) {
+            e1.printStackTrace();
         }
     }
 
@@ -128,7 +151,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
     }
 
-    private void afficherContenuMapUtilisateurs() {
+   private void afficherContenuMapUtilisateurs() {
         System.out.println("Liste Utilisateurs : " + mapUtilisateurs.size() + "\n");
 
         for (UtilisateurMetier utilisateur : mapUtilisateurs.values()) {
@@ -233,6 +256,12 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         System.out.println("DEPOT - " + util.getDateDepot());
         System.out.println("RETRAIT - " + util.getDateRetrait());
 
+        // Gestion de la notification en cas de saturation
+        if(st.getCapacite()>7){
+            //si on a une capcité superieure à 7 vélo on notifie un technicien
+            notifierPlein(bornetech,st.getIdentifiantStation());
+        }
+
         return  resultat;
 
     }
@@ -288,7 +317,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
             // Gestion de la notification en cas de pénurie
             if(st.getCapacite()<3){
                 //si on a une capcité inférieure à 3 vélo on notifie un technicien
-                notifier(st.getIdentifiantStation());
+                notifierVide(bornetech,st.getIdentifiantStation());
             }
 
             System.out.println("Velo retire");
@@ -427,15 +456,78 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
     // A FAIRE
     @Override
-    public void notifier(int idStation) throws RemoteException {
+    public void notifierVide(BorneTechnicien bt,int idStation) throws RemoteException {
         // en fonction de la station on contacte le bon tech
-       //TODO compléter
+
+        //On récupère la station
+
+        StationMetier st=stationdao.find(idStation);
+
 
         //on recupère la map des techs :
         HashMap<Integer,UtilisateurMetier> techs=utilisateurdao.getTechs();
 
-        if (idStation>= 0 && idStation <99){
-            techs.get(1111).notifier(stationdao.find(idStation)); //todo revoir
+        if (idStation>= 0 && idStation <5){
+            //On récupère le tech
+            UtilisateurMetier ut = utilisateurdao.find(1111);
+
+            bt.notifierVide(st.toString(),ut.toString());
+        }
+        if (idStation>= 5 && idStation <10){
+            //On récupère le tech
+            UtilisateurMetier ut = utilisateurdao.find(2222);
+
+            bt.notifierVide(st.toString(),ut.toString());
+        }
+        if (idStation>= 10 && idStation <15){
+            //On récupère le tech
+            UtilisateurMetier ut = utilisateurdao.find(3333);
+
+            bt.notifierVide(st.toString(),ut.toString());
+        }
+        if (idStation>= 15 && idStation <20){
+            //On récupère le tech
+            UtilisateurMetier ut = utilisateurdao.find(4444);
+
+            bt.notifierVide(st.toString(),ut.toString());
+        }
+    }
+
+    @Override
+    public void notifierPlein(BorneTechnicien bt,int idStation) throws RemoteException {
+        // en fonction de la station on contacte le bon tech
+
+        //On récupère la station
+
+        StationMetier st=stationdao.find(idStation);
+
+
+        //on recupère la map des techs :
+        HashMap<Integer,UtilisateurMetier> techs=utilisateurdao.getTechs();
+
+        if (idStation>= 0 && idStation <5){
+            //On récupère le tech
+            UtilisateurMetier ut = utilisateurdao.find(3333);
+
+            bt.notifierPlein(st.toString(),ut.toString());
+        }
+        if (idStation>= 5 && idStation <10){
+            //On récupère le tech
+            UtilisateurMetier ut = utilisateurdao.find(2222);
+
+            bt.notifierPlein(st.toString(),ut.toString());
+        }
+        if (idStation>= 10 && idStation <15){
+            //On récupère le tech
+            UtilisateurMetier ut = utilisateurdao.find(3333);
+
+            bt.notifierPlein(st.toString(),ut.toString());
+        }
+        if (idStation>= 15 && idStation <20){
+            //On récupère le tech
+            UtilisateurMetier ut = utilisateurdao.find(4444);
+
+            bt.notifierPlein(st.toString(),ut.toString());
         }
     }
 

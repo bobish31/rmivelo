@@ -29,7 +29,9 @@ public interface ServeurGeneral extends Remote {
 
     public String imprimerRecuUtilisateur(int numero, Timestamp retrait, Timestamp depot) throws java.rmi.RemoteException;
 
-    public void notifier(int idStation) throws java.rmi.RemoteException;
+    public void notifierVide(BorneTechnicien bt, int idStation) throws java.rmi.RemoteException;
+
+    public void notifierPlein(BorneTechnicien bt, int idStation) throws java.rmi.RemoteException;
 
     public boolean connexionOkBDD() throws RemoteException;
 

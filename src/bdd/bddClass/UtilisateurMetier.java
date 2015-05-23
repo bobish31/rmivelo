@@ -36,11 +36,7 @@ public class UtilisateurMetier  {
 
     public boolean estTechnicien() { return tech; }
 
-    public void notifier(StationMetier st){
-        if(this.estTechnicien()){
-            System.out.println("L\'utilisateur : "+this.toString()+" Doit se rendre à la station " + st.toString());
-        }
-    }
+
 
     @Override
     public String toString() {

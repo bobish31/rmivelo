@@ -155,11 +155,11 @@
 	--				   SCRIPT D'INSERTION
 	-- *********** -- *********** -- *********** -- *******
 
-		INSERT INTO utilisateur (numero, code) VALUES (1, 0000);
-		INSERT INTO utilisateur (numero, code) VALUES (2, 1111);
-		INSERT INTO utilisateur (numero, code) VALUES (3, 2222);
-		INSERT INTO utilisateur (numero, code) VALUES (4, 3333);
-		INSERT INTO utilisateur (numero, code) VALUES (5, 4444);
+		INSERT INTO utilisateur (numero, code,tech) VALUES (1, 0000,FALSE);
+		INSERT INTO utilisateur (numero, code,tech) VALUES (2, 1111,TRUE);
+		INSERT INTO utilisateur (numero, code,tech) VALUES (3, 2222,TRUE);
+		INSERT INTO utilisateur (numero, code,tech) VALUES (4, 3333,TRUE);
+		INSERT INTO utilisateur (numero, code,tech) VALUES (5, 4444,TRUE);
 
 		-- Les nombre de retraits et dépôts sont automatiquement remplis à 0 grâce à la structure de création
 		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (1, 20, 43.585909, 1.447364);
