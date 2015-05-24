@@ -507,7 +507,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
         if (idStation>= 0 && idStation <5){
             //On récupère le tech
-            UtilisateurMetier ut = utilisateurdao.find(3333);
+            UtilisateurMetier ut = utilisateurdao.find(1111);
 
             bt.notifierPlein(st.toString(),ut.toString());
         }

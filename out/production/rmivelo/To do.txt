@@ -40,8 +40,24 @@ ETAPE 5 - SERVEURGENERALIMPL
 
 ETAPE 6 : Fonctionnalités
 
-- Chargement de la bdd dans les listes (en cours : RM)
-- générerUtilisateur (en cours : RM)
+- Chargement de la bdd dans les listes (OK)
+- générerUtilisateur (OK)
+- AuthentifierUtilisateur (OK)
+- AffectionVeloStation (OK)
+- Créer velo (OK)
+- Test de déposer (en cours : RM)
+
+- Test de retirer (en cours : RM)
+
+
+NOTIFIER :
+- Faire un objet rmi "smartphone tech"
+- faire 2 methodes notifiervide et notifierplein
+- faire l'action déposer vélo ou retirer velo en fonction des penuries
+
+ALTER TABLE utiliser ALTER COLUMN datedepot DROP NOT NULL;
+ALTER TABLE velo ALTER COLUMN fk_identifiantstation DROP NOT NULL;
+--> Modifié dans le script de création de la base --> OK
 
 
 

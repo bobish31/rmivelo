@@ -54,7 +54,8 @@
 		-------------------------------------------------------
 		CREATE TABLE utilisateur (
 				numero integer NOT NULL,
-				code integer NOT NULL
+				code integer NOT NULL,
+				tech BOOLEAN DEFAULT FALSE
 			);
 
 		ALTER TABLE public.utilisateur OWNER TO postgres;
@@ -102,8 +103,8 @@
 				utiliser_id integer NOT NULL,
 				fk_identifiantvelo integer NOT NULL,
 				fk_numero integer NOT NULL,
-				dateretrait timestamp with time zone NOT NULL,
-				datedepot timestamp with time zone NOT NULL
+				dateretrait timestamp without time zone NOT NULL,
+				datedepot timestamp without time zone
 			);
 
 		ALTER TABLE public.utiliser OWNER TO postgres;
@@ -154,17 +155,21 @@
 	--				   SCRIPT D'INSERTION
 	-- *********** -- *********** -- *********** -- *******
 
-		INSERT INTO utilisateur (numero, code) VALUES (1, 0000);
-		INSERT INTO utilisateur (numero, code) VALUES (2, 1111);
-		INSERT INTO utilisateur (numero, code) VALUES (3, 2222);
-		INSERT INTO utilisateur (numero, code) VALUES (4, 3333);
-		INSERT INTO utilisateur (numero, code) VALUES (5, 4444);
+		INSERT INTO utilisateur (numero, code,tech) VALUES (1, 0000,FALSE);
+		INSERT INTO utilisateur (numero, code,tech) VALUES (2, 1111,TRUE);
+		INSERT INTO utilisateur (numero, code,tech) VALUES (3, 2222,TRUE);
+		INSERT INTO utilisateur (numero, code,tech) VALUES (4, 3333,TRUE);
+		INSERT INTO utilisateur (numero, code,tech) VALUES (5, 4444,TRUE);
+		INSERT INTO utilisateur (numero, code,tech) VALUES (1111, 9,TRUE);
+		INSERT INTO utilisateur (numero, code,tech) VALUES (2222, 9,TRUE);
+		INSERT INTO utilisateur (numero, code,tech) VALUES (3333, 9,TRUE);
+		INSERT INTO utilisateur (numero, code,tech) VALUES (4444, 9,TRUE);
 
 		-- Les nombre de retraits et dépôts sont automatiquement remplis à 0 grâce à la structure de création
 		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (1, 20, 43.585909, 1.447364);
-		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (2, 15, 43.583776, 1.443702);
-		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (3, 25, 43.585632, 1.428026);
-		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (4, 10, 43.591544, 1.418569);
+		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (2, 20, 43.583776, 1.443702);
+		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (3, 20, 43.585632, 1.428026);
+		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (4, 20, 43.591544, 1.418569);
 		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (5, 20, 43.587916, 1.424500);
 
 		INSERT INTO velo (identifiantvelo, operationnel, fk_identifiantstation) VALUES (1, TRUE, 1);

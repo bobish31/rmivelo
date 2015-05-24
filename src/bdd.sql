@@ -160,6 +160,10 @@
 		INSERT INTO utilisateur (numero, code,tech) VALUES (3, 2222,TRUE);
 		INSERT INTO utilisateur (numero, code,tech) VALUES (4, 3333,TRUE);
 		INSERT INTO utilisateur (numero, code,tech) VALUES (5, 4444,TRUE);
+		INSERT INTO utilisateur (numero, code,tech) VALUES (1111, 9,TRUE);
+		INSERT INTO utilisateur (numero, code,tech) VALUES (2222, 9,TRUE);
+		INSERT INTO utilisateur (numero, code,tech) VALUES (3333, 9,TRUE);
+		INSERT INTO utilisateur (numero, code,tech) VALUES (4444, 9,TRUE);
 
 		-- Les nombre de retraits et dépôts sont automatiquement remplis à 0 grâce à la structure de création
 		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (1, 20, 43.585909, 1.447364);
