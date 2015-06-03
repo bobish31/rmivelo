@@ -54,4 +54,8 @@ public interface ServeurGeneral extends Remote {
     public boolean initBorneTechnicien() throws RemoteException;
 
     public String obtenirInfosBorneVoisine(int identifiantStation) throws RemoteException;
+
+    public String obtenirStatistiqueBorne(int identifiantStation) throws RemoteException;
+
+    public void statisqueBorneConsultation (int identifiantStation) throws RemoteException;
 }

@@ -103,6 +103,9 @@ public class BorneUtilisateur {
         for (Map.Entry<Double, Integer> e : stationsVoisines.entrySet()){
                 System.out.println("Station " + e.getValue() + " ---> Distance = " + df.format(e.getKey()) + "km ---> " + serveurDistant.obtenirInfosBorneVoisine(e.getValue()));
         }
+
+        // Statistique
+        serveurDistant.statisqueBorneConsultation(IDENTIFIANT_BORNE_UTILISATEUR);
     }
 
     private static void deposerUnVelo(ServeurGeneral serveurDistant) throws RemoteException {

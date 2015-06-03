@@ -20,27 +20,27 @@ public class BorneTechnicienImpl extends UnicastRemoteObject implements BorneTec
         serv = new ServeurGeneralImpl();
     }
 
-    // Méthode qui lance le serveur
+    // Mï¿½thode qui lance le serveur
     public static void main(String[] args) {
 
         try {
-            // Création du registre
+            // Crï¿½ation du registre
             LocateRegistry.createRegistry(5589);
 
-            // Création de l'objet
+            // Crï¿½ation de l'objet
             BorneTechnicienImpl obj = new BorneTechnicienImpl();
 
-            // Création de l'adresse URL
+            // Crï¿½ation de l'adresse URL
             String url = "rmi://127.0.0.1:5589/BorneTechnicien";
 
             // Enregistrement de l'adresse
             Naming.rebind(url, obj);
 
             // On confirme que tout est ok
-            System.out.println("Borne Tech lancée ");
+            System.out.println("Borne Tech lancï¿½e ");
 
 
-            // On va chercher la référence du serveur général
+            // On va chercher la rï¿½fï¿½rence du serveur gï¿½nï¿½ral
             Remote serv = Naming.lookup("rmi://127.0.0.1:5588/ServeurGeneral");
 
             if (serv instanceof ServeurGeneral) {
@@ -60,24 +60,25 @@ public class BorneTechnicienImpl extends UnicastRemoteObject implements BorneTec
     @Override
     public void notifierVide(String st, String ut) {
 
-        System.out.println("L\'utilisateur : " + ut + " Doit se rendre à la station " + st+" Car elle est presque en pénurie.  " );
+        System.out.println("L\'utilisateur : " + ut + " Doit se rendre Ã  la station " + st+" Car elle est presque en pÃ©nurie.  " );
 
     }
 
     @Override
     public void notifierPlein(String st, String ut) {
 
-        System.out.println("L\'utilisateur : " + ut + " Doit se rendre à la station " + st+" Car elle est presque en saturation.");
+        System.out.println("L\'utilisateur : " + ut + " Doit se rendre Ã  la station " + st+" Car elle est presque en saturation.");
 
     }
 
     private static void lancerMenuAccueil(ServeurGeneral serveurDistant) throws RemoteException {
         System.out.println("" +
-                "************ BIENVENUE SUR LE SERVICE VELO'TOULOUSE ************\n" +
+                "************ BIENVENUE SUR LE GESTIONNAIRE DE SERVICE VELO'TOULOUSE ************\n" +
                 "\n" +
-                "Faites votre choix à l'aide du menu ci-dessous :\n" +
+                "Faites votre choix Ã  l'aide du menu ci-dessous :\n" +
                 "\n" +
-                "1 - Consulter la situation d'un vélo\n");
+                "1 - Consulter la situation d'un vÃ©lo\n" +
+                "2 - Consulter les statistiques du rÃ©seau\n");
 
         System.out.println("Votre choix : ");
         Scanner scanner = new Scanner(System.in);
@@ -86,8 +87,11 @@ public class BorneTechnicienImpl extends UnicastRemoteObject implements BorneTec
             case "1":
                 consulterSituationVelo(serveurDistant);
                 break;
+            case "2":
+                consulterStatistiqueStation(serveurDistant);
+                break;
             default:
-                System.out.println("Votre saisie est incorrecte, veuillez reprendre la procédure.\n");
+                System.out.println("Votre saisie est incorrecte, veuillez reprendre la procÃ©dure.\n");
                 lancerMenuAccueil(serveurDistant);
                 break;
         }
@@ -95,11 +99,22 @@ public class BorneTechnicienImpl extends UnicastRemoteObject implements BorneTec
 
     private static void consulterSituationVelo(ServeurGeneral serveurDistant) throws RemoteException{
         String input;
-        System.out.println("Veuillez saisir le numéro du vélo concerné : ");
+        System.out.println("Veuillez saisir le numÃ©ro du vÃ©lo concernÃ© : ");
         input = new Scanner(System.in).nextLine();
         int numeroVelo = Integer.parseInt(input);
 
         System.out.println(serveurDistant.connaitreSituationVelo(numeroVelo));
+
+        lancerMenuAccueil(serveurDistant);
+    }
+
+    private static void consulterStatistiqueStation(ServeurGeneral serveurDistant) throws RemoteException{
+        String input;
+        System.out.println("Veuillez saisir l'identifiant de la station recherchÃ©e : ");
+        input = new Scanner(System.in).nextLine();
+        int idStation = Integer.parseInt(input);
+
+        System.out.println(serveurDistant.obtenirStatistiqueBorne(idStation));
 
         lancerMenuAccueil(serveurDistant);
     }

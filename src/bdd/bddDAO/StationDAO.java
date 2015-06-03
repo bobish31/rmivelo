@@ -21,6 +21,9 @@ public class StationDAO extends DAO<StationMetier> {
     private static final String COLONNE_STATION_NBVELOSDISPOS = "nbvelosdispos";
     private static final String COLONNE_STATION_NBRETRAITS = "nbretraits";
     private static final String COLONNE_STATION_NBDEPOTS = "nbdepots";
+    private static final String COLONNE_STATION_NBPENURIE = "nbpenurie";
+    private static final String COLONNE_STATION_NBPLEIN = "nbplein";
+    private static final String COLONNE_STATION_NBCONSULTATION = "nbconsultation";
     private static final String COLONNE_STATION_LATITUDE = "latitude";
     private static final String COLONNE_STATION_LONGITUDE = "longitude";
 
@@ -93,6 +96,9 @@ public class StationDAO extends DAO<StationMetier> {
                 + COLONNE_STATION_NBVELOSDISPOS + " = " + obj.getNbVelosDispos() + ","
                 + COLONNE_STATION_NBRETRAITS + " = " + obj.getNbRetraits() + ","
                 + COLONNE_STATION_NBDEPOTS + " = " + obj.getNbDepots() + ","
+                + COLONNE_STATION_NBPENURIE + " = " + obj.getNbPenurie() + ','
+                + COLONNE_STATION_NBPLEIN + " = " + obj.getNbPlein() + ','
+                + COLONNE_STATION_NBCONSULTATION + " = " + obj.getNbConsultation() + ','
                 + COLONNE_STATION_LATITUDE + "=  " + obj.getLatitude() + ","
                 + COLONNE_STATION_LONGITUDE + " = " + obj.getLongitude()
                 + " WHERE " + COLONNE_STATION_IDENTIFIANTSTATION + "=" + obj.getIdentifiantStation();
@@ -128,7 +134,7 @@ public class StationDAO extends DAO<StationMetier> {
             ).executeQuery(requete);
 
             if(result.first()) {
-                station = new StationMetier(id,result.getInt(COLONNE_STATION_CAPACITE),result.getInt(COLONNE_STATION_NBVELOSDISPOS),result.getInt(COLONNE_STATION_NBRETRAITS),result.getInt(COLONNE_STATION_NBDEPOTS), result.getDouble(COLONNE_STATION_LATITUDE), result.getDouble(COLONNE_STATION_LONGITUDE));
+                station = new StationMetier(id,result.getInt(COLONNE_STATION_CAPACITE),result.getInt(COLONNE_STATION_NBVELOSDISPOS),result.getInt(COLONNE_STATION_NBRETRAITS),result.getInt(COLONNE_STATION_NBDEPOTS),result.getInt(COLONNE_STATION_NBPENURIE),result.getInt(COLONNE_STATION_NBPLEIN),result.getInt(COLONNE_STATION_NBCONSULTATION), result.getDouble(COLONNE_STATION_LATITUDE), result.getDouble(COLONNE_STATION_LONGITUDE));
             }
 
         } catch (SQLException e) {

@@ -12,6 +12,9 @@ public class StationMetier {
     private int nbVelosDispos;
     private int nbRetraits;
     private int nbDepots;
+    private int nbPenurie;
+    private int nbPlein;
+    private int nbConsultation;
     private double latitude;
     private double longitude;
 
@@ -21,12 +24,15 @@ public class StationMetier {
 
     public StationMetier () {}
 
-    public StationMetier(int identifiantStation, int capacite, int nbVelosDispos, int nbRetraits, int nbDepots, double latitude, double longitude) {
+    public StationMetier(int identifiantStation, int capacite, int nbVelosDispos, int nbRetraits, int nbDepots, int nbPenurie, int nbPlein, int nbConsultation, double latitude, double longitude) {
         this.identifiantStation = identifiantStation;
         this.capacite = capacite;
         this.nbVelosDispos = nbVelosDispos;
         this.nbRetraits = nbRetraits;
         this.nbDepots = nbDepots;
+        this.nbPenurie = nbPenurie;
+        this.nbPlein = nbPlein;
+        this.nbConsultation = nbConsultation;
         this.latitude = latitude;
         this.longitude = longitude;
 
@@ -81,6 +87,28 @@ public class StationMetier {
         this.nbRetraits = nbRetraits;
     }
 
+    public int getNbPenurie() {
+        return nbPenurie;
+    }
+
+    public void setNbPenurie(int nbPenurie) {
+        this.nbPenurie = nbPenurie;
+    }
+
+    public int getNbPlein() { return nbPlein; }
+
+    public int getNbConsultation() {
+        return nbConsultation;
+    }
+
+    public void setNbPlein(int nbPlein) {
+        this.nbPlein = nbPlein;
+    }
+
+    public void setNbConsultation(int nbConsultation) {
+        this.nbConsultation = nbConsultation;
+    }
+
     public double getLatitude() {
         return latitude;
     }
@@ -121,6 +149,9 @@ public class StationMetier {
                 ", nbVelosDispos=" + nbVelosDispos +
                 ", nbDepots=" + nbDepots +
                 ", nbRetraits=" + nbRetraits +
+                ", nbPenurie=" + nbPenurie +
+                ", nbPlein=" + nbPlein +
+                ", nbConsultation=" + nbConsultation +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", listeVelos=" + listeVelos +

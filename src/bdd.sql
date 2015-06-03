@@ -80,6 +80,9 @@
 				nbvelosdispos integer NOT NULL,
 				nbretraits integer NOT NULL DEFAULT 0,
 				nbdepots integer NOT NULL DEFAULT 0,
+				nbpenurie integer NOT NULL DEFAULT 0,
+				nbplein integer NOT NULL DEFAULT 0,
+				nbconsultation integer NOT NULL DEFAULT 0,
 				latitude real NOT NULL,
 				longitude real NOT NULL
 			);

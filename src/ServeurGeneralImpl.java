@@ -239,7 +239,10 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
             // Gestion de la notification en cas de saturation
             if(st.getCapacite() - st.getNbVelosDispos() < 3){
-                notifierPlein(bornetech,st.getIdentifiantStation());
+                notifierPlein(bornetech, st.getIdentifiantStation());
+                st.setNbPlein(st.getNbPlein() + 1);
+                //maj dans la base
+                stationdao.update(st);
             }
 
             return  resultat;
@@ -297,7 +300,10 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
             // Gestion de la notification en cas de pénurie
             if(st.getNbVelosDispos() < 3){
                 //si on a une capcité inférieure à 3 vélo on notifie un technicien
-                notifierVide(bornetech,st.getIdentifiantStation());
+                notifierVide(bornetech, st.getIdentifiantStation());
+                st.setNbPenurie(st.getNbPenurie() + 1);
+                //maj dans la base
+                stationdao.update(st);
             }
 
             System.out.println("Velo retire");
@@ -332,7 +338,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     @Override
     public void creerVelo(int identifiantVelo, boolean operationnel) throws RemoteException {
 
-        veldao.create(new VeloMetier(identifiantVelo,operationnel));
+        veldao.create(new VeloMetier(identifiantVelo, operationnel));
     }
 
     // OK
@@ -436,6 +442,21 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         return "Nombre de velos disponibles : " +  st.getNbVelosDispos() + " || Nombre de places restantes = " + (st.getCapacite() - st.getNbVelosDispos());
     }
 
+    @Override
+    public String obtenirStatistiqueBorne(int identifiantStation) {
+            StationMetier st = stationdao.find(identifiantStation);
+            return "ID Borne : " +  st.getIdentifiantStation() + "\nCapacité = " + st.getCapacite() + "\nNombres de vélo disponible : " + (st.getCapacite() - st.getNbVelosDispos()) + "\nNombre de Retrait : " + st.getNbRetraits() + "\nNombre de Dépôt : " + st.getNbDepots() + "\nNombre de Pénurie : " + st.getNbPenurie() + "\nNombre de Saturation : " + st.getNbPlein() + "\nNombre de Consultation Bornes Voisines : " + st.getNbConsultation() + "\n\n";
+        }
+
+    @Override
+    public void statisqueBorneConsultation(int identifiantStation) throws RemoteException {
+        StationMetier st = stationdao.find(identifiantStation);
+        st.setNbConsultation(st.getNbConsultation() + 1);
+        //maj dans la base
+        stationdao.update(st);
+    }
+
+
     // OK
     @Override
     public boolean authentifierUtilisateur(int numero, int code) throws RemoteException {
@@ -449,7 +470,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         return false;
     }
 
-    // EN COURS
+    // OK
     @Deprecated
     @Override
     public String imprimerRecuUtilisateur(int idPret, Timestamp retrait, Timestamp depot) throws RemoteException {
@@ -495,7 +516,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         return resultat;
     }
 
-    // A FAIRE
+    // OK
     @Override
     public void notifierVide(BorneTechnicien bt,int idStation) throws RemoteException {
         // en fonction de la station on contacte le bon tech
@@ -513,32 +534,32 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
             //On récupère le tech
             UtilisateurMetier ut = utilisateurdao.find(6);
 
-            bt.notifierVide(st.toString(),ut.toString());
+            bt.notifierVide(st.toString(), ut.toString());
         }
         if (idStation>= 5 && idStation <10){
             //On récupère le tech
             UtilisateurMetier ut = utilisateurdao.find(7);
 
-            bt.notifierVide(st.toString(),ut.toString());
+            bt.notifierVide(st.toString(), ut.toString());
         }
         if (idStation>= 10 && idStation <15){
             //On récupère le tech
             UtilisateurMetier ut = utilisateurdao.find(8);
 
-            bt.notifierVide(st.toString(),ut.toString());
+            bt.notifierVide(st.toString(), ut.toString());
         }
         if (idStation>= 15 && idStation <20){
             //On récupère le tech
             UtilisateurMetier ut = utilisateurdao.find(9);
 
-            bt.notifierVide(st.toString(),ut.toString());
+            bt.notifierVide(st.toString(), ut.toString());
         }
     }
 
     @Override
     public void notifierPlein(BorneTechnicien bt,int idStation) throws RemoteException {
-        // en fonction de la station on contacte le bon tech
 
+        // en fonction de la station on contacte le bon tech
         //On récupère la station
 
         StationMetier st=stationdao.find(idStation);
@@ -552,27 +573,29 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
             //On récupère le tech
             UtilisateurMetier ut = utilisateurdao.find(6);
 
-            bt.notifierPlein(st.toString(),ut.toString());
+            bt.notifierPlein(st.toString(), ut.toString());
         }
         if (idStation>= 5 && idStation <10){
             //On récupère le tech
             UtilisateurMetier ut = utilisateurdao.find(7);
 
-            bt.notifierPlein(st.toString(),ut.toString());
+            bt.notifierPlein(st.toString(), ut.toString());
         }
         if (idStation>= 10 && idStation <15){
             //On récupère le tech
             UtilisateurMetier ut = utilisateurdao.find(8);
 
-            bt.notifierPlein(st.toString(),ut.toString());
+            bt.notifierPlein(st.toString(), ut.toString());
         }
         if (idStation>= 15 && idStation <20){
             //On récupère le tech
             UtilisateurMetier ut = utilisateurdao.find(9);
 
-            bt.notifierPlein(st.toString(),ut.toString());
+            bt.notifierPlein(st.toString(), ut.toString());
         }
     }
+
+
 
     // OK
     @Override
