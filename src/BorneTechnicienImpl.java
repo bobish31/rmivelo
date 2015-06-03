@@ -1,11 +1,13 @@
-import bdd.bddClass.StationMetier;
-import bdd.bddClass.UtilisateurMetier;
+import bdd.bddClass.VeloMetier;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Scanner;
 
 /**
  * Created by David on 23/05/2015.
@@ -38,7 +40,19 @@ public class BorneTechnicienImpl extends UnicastRemoteObject implements BorneTec
             System.out.println("Borne Tech lancée ");
 
 
-        } catch (RemoteException | MalformedURLException e) {
+            // On va chercher la référence du serveur général
+            Remote serv = Naming.lookup("rmi://127.0.0.1:5588/ServeurGeneral");
+
+            if (serv instanceof ServeurGeneral) {
+
+                // On fera les tous appels sur serveurDistant
+                ServeurGeneral serveurDistant = (ServeurGeneral) serv;
+                serveurDistant.initBorneTechnicien();
+
+                lancerMenuAccueil(serveurDistant);
+            }
+
+        } catch (RemoteException | MalformedURLException | NotBoundException e) {
             e.printStackTrace();
         }
     }
@@ -57,4 +71,36 @@ public class BorneTechnicienImpl extends UnicastRemoteObject implements BorneTec
 
     }
 
+    private static void lancerMenuAccueil(ServeurGeneral serveurDistant) throws RemoteException {
+        System.out.println("" +
+                "************ BIENVENUE SUR LE SERVICE VELO'TOULOUSE ************\n" +
+                "\n" +
+                "Faites votre choix à l'aide du menu ci-dessous :\n" +
+                "\n" +
+                "1 - Consulter la situation d'un vélo\n");
+
+        System.out.println("Votre choix : ");
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+        switch (input) {
+            case "1":
+                consulterSituationVelo(serveurDistant);
+                break;
+            default:
+                System.out.println("Votre saisie est incorrecte, veuillez reprendre la procédure.\n");
+                lancerMenuAccueil(serveurDistant);
+                break;
+        }
+    }
+
+    private static void consulterSituationVelo(ServeurGeneral serveurDistant) throws RemoteException{
+        String input;
+        System.out.println("Veuillez saisir le numéro du vélo concerné : ");
+        input = new Scanner(System.in).nextLine();
+        int numeroVelo = Integer.parseInt(input);
+
+        System.out.println(serveurDistant.connaitreSituationVelo(numeroVelo));
+
+        lancerMenuAccueil(serveurDistant);
+    }
 }

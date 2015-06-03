@@ -48,4 +48,10 @@ public interface ServeurGeneral extends Remote {
     public boolean velosDisposDansLaStation(int identifiantBorneUtilisateur) throws RemoteException;
 
     public boolean stationPleineDeVelos(int identifiantBorneUtilisateur) throws RemoteException;
+
+    public String connaitreSituationVelo(int identifiantVelo) throws RemoteException;
+
+    public boolean initBorneTechnicien() throws RemoteException;
+
+    public String obtenirInfosBorneVoisine(int identifiantStation) throws RemoteException;
 }

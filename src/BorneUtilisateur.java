@@ -16,7 +16,7 @@ public class BorneUtilisateur {
     private StationMetier station;
     private ServeurGeneralImpl serv;
 
-    private static final int IDENTIFIANT_BORNE_UTILISATEUR = 5;
+    private static final int IDENTIFIANT_BORNE_UTILISATEUR = 1;
 
 
     public BorneUtilisateur(StationMetier s) {
@@ -101,7 +101,7 @@ public class BorneUtilisateur {
         df.setRoundingMode(RoundingMode.HALF_UP);
 
         for (Map.Entry<Double, Integer> e : stationsVoisines.entrySet()){
-            System.out.println("Station " + e.getValue() + " ---> Distance = " + df.format(e.getKey()) + "km");
+                System.out.println("Station " + e.getValue() + " ---> Distance = " + df.format(e.getKey()) + "km ---> " + serveurDistant.obtenirInfosBorneVoisine(e.getValue()));
         }
     }
 
@@ -189,7 +189,7 @@ public class BorneUtilisateur {
                 lancerMenuAccueil(serveurDistant);
                 break;
             default:
-                System.out.println("Votre saisie est incorrecte, veuillez reprendre la procédure.\n Input = " + input);
+                System.out.println("Votre saisie est incorrecte, veuillez reprendre la procédure.\n");
                 lancerMenuAccueil(serveurDistant);
                 break;
         }
@@ -219,7 +219,7 @@ public class BorneUtilisateur {
                 case "9":
                     lancerMenuAccueil(serveurDistant);
                 default:
-                    System.out.println("222Votre saisie est incorrecte, veuillez reprendre la procédure.\n");
+                    System.out.println("Votre saisie est incorrecte, veuillez reprendre la procédure.\n");
                     lancerMenuUtilisateurAuthentifie(serveurDistant, numero);
                     break;
             }
@@ -252,7 +252,7 @@ public class BorneUtilisateur {
                 case "9":
                     lancerMenuAccueil(serveurDistant);
                 default:
-                    System.out.println("111Votre saisie est incorrecte, veuillez reprendre la procédure.\n");
+                    System.out.println("Votre saisie est incorrecte, veuillez reprendre la procédure.\n");
                     lancerMenuUtilisateurAuthentifie(serveurDistant, numero);
                     break;
             }

@@ -96,28 +96,9 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
             */
 
 
-            // Connexion à la borne du tech
-            //Récupération d'un proxy sur l'objet
-            Remote tech = Naming.lookup("rmi://127.0.0.1:5589/BorneTechnicien");
-
-            System.out.println ("Lancement de la borne technicien");
-
-            if (tech instanceof BorneTechnicien) {
-
-
-                bornetech= (BorneTechnicien) tech;
-
-                //test notifier
-                obj.notifierPlein(bornetech, 1);
-                obj.notifierVide(bornetech, 1);
-            }
-
-
         }
         catch (RemoteException | MalformedURLException e){
             e.printStackTrace();
-        } catch (NotBoundException e1) {
-            e1.printStackTrace();
         }
     }
 
@@ -401,6 +382,60 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         return st.getListeVelos().size() == st.getCapacite();
     }
 
+    @Override
+    public String connaitreSituationVelo(int identifiantVelo) throws RemoteException {
+
+        String response = "";
+
+        VeloMetier vel = veldao.find(identifiantVelo);
+        if (vel.getIdentifiantVelo() == 0) {
+            response = "Velo inconnu !";
+        } else {
+            if (vel.isOperationnel()) {
+
+                // Vérifier le statut du vélo si il est emprunté ou pas
+                if (vel.getIdentifiantStation() == 0) {
+                    response = "operationnel --> en circulation";
+                } else {
+                    response = "operationnel --> gare a la station " + vel.getIdentifiantStation();
+                }
+
+            } else {
+                response = "non operationnel";
+            }
+        }
+
+        return response;
+    }
+
+    @Override
+    public boolean initBorneTechnicien() throws RemoteException {
+
+        // Connexion à la borne du tech
+        //Récupération d'un proxy sur l'objet
+        Remote tech = null;
+        try {
+            tech = Naming.lookup("rmi://127.0.0.1:5589/BorneTechnicien");
+        } catch (NotBoundException | MalformedURLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        System.out.println ("Lancement de la borne technicien");
+
+        if (tech instanceof BorneTechnicien) {
+            bornetech = (BorneTechnicien) tech;
+        }
+
+        return true;
+    }
+
+    @Override
+    public String obtenirInfosBorneVoisine(int identifiantStation) {
+        StationMetier st = stationdao.find(identifiantStation);
+        return "Nombre de velos disponibles : " +  st.getNbVelosDispos() + " || Nombre de places restantes = " + (st.getCapacite() - st.getNbVelosDispos());
+    }
+
     // OK
     @Override
     public boolean authentifierUtilisateur(int numero, int code) throws RemoteException {
@@ -468,6 +503,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         //On récupère la station
 
         StationMetier st=stationdao.find(idStation);
+        st.setListeVelos(veldao.getVeloFromAStation(st.getIdentifiantStation()));
 
 
         //on recupère la map des techs :
@@ -475,25 +511,25 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
         if (idStation>= 0 && idStation <5){
             //On récupère le tech
-            UtilisateurMetier ut = utilisateurdao.find(1111);
+            UtilisateurMetier ut = utilisateurdao.find(6);
 
             bt.notifierVide(st.toString(),ut.toString());
         }
         if (idStation>= 5 && idStation <10){
             //On récupère le tech
-            UtilisateurMetier ut = utilisateurdao.find(2222);
+            UtilisateurMetier ut = utilisateurdao.find(7);
 
             bt.notifierVide(st.toString(),ut.toString());
         }
         if (idStation>= 10 && idStation <15){
             //On récupère le tech
-            UtilisateurMetier ut = utilisateurdao.find(3333);
+            UtilisateurMetier ut = utilisateurdao.find(8);
 
             bt.notifierVide(st.toString(),ut.toString());
         }
         if (idStation>= 15 && idStation <20){
             //On récupère le tech
-            UtilisateurMetier ut = utilisateurdao.find(4444);
+            UtilisateurMetier ut = utilisateurdao.find(9);
 
             bt.notifierVide(st.toString(),ut.toString());
         }
@@ -506,6 +542,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         //On récupère la station
 
         StationMetier st=stationdao.find(idStation);
+        st.setListeVelos(veldao.getVeloFromAStation(st.getIdentifiantStation()));
 
 
         //on recupère la map des techs :
@@ -513,25 +550,25 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
         if (idStation>= 0 && idStation <5){
             //On récupère le tech
-            UtilisateurMetier ut = utilisateurdao.find(1111);
+            UtilisateurMetier ut = utilisateurdao.find(6);
 
             bt.notifierPlein(st.toString(),ut.toString());
         }
         if (idStation>= 5 && idStation <10){
             //On récupère le tech
-            UtilisateurMetier ut = utilisateurdao.find(2222);
+            UtilisateurMetier ut = utilisateurdao.find(7);
 
             bt.notifierPlein(st.toString(),ut.toString());
         }
         if (idStation>= 10 && idStation <15){
             //On récupère le tech
-            UtilisateurMetier ut = utilisateurdao.find(3333);
+            UtilisateurMetier ut = utilisateurdao.find(8);
 
             bt.notifierPlein(st.toString(),ut.toString());
         }
         if (idStation>= 15 && idStation <20){
             //On récupère le tech
-            UtilisateurMetier ut = utilisateurdao.find(4444);
+            UtilisateurMetier ut = utilisateurdao.find(9);
 
             bt.notifierPlein(st.toString(),ut.toString());
         }
