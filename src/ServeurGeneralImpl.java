@@ -176,9 +176,9 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         // On créé le numero + 1
         numero++;
 
-        // On génére un code aléatoire de 4 chiffres pour le code [BUG CA FAIT QUE 3 CHIFFRES]
+        // On génére un code aléatoire de 4 chiffres pour le code
         Random rand = new Random();
-        int code = rand.nextInt((9999 - 0) + 1) + 0;
+        int code = rand.nextInt(9999 - 1000)+1000;
 
         // On stocke le nouvel utilisateur selon la stratégie de stockage choisie
         UtilisateurMetier u =  new UtilisateurMetier(numero, code,false);
