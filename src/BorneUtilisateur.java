@@ -16,7 +16,7 @@ public class BorneUtilisateur {
     private StationMetier station;
     private ServeurGeneralImpl serv;
 
-    private static final int IDENTIFIANT_BORNE_UTILISATEUR = 1;
+    private static final int IDENTIFIANT_BORNE_UTILISATEUR = 5;
 
 
     public BorneUtilisateur(StationMetier s) {
@@ -105,14 +105,31 @@ public class BorneUtilisateur {
         }
     }
 
-    private static void deposerUnVelo(ServeurGeneral serveurDistant, int numero) throws RemoteException {
-        Date dateDepot = new Date();
-        Timestamp heureDepot = new Timestamp(dateDepot.getTime());
+    private static void deposerUnVelo(ServeurGeneral serveurDistant) throws RemoteException {
 
-        int numeroDuVelo = serveurDistant.obtenirVeloCorrespondantAuPretEnCours(numero);
-        String ticket = serveurDistant.deposerVelo(IDENTIFIANT_BORNE_UTILISATEUR, numeroDuVelo, heureDepot);
-        System.out.println("Vélo déposé");
-        System.out.println(ticket);
+        if (serveurDistant.stationPleineDeVelos(IDENTIFIANT_BORNE_UTILISATEUR)){
+            System.out.println("Il n'y a plus de place dispos dans cette station ...");
+            consulterStationsAlentours(serveurDistant);
+            lancerMenuAccueil(serveurDistant);
+
+        } else {
+
+            Date dateDepot = new Date();
+            Timestamp heureDepot = new Timestamp(dateDepot.getTime());
+
+            System.out.println("Vélo à déposer : ");
+            Scanner scanner = new Scanner(System.in);
+            int numeroDuVelo = Integer.parseInt(scanner.nextLine());
+
+            String ticket = null;
+            try {
+                ticket = serveurDistant.deposerVelo(IDENTIFIANT_BORNE_UTILISATEUR, numeroDuVelo, heureDepot);
+                System.out.println("Vélo déposé");
+                System.out.println(ticket);
+            } catch (VeloInconnuException e) {
+                System.out.println(e.toString());
+            }
+        }
     }
 
     private static void retirerUnVelo(ServeurGeneral serveurDistant, int numero) throws RemoteException {
@@ -153,7 +170,9 @@ public class BorneUtilisateur {
                 "Faites votre choix à l'aide du menu ci-dessous :\n" +
                 "\n" +
                 "1 - S'inscrire au service Velo'Toulouse\n" +
-                "2 - S'authentifier à l'aide de son numéro d'adhérent et code secret");
+                "2 - S'authentifier à l'aide de son numéro d'adhérent et code secret\n\n" +
+
+                "3 - Déposer un vélo");
 
         System.out.println("Votre choix : ");
         Scanner scanner = new Scanner(System.in);
@@ -165,8 +184,12 @@ public class BorneUtilisateur {
             case "2":
                 authentifierUtilisateur(serveurDistant);
                 break;
+            case "3":
+                deposerUnVelo(serveurDistant);
+                lancerMenuAccueil(serveurDistant);
+                break;
             default:
-                System.out.println("Votre saisie est incorrecte, veuillez reprendre la procédure.\n");
+                System.out.println("Votre saisie est incorrecte, veuillez reprendre la procédure.\n Input = " + input);
                 lancerMenuAccueil(serveurDistant);
                 break;
         }
@@ -181,8 +204,7 @@ public class BorneUtilisateur {
                     "\n" +
                     "Faites votre choix à l'aide du menu ci-dessous :\n" +
                     "\n" +
-                    "1 - Déposer le velo\n" +
-                    "2 - Consulter les stations aux alentours\n" +
+                    "1 - Consulter les stations aux alentours\n" +
                     "\n" +
                     "9 - Quitter");
 
@@ -191,17 +213,13 @@ public class BorneUtilisateur {
             String input = scanner.nextLine();
             switch (input) {
                 case "1":
-                    deposerUnVelo(serveurDistant, numero);
-                    lancerMenuAccueil(serveurDistant);
-                    break;
-                case "2":
                     consulterStationsAlentours(serveurDistant);
                     lancerMenuUtilisateurAuthentifie(serveurDistant, numero);
                     break;
                 case "9":
                     lancerMenuAccueil(serveurDistant);
                 default:
-                    System.out.println("Votre saisie est incorrecte, veuillez reprendre la procédure.\n");
+                    System.out.println("222Votre saisie est incorrecte, veuillez reprendre la procédure.\n");
                     lancerMenuUtilisateurAuthentifie(serveurDistant, numero);
                     break;
             }
@@ -234,7 +252,7 @@ public class BorneUtilisateur {
                 case "9":
                     lancerMenuAccueil(serveurDistant);
                 default:
-                    System.out.println("Votre saisie est incorrecte, veuillez reprendre la procédure.\n");
+                    System.out.println("111Votre saisie est incorrecte, veuillez reprendre la procédure.\n");
                     lancerMenuUtilisateurAuthentifie(serveurDistant, numero);
                     break;
             }

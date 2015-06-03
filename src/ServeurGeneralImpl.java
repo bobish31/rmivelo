@@ -17,11 +17,9 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.prefs.Preferences;
 
 /**
  * Created by Robin on 03/04/2015.
@@ -219,51 +217,52 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
     // EN TEST
     @Override
-    public String deposerVelo(int identifiantBorneUtilisateur, int identifiantVelo, Timestamp heureDepot) throws RemoteException {
+    public String deposerVelo(int identifiantBorneUtilisateur, int identifiantVelo, Timestamp heureDepot) throws RemoteException, VeloInconnuException {
 
         // Changement du statut du vélo, affectation de la station dans la bdd
-        VeloMetier vel = veldao.find(identifiantVelo);
-        StationMetier st = stationdao.find(identifiantBorneUtilisateur);
-        vel.setIdentifiantStation(st.getIdentifiantStation());
-        veldao.update(vel);
+        UtiliserMetier util = utiliserdao.find(utiliserdao.obtenirIDUtiliser(identifiantVelo));
 
-        // Changement des capacités de la station concernée
-        st.setCapacite(st.getCapacite() + 1);
+        // Si le prêt retourné par le vélo concerné n'existe pas ou bien que le vélo a déjà été déposé
+        if (util.getIdUtilisation() == 0) {
+            throw new VeloInconnuException(identifiantBorneUtilisateur, identifiantVelo);
 
-        // Gérer les nombres de dépôts de vélo dans la station
-        st.incrementerNbDepots();
-        // st.deposerVelo(identifiantVelo);
+        } else {
+            StationMetier st = stationdao.find(identifiantBorneUtilisateur);
+            VeloMetier vel = veldao.find(identifiantVelo);
+            vel.setIdentifiantStation(st.getIdentifiantStation());
+            veldao.update(vel);
 
-        //maj dans la base
-        stationdao.update(st);
+            // Changement des capacités de la station concernée
+            st.setNbVelosDispos(st.getNbVelosDispos() + 1);
 
-        // on cherche l'id du pret dans la bdd
-        int idPret = utiliserdao.obtenirIDUtiliser(identifiantVelo);
+            // Gérer les nombres de dépôts de vélo dans la station
+            st.incrementerNbDepots();
+            // st.deposerVelo(identifiantVelo);
 
-        System.out.println("ID PRET :" + idPret);
+            //maj dans la base
+            stationdao.update(st);
 
-        // On récupere l'objet utiliser
-        UtiliserMetier util = utiliserdao.find(idPret);
+            System.out.println("ID PRET :" + util.getIdUtilisation());
 
-        util.setDateArivee(heureDepot);
 
-        // On créé la relation utiliser
-        utiliserdao.update(util);
+            util.setDateArivee(heureDepot);
 
-        // On imprime le recu
-        String resultat = imprimerRecuUtilisateur(idPret, util.getDateRetrait(), util.getDateDepot());
+            // On créé la relation utiliser
+            utiliserdao.update(util);
 
-        System.out.println("DEPOT - " + util.getDateDepot());
-        System.out.println("RETRAIT - " + util.getDateRetrait());
+            // On imprime le recu
+            String resultat = imprimerRecuUtilisateur(util.getIdUtilisation(), util.getDateRetrait(), util.getDateDepot());
 
-        // Gestion de la notification en cas de saturation
-        if(st.getCapacite()>7){
-            //si on a une capcité superieure à 7 vélo on notifie un technicien
-            notifierPlein(bornetech,st.getIdentifiantStation());
+            System.out.println("DEPOT - " + util.getDateDepot());
+            System.out.println("RETRAIT - " + util.getDateRetrait());
+
+            // Gestion de la notification en cas de saturation
+            if(st.getCapacite() - st.getNbVelosDispos() < 3){
+                notifierPlein(bornetech,st.getIdentifiantStation());
+            }
+
+            return  resultat;
         }
-
-        return  resultat;
-
     }
 
     // EN TEST
@@ -286,7 +285,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
             veldao.update(vel);
 
             // Changement des capacités de la station concernée
-            st.setCapacite(st.getCapacite() - 1);
+            st.setNbVelosDispos(st.getNbVelosDispos() - 1);
 
             // Gérer les nombres de retraits de vélo dans la station
             st.incrementerNbRetraits();
@@ -315,7 +314,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
             utiliserdao.create(util);
 
             // Gestion de la notification en cas de pénurie
-            if(st.getCapacite()<3){
+            if(st.getNbVelosDispos() < 3){
                 //si on a une capcité inférieure à 3 vélo on notifie un technicien
                 notifierVide(bornetech,st.getIdentifiantStation());
             }
@@ -393,6 +392,13 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         StationMetier st = stationdao.find(identifiantBorneUtilisateur);
         st.setListeVelos(veldao.getVeloFromAStation(identifiantBorneUtilisateur));
         return !st.getListeVelos().isEmpty();
+    }
+
+    @Override
+    public boolean stationPleineDeVelos(int identifiantBorneUtilisateur) throws RemoteException {
+        StationMetier st = stationdao.find(identifiantBorneUtilisateur);
+        st.setListeVelos(veldao.getVeloFromAStation(identifiantBorneUtilisateur));
+        return st.getListeVelos().size() == st.getCapacite();
     }
 
     // OK

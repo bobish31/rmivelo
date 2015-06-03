@@ -1,7 +1,6 @@
 package bdd.bddClass;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Robin on 03/04/2015.
@@ -10,6 +9,7 @@ public class StationMetier {
 
     private int identifiantStation;
     private int capacite;
+    private int nbVelosDispos;
     private int nbRetraits;
     private int nbDepots;
     private double latitude;
@@ -21,9 +21,10 @@ public class StationMetier {
 
     public StationMetier () {}
 
-    public StationMetier(int identifiantStation, int capacite, int nbRetraits, int nbDepots, double latitude, double longitude) {
+    public StationMetier(int identifiantStation, int capacite, int nbVelosDispos, int nbRetraits, int nbDepots, double latitude, double longitude) {
         this.identifiantStation = identifiantStation;
         this.capacite = capacite;
+        this.nbVelosDispos = nbVelosDispos;
         this.nbRetraits = nbRetraits;
         this.nbDepots = nbDepots;
         this.latitude = latitude;
@@ -56,12 +57,12 @@ public class StationMetier {
         this.identifiantStation = identifiantStation;
     }
 
-    public int getCapacite() {
-        return capacite;
+    public int getNbVelosDispos() {
+        return nbVelosDispos;
     }
 
-    public void setCapacite(int capacite) {
-        this.capacite = capacite;
+    public void setNbVelosDispos(int nbVelosDispos) {
+        this.nbVelosDispos = nbVelosDispos;
     }
 
     public int getNbDepots() {
@@ -104,11 +105,20 @@ public class StationMetier {
         this.listeVelos = listeVelos;
     }
 
+    public int getCapacite() {
+        return capacite;
+    }
+
+    public void setCapacite(int capacite) {
+        this.capacite = capacite;
+    }
+
     @Override
     public String toString() {
         return "StationMetier{" +
                 "identifiantStation=" + identifiantStation +
                 ", capacite=" + capacite +
+                ", nbVelosDispos=" + nbVelosDispos +
                 ", nbDepots=" + nbDepots +
                 ", nbRetraits=" + nbRetraits +
                 ", latitude=" + latitude +

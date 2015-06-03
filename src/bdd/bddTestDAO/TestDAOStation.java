@@ -32,7 +32,7 @@ public class TestDAOStation {
             //System.out.println("Suppression OK");
 
             // UPDATE -> CERTIFICATION = OK
-            // s.setCapacite(50);
+            // s.setNbVelosDispos(50);
             // s.setNbRetraits(10);
             // stationD.update(s);
             // System.out.println(s.toString());

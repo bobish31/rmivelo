@@ -68,7 +68,7 @@
 		ALTER TABLE public.numero_seq OWNER TO postgres;
 		ALTER SEQUENCE numero_seq OWNED BY utilisateur.numero;
 		-- Initialiser la séquence selon le nombre d'INSERT faits à la main dans ce script
-		SELECT pg_catalog.setval('numero_seq', 5, true);
+		SELECT pg_catalog.setval('numero_seq', 9, true);
 
 
 		-------------------------------------------------------
@@ -77,6 +77,7 @@
 		CREATE TABLE station (
 				identifiantstation integer NOT NULL,
 				capacite integer NOT NULL,
+				nbvelosdispos integer NOT NULL,
 				nbretraits integer NOT NULL DEFAULT 0,
 				nbdepots integer NOT NULL DEFAULT 0,
 				latitude real NOT NULL,
@@ -155,22 +156,22 @@
 	--				   SCRIPT D'INSERTION
 	-- *********** -- *********** -- *********** -- *******
 
-		INSERT INTO utilisateur (numero, code,tech) VALUES (1, 0000,FALSE);
-		INSERT INTO utilisateur (numero, code,tech) VALUES (2, 1111,TRUE);
-		INSERT INTO utilisateur (numero, code,tech) VALUES (3, 2222,TRUE);
-		INSERT INTO utilisateur (numero, code,tech) VALUES (4, 3333,TRUE);
-		INSERT INTO utilisateur (numero, code,tech) VALUES (5, 4444,TRUE);
-		INSERT INTO utilisateur (numero, code,tech) VALUES (1111, 9,TRUE);
-		INSERT INTO utilisateur (numero, code,tech) VALUES (2222, 9,TRUE);
-		INSERT INTO utilisateur (numero, code,tech) VALUES (3333, 9,TRUE);
-		INSERT INTO utilisateur (numero, code,tech) VALUES (4444, 9,TRUE);
+		INSERT INTO utilisateur (numero, code, tech) VALUES (1, 1568, FALSE);
+		INSERT INTO utilisateur (numero, code, tech) VALUES (2, 1358, FALSE);
+		INSERT INTO utilisateur (numero, code, tech) VALUES (3, 9546, FALSE);
+		INSERT INTO utilisateur (numero, code, tech) VALUES (4, 7536, FALSE);
+		INSERT INTO utilisateur (numero, code, tech) VALUES (5, 4756, FALSE);
+		INSERT INTO utilisateur (numero, code, tech) VALUES (6, 9999, TRUE);
+		INSERT INTO utilisateur (numero, code, tech) VALUES (7, 9999, TRUE);
+		INSERT INTO utilisateur (numero, code, tech) VALUES (8, 9999, TRUE);
+		INSERT INTO utilisateur (numero, code, tech) VALUES (9, 9999, TRUE);
 
 		-- Les nombre de retraits et dépôts sont automatiquement remplis à 0 grâce à la structure de création
-		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (1, 20, 43.585909, 1.447364);
-		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (2, 20, 43.583776, 1.443702);
-		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (3, 20, 43.585632, 1.428026);
-		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (4, 20, 43.591544, 1.418569);
-		INSERT INTO station (identifiantstation, capacite, latitude, longitude) VALUES (5, 20, 43.587916, 1.424500);
+		INSERT INTO station (identifiantstation, capacite, nbvelosdispos, latitude, longitude) VALUES (1, 20, 2, 43.585909, 1.447364);
+		INSERT INTO station (identifiantstation, capacite, nbvelosdispos, latitude, longitude) VALUES (2, 20, 1, 43.583776, 1.443702);
+		INSERT INTO station (identifiantstation, capacite, nbvelosdispos, latitude, longitude) VALUES (3, 20, 1, 43.585632, 1.428026);
+		INSERT INTO station (identifiantstation, capacite, nbvelosdispos, latitude, longitude) VALUES (4, 20, 1, 43.591544, 1.418569);
+		INSERT INTO station (identifiantstation, capacite, nbvelosdispos, latitude, longitude) VALUES (5, 20, 0, 43.587916, 1.424500);
 
 		INSERT INTO velo (identifiantvelo, operationnel, fk_identifiantstation) VALUES (1, TRUE, 1);
 		INSERT INTO velo (identifiantvelo, operationnel, fk_identifiantstation) VALUES (2, TRUE, 1);

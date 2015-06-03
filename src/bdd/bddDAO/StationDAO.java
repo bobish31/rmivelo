@@ -18,6 +18,7 @@ public class StationDAO extends DAO<StationMetier> {
 
     private static final String COLONNE_STATION_IDENTIFIANTSTATION = "identifiantstation";
     private static final String COLONNE_STATION_CAPACITE = "capacite";
+    private static final String COLONNE_STATION_NBVELOSDISPOS = "nbvelosdispos";
     private static final String COLONNE_STATION_NBRETRAITS = "nbretraits";
     private static final String COLONNE_STATION_NBDEPOTS = "nbdepots";
     private static final String COLONNE_STATION_LATITUDE = "latitude";
@@ -44,20 +45,22 @@ public class StationDAO extends DAO<StationMetier> {
                         "INSERT INTO " + TABLE_STATION + "("
                                 + COLONNE_STATION_IDENTIFIANTSTATION + ","
                                 + COLONNE_STATION_CAPACITE + ","
+                                + COLONNE_STATION_NBVELOSDISPOS + ","
                                 + COLONNE_STATION_NBRETRAITS + ","
                                 + COLONNE_STATION_NBDEPOTS + ","
                                 + COLONNE_STATION_LATITUDE + ","
                                 + COLONNE_STATION_LONGITUDE
                                 + ")"
-                                + "VALUES (?,?,?,?,?,?);";
+                                + "VALUES (?,?,?,?,?,?,?);";
 
                 PreparedStatement prepare = bddConnecteur.prepareStatement(requete);
                 prepare.setInt(1, id);
                 prepare.setInt(2, obj.getCapacite());
-                prepare.setInt(3, obj.getNbRetraits());
-                prepare.setInt(4, obj.getNbDepots());
-                prepare.setDouble (5, obj.getLatitude());
-                prepare.setDouble (6, obj.getLongitude());
+                prepare.setInt(3, obj.getNbVelosDispos());
+                prepare.setInt(4, obj.getNbRetraits());
+                prepare.setInt(5, obj.getNbDepots());
+                prepare.setDouble(6, obj.getLatitude());
+                prepare.setDouble(7, obj.getLongitude());
                 prepare.executeUpdate();
                 obj = this.find(id);
             }
@@ -87,6 +90,7 @@ public class StationDAO extends DAO<StationMetier> {
 
         String requete = "UPDATE " + TABLE_STATION + " SET "
                 + COLONNE_STATION_CAPACITE + " = " + obj.getCapacite() + ","
+                + COLONNE_STATION_NBVELOSDISPOS + " = " + obj.getNbVelosDispos() + ","
                 + COLONNE_STATION_NBRETRAITS + " = " + obj.getNbRetraits() + ","
                 + COLONNE_STATION_NBDEPOTS + " = " + obj.getNbDepots() + ","
                 + COLONNE_STATION_LATITUDE + "=  " + obj.getLatitude() + ","
@@ -124,7 +128,7 @@ public class StationDAO extends DAO<StationMetier> {
             ).executeQuery(requete);
 
             if(result.first()) {
-                station = new StationMetier(id,result.getInt(COLONNE_STATION_CAPACITE),result.getInt(COLONNE_STATION_NBRETRAITS),result.getInt(COLONNE_STATION_NBDEPOTS), result.getDouble(COLONNE_STATION_LATITUDE), result.getDouble(COLONNE_STATION_LONGITUDE));
+                station = new StationMetier(id,result.getInt(COLONNE_STATION_CAPACITE),result.getInt(COLONNE_STATION_NBVELOSDISPOS),result.getInt(COLONNE_STATION_NBRETRAITS),result.getInt(COLONNE_STATION_NBDEPOTS), result.getDouble(COLONNE_STATION_LATITUDE), result.getDouble(COLONNE_STATION_LONGITUDE));
             }
 
         } catch (SQLException e) {
