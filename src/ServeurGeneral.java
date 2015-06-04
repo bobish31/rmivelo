@@ -17,7 +17,7 @@ public interface ServeurGeneral extends Remote {
 
     public String genererUtilisateur() throws java.rmi.RemoteException;
 
-    public String deposerVelo(int identifiantBorneUtilisateur, int identifiantVelo, Timestamp heureDepot) throws java.rmi.RemoteException, VeloInconnuException;
+    public String deposerVelo( int identifiantBorneUtilisateur, int identifiantVelo, Timestamp heureDepot) throws java.rmi.RemoteException, VeloInconnuException;
 
     public void retirerVelo(int identifiantBorneUtilisateur, int numero, int identifiantVelo, Timestamp heureRetrait) throws java.rmi.RemoteException;
 

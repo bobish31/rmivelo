@@ -245,9 +245,6 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     // EN TEST
     @Override
     public void retirerVelo(int identifiantBorneUtilisateur, int numero, int identifiantVelo, Timestamp heureRetrait) throws RemoteException {
-
-        // TODO : Il faut rajouter une map comme pour le reste, récupérer la dernire transaction et faire un +1 pour l'id
-
         VeloMetier vel = veldao.find(identifiantVelo);
 
         // Vérifier si le vélo est bien dans la station désignée
@@ -255,7 +252,6 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
             System.out.println("---- ERREUR : Le vélo n'est pas présent sur la borne choisie");
 
         } else {
-
             // Changement du statut du vélo => on enleve la clé étrangère
             StationMetier st=stationdao.find(identifiantBorneUtilisateur);
             vel.setIdentifiantStation(StationMetier.IDENTIFIANT_STATION_NULL);
@@ -283,7 +279,6 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
             } else {
                 idpret = Collections.max(mapPret.keySet()) + 1;
             }
-
             // On créer l'objet utiliser
             UtiliserMetier util = new UtiliserMetier(idpret, u.getNumero(), vel.getIdentifiantVelo(), heureRetrait, null);
 
@@ -298,7 +293,6 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
                 //maj dans la base
                 stationdao.update(st);
             }
-
             System.out.println("Velo retire");
         }
     }
@@ -317,7 +311,8 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         // Je mets toutes les distances dans la map
         for (StationMetier station : toutesLesStations) {
             if (station.getIdentifiantStation() != identifiantBorneUtilisateur) {
-                stationsParCoordonnes.put(StationMetier.distance(stationSource.getLatitude(), stationSource.getLongitude(), station.getLatitude(), station.getLongitude()), station.getIdentifiantStation());
+                stationsParCoordonnes.put(StationMetier.distance(stationSource.getLatitude(),
+                        stationSource.getLongitude(), station.getLatitude(), station.getLongitude()), station.getIdentifiantStation());
             }
         }
 

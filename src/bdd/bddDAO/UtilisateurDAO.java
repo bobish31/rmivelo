@@ -177,7 +177,7 @@ public class UtilisateurDAO extends DAO<UtilisateurMetier> {
         HashMap<Integer,UtilisateurMetier> map = new HashMap<>();
 
         try {
-            String requete = "SELECT * from " + TABLE_UTILISATEUR + " where "+COLONNE_UTILISATEUR_TECH+" = true"; //todo check si true ou 1
+            String requete = "SELECT * from " + TABLE_UTILISATEUR + " where "+COLONNE_UTILISATEUR_TECH+" = true"; 
 
             ResultSet result = bddConnecteur.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
