@@ -89,13 +89,6 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
 
             System.out.println("En attente d'opération ... ");
 
-
-            /*UtiliserDAO u = new UtiliserDAO();
-            UtiliserMetier recu = u.find();
-            obj.imprimerRecuUtilisateur(5,recu.getDateRetrait(),recu.getDateDepot());
-            */
-
-
         }
         catch (RemoteException | MalformedURLException e){
             e.printStackTrace();
@@ -334,38 +327,11 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         return stationsOrdonneesParCoordonnes;
     }
 
-    // OK
-    @Override
-    public void creerVelo(int identifiantVelo, boolean operationnel) throws RemoteException {
-
-        veldao.create(new VeloMetier(identifiantVelo, operationnel));
-    }
-
-    // OK
-    @Override
-    public void affectationVeloStation (int identifiantVelo, int identificationStation){
-
-        // On récupère dans la bdd les objets
-        VeloMetier v = veldao.find(identifiantVelo);
-        StationMetier s = stationdao.find(identificationStation);
-
-        v.setIdentifiantStation(s.getIdentifiantStation());
-
-        // On applique update avec la station
-        veldao.update(v);
-    }
-
     @Override
     public ArrayList<Integer> obtenirVelosRattachesAUneStation(int identificationStation) throws RemoteException {
         StationMetier station = stationdao.find(identificationStation);
         station.setListeVelos(veldao.getVeloFromAStation(station.getIdentifiantStation()));
         return station.getListeVelos();
-    }
-
-    @Override
-    public int obtenirVeloCorrespondantAuPretEnCours(int numero) throws RemoteException {
-        UtiliserMetier pret = utiliserdao.find(utiliserdao.obtenirIDUtiliserParNumeroClient(numero));
-        return pret.getIdentifiantVelo();
     }
 
     @Override
@@ -445,7 +411,11 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     @Override
     public String obtenirStatistiqueBorne(int identifiantStation) {
             StationMetier st = stationdao.find(identifiantStation);
-            return "ID Borne : " +  st.getIdentifiantStation() + "\nCapacité = " + st.getCapacite() + "\nNombres de vélo disponible : " + st.getNbVelosDispos() + "\nNombre de Retrait : " + st.getNbRetraits() + "\nNombre de Dépôt : " + st.getNbDepots() + "\nNombre de Pénurie : " + st.getNbPenurie() + "\nNombre de Saturation : " + st.getNbPlein() + "\nNombre de Consultation Bornes Voisines : " + st.getNbConsultation() + "\n\n";
+            if (st.getIdentifiantStation() != 0) {
+                return "ID Borne : " +  st.getIdentifiantStation() + "\nCapacité = " + st.getCapacite() + "\nNombres de vélo disponible : " + st.getNbVelosDispos() + "\nNombre de Retrait : " + st.getNbRetraits() + "\nNombre de Dépôt : " + st.getNbDepots() + "\nNombre de Pénurie : " + st.getNbPenurie() + "\nNombre de Saturation : " + st.getNbPlein() + "\nNombre de Consultation Bornes Voisines : " + st.getNbConsultation() + "\n\n";
+            } else {
+                return "Station inconnue !";
+            }
         }
 
     @Override
@@ -595,9 +565,6 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
         }
     }
 
-
-
-    // OK
     @Override
     public boolean connexionOkBDD() throws RemoteException {
          return (BDDConnecteur.getInstance() != null);

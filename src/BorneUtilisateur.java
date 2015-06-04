@@ -50,33 +50,6 @@ public class BorneUtilisateur {
                 if (serveurDistant.connexionOkBDD()) {
                     System.out.println("Connexion à la base de données réussie");
 
-                    // --- Appel des fonctionnalités --- //
-
-                    // ---- TEST genererUtilisateur ---- //
-                    //inscrireUtilisateur(serveurDistant);
-
-                    // ---- TEST authentifierUtilisateur ---- //
-                    //authentifierUtilisateur(serveurDistant);
-
-                    // ---- TEST créerVelo ---- //
-                    // serveurDistant.creerVelo(10,true);
-                    // System.out.println("Velo créé");
-
-                    // ---- TEST affectationVeloStation  ----
-                   /* serveurDistant.affectationVeloStation(8,3);
-                    System.out.println("Station affecte");
-                    */
-
-                    // ---- TEST retirerVelo  ----
-                    //retirerUnVelo(serveurDistant);
-
-                    // ---- TEST deposerVelo  ----
-                    //deposerUnVelo(serveurDistant);
-
-                    // ---- TEST obtenirBornesVoisines ----
-                    //consulterStationsAlentours(serveurDistant);
-
-                    // MENU D'ACCUEIL
                     lancerMenuAccueil(serveurDistant);
 
                 } else {

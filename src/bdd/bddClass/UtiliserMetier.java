@@ -34,20 +34,8 @@ public class UtiliserMetier {
         return numero;
     }
 
-    public void setNumero(int numero) {
-        this.numero = numero;
-    }
-
     public int getIdentifiantVelo() {
         return identifiantVelo;
-    }
-
-    public void setIdentifiantVelo(int identifiantVelo) {
-        this.identifiantVelo = identifiantVelo;
-    }
-
-    public void setDateDepart(Timestamp dateDepart) {
-        this.dateRetrait = dateDepart;
     }
 
     public Timestamp getDateDepot() {

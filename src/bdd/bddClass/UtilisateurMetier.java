@@ -22,16 +22,8 @@ public class UtilisateurMetier  {
         return numero;
     }
 
-    public void setNumero(int numero) {
-        this.numero = numero;
-    }
-
     public int getCode() {
         return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
     }
 
     public boolean estTechnicien() { return tech; }
