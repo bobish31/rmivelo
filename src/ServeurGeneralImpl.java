@@ -445,7 +445,7 @@ public class ServeurGeneralImpl extends UnicastRemoteObject implements ServeurGe
     @Override
     public String obtenirStatistiqueBorne(int identifiantStation) {
             StationMetier st = stationdao.find(identifiantStation);
-            return "ID Borne : " +  st.getIdentifiantStation() + "\nCapacité = " + st.getCapacite() + "\nNombres de vélo disponible : " + (st.getCapacite() - st.getNbVelosDispos()) + "\nNombre de Retrait : " + st.getNbRetraits() + "\nNombre de Dépôt : " + st.getNbDepots() + "\nNombre de Pénurie : " + st.getNbPenurie() + "\nNombre de Saturation : " + st.getNbPlein() + "\nNombre de Consultation Bornes Voisines : " + st.getNbConsultation() + "\n\n";
+            return "ID Borne : " +  st.getIdentifiantStation() + "\nCapacité = " + st.getCapacite() + "\nNombres de vélo disponible : " + st.getNbVelosDispos() + "\nNombre de Retrait : " + st.getNbRetraits() + "\nNombre de Dépôt : " + st.getNbDepots() + "\nNombre de Pénurie : " + st.getNbPenurie() + "\nNombre de Saturation : " + st.getNbPlein() + "\nNombre de Consultation Bornes Voisines : " + st.getNbConsultation() + "\n\n";
         }
 
     @Override

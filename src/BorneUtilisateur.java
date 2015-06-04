@@ -16,7 +16,7 @@ public class BorneUtilisateur {
     private StationMetier station;
     private ServeurGeneralImpl serv;
 
-    private static final int IDENTIFIANT_BORNE_UTILISATEUR = 1;
+    private static final int IDENTIFIANT_BORNE_UTILISATEUR = 2;
 
 
     public BorneUtilisateur(StationMetier s) {
@@ -100,8 +100,27 @@ public class BorneUtilisateur {
         DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.HALF_UP);
 
+
+        DecimalFormat entier = new DecimalFormat("##");
+        entier.setRoundingMode(RoundingMode.HALF_UP);
+
+        // Vitesse en km/h
+        final int vitesseMoyenneMarche = 5;
+        final int vitesseMoyenneVelo = 15;
+
+        double tempsEstimeMarche;
+        double tempsEstimeVelo;
+
         for (Map.Entry<Double, Integer> e : stationsVoisines.entrySet()){
-                System.out.println("Station " + e.getValue() + " ---> Distance = " + df.format(e.getKey()) + "km ---> " + serveurDistant.obtenirInfosBorneVoisine(e.getValue()));
+
+            tempsEstimeMarche = (e.getKey() / vitesseMoyenneMarche) * 60;
+            tempsEstimeVelo = (e.getKey() / vitesseMoyenneVelo) * 60;
+
+            System.out.println("Station " + e.getValue() + " " +
+                    "---> Distance = " + df.format(e.getKey()) + "km " +
+                    "---> Temps estime a pieds : " + entier.format(tempsEstimeMarche) + " minutes " +
+                    "---> Temps estime a velo : " + entier.format(tempsEstimeVelo) + " minutes " +
+                    "---> " + serveurDistant.obtenirInfosBorneVoisine(e.getValue()));
         }
 
         // Statistique
@@ -295,30 +314,5 @@ public class BorneUtilisateur {
         System.out.println(util.toString());
         lancerMenuAccueil(serveurDistant);
     }
-
-
-    // public void deposerVelo(int numero, int idVelo, Date heureDepot) throws RemoteException {
-        //Maj de la station locale
-      //  station.deposerVelo(idVelo);
-
-        //maj de la station distante via l'objet rmi serveur
-        //serv.deposerVelo(station.getIdentifiantStation(), numero, idVelo, heureDepot); //todo à corriger
-   // }
-
- /*  public void retirerVelo(int numero, int idVelo, Date heureDepot) throws RemoteException {
-        //maj de la station locale
-        station.retirerVelo(idVelo);
-
-
-
-
-        //maj de la station distante via l'objet rmi serveur
-        //serv.retirerVelo(station.getIdentifiantStation(),numero,idVelo,heureDepot); // todo à corriger
-    }
-
-    */
-
-
-
 }
 
